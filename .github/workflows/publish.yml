@@ -1,0 +1,118 @@
+name: npm publish
+# Publishes @descix/egpt-site-theme to npm from THIS public repository, on a GitHub Release tagged
+# egpt-site-theme-v<version>, through npm trusted publishing (OIDC): there is no npm token anywhere in this workflow.
+#
+# The one executor of every check is scripts/publish-gate.sh:
+#   - release-target: the repository is DeSciX/egpt-site-theme, the tag is egpt-site-theme-v<version>, and <version>
+#     equals package.json "version" at the tag's commit; anything else FAILS the run (a release with any other tag is
+#     refused, not skipped);
+#   - dist-tag: derived from the version alone (a version containing '-' publishes to `next`; any other publishes to
+#     `latest`, and `next` is then moved to it too). The release's pre-release flag is not read;
+#   - npm-floor: the one npm range every job installs and the gate holds;
+#   - the gate: npm test, pack once, the tarball's file list and bytes, an install smoke test of the tarball, and the
+#     sha re-check. `npm publish` takes the gated .tgz itself after check-sha; a directory is never published;
+#   - registry-check: a version already on npm is compared with the gated tarball. The same content is skipped, so
+#     re-running a release is harmless; different bytes, or an npm error that is not "not found", fail the run;
+#   - move-next: `next` follows a `latest` release.
+#
+# workflow_dispatch is a DRY RUN: every gate runs over the packed tarball, and no publish step is reachable.
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+concurrency:
+  group: npm-publish
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  guard:
+    name: Release guard
+    if: github.event_name == 'release'
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.target.outputs.version }}
+      dist_tag: ${{ steps.target.outputs.dist_tag }}
+      also_next: ${{ steps.target.outputs.also_next }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Repository, tag and version
+        id: target
+        env:
+          REPOSITORY: ${{ github.repository }}
+          TAG: ${{ github.event.release.tag_name }}
+        run: |
+          set -euo pipefail
+          bash scripts/publish-gate.sh release-target "$REPOSITORY" "$TAG" | tee -a "$GITHUB_OUTPUT"
+
+  publish:
+    name: Gate and publish (OIDC)
+    needs: guard
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment: npm-publish   # the same name is on the npm trusted-publisher configuration
+    permissions:
+      contents: read
+      id-token: write          # OIDC mints the short-lived npm publish credential
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          registry-url: https://registry.npmjs.org
+      - name: npm at the gate's floor
+        run: npm install -g "npm@^$(bash scripts/publish-gate.sh npm-floor)"
+      - run: npm ci
+      - name: Gate (pack once, gate the tarball)
+        id: gate
+        run: |
+          set -euo pipefail
+          bash scripts/publish-gate.sh --out "$RUNNER_TEMP/pack" | tee "$RUNNER_TEMP/gate.out"
+          echo "dir=$RUNNER_TEMP/pack" >> "$GITHUB_OUTPUT"
+          grep '^tarball=' "$RUNNER_TEMP/gate.out" >> "$GITHUB_OUTPUT"
+      - name: Publish the gated tarball
+        env:
+          VERSION: ${{ needs.guard.outputs.version }}
+          DIST_TAG: ${{ needs.guard.outputs.dist_tag }}
+          DIR: ${{ steps.gate.outputs.dir }}
+          TGZ: ${{ steps.gate.outputs.tarball }}
+        run: |
+          set -euo pipefail
+          PUBLISHED="$(bash scripts/publish-gate.sh registry-check "$DIR" "$TGZ")"
+          case "$PUBLISHED" in
+            published=same) echo "$VERSION is already on npm with the gated content; nothing to publish." ;;
+            published=no)
+              bash scripts/publish-gate.sh check-sha "$DIR" "$TGZ"
+              npm publish "$TGZ" --tag "$DIST_TAG" --provenance --access public --ignore-scripts ;;
+            *) echo "::error::registry-check printed '$PUBLISHED'"; exit 1 ;;
+          esac
+      - name: Move next to the latest version
+        if: needs.guard.outputs.also_next == 'true'
+        env:
+          VERSION: ${{ needs.guard.outputs.version }}
+        run: bash scripts/publish-gate.sh move-next "$VERSION"
+
+  dry-run:
+    name: Dry run (gate only, nothing published)
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: npm at the gate's floor
+        run: npm install -g "npm@^$(bash scripts/publish-gate.sh npm-floor)"
+      - run: npm ci
+      - name: Gate (pack once, gate the tarball)
+        run: bash scripts/publish-gate.sh --out "$RUNNER_TEMP/pack"

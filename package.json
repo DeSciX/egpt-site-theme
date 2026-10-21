@@ -1,6 +1,6 @@
 {
   "name": "@descix/egpt-site-theme",
-  "version": "0.1.0-p4.1",
+  "version": "0.1.0-p5.1",
   "description": "The EGPT community's site theme: tokens, partials, the copy layer, the page assembler, the tile writer, the view declarer, the share writer and the page gates.",
   "license": "SEE LICENSE IN LICENSE.md",
   "type": "module",
@@ -37,10 +37,10 @@
   },
   "peerDependencies": {
     "@descix/app-sdk": "0.6.0",
-    "@descix/frqtl-web": "0.6.1-p2.1"
+    "@descix/frqtl-web": "0.6.1-p3.1"
   },
   "devDependencies": {
     "@descix/app-sdk": "0.6.0",
-    "@descix/frqtl-web": "0.6.1-p2.1"
+    "@descix/frqtl-web": "0.6.1-p3.1"
   }
 }
