@@ -1,0 +1,19 @@
+{
+  "sceneKey": "scene-rung-big-bang",
+  "rung": "big-bang",
+  "mode": null,
+  "link": "./app.html?preset=compare&walkthrough=big-bang",
+  "tick": 200,
+  "sceneHash": "sha256:c014e8b44a2282600e2fbc35a9de51b28d48c2938d378b563c0b830782561be1",
+  "seed": 42,
+  "world": [
+    600,
+    600
+  ],
+  "pose": null,
+  "wasmSha256": "52de3763b72a31c8ffdf4fe7cb6aa3f51d2276fb6aef5dc23d8c4b7a8b2a9642",
+  "servedFrom": "http://127.0.0.1:5813/app.html?preset=compare&walkthrough=big-bang",
+  "siteBuild": "8ba141ba",
+  "capturedAt": "2026-10-12T14:17:57.512Z",
+  "instrument": "apps/ide/test/tile-stills-capture.spec.js"
+}

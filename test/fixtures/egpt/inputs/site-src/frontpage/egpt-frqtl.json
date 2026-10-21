@@ -1,0 +1,183 @@
+{
+  "title": "FRQTL — Impossible things, running",
+  "description": "FRQTL, the physics engine that doesn't know any physics equations: the double slit, a sun, a mirror loop, a blackbody, a half-adder, a big bang, an atom, all computed live in your tab. Open STUDIO.",
+  "brand": {
+    "name": "FRQTL",
+    "tag": "physics engine"
+  },
+  "nav": [
+    {
+      "text": "Proof",
+      "href": "#technology"
+    },
+    {
+      "text": "Quantum",
+      "href": "#proof"
+    },
+    {
+      "text": "AI",
+      "href": "#ai"
+    },
+    {
+      "text": "Tools",
+      "href": "#products"
+    },
+    {
+      "text": "Earn",
+      "href": "#earn"
+    },
+    {
+      "text": "Media",
+      "href": "#media"
+    },
+    {
+      "text": "Open core",
+      "href": "#opencore"
+    },
+    {
+      "text": "Open GYM →",
+      "href": "app.html?preset=compare",
+      "class": "mono",
+      "style": "color:var(--cyan)"
+    }
+  ],
+  "hero": {
+    "eyebrow": "FRQTL · the physics engine that doesn't know any physics equations",
+    "h1_html": "Impossible things, <em>running.</em>",
+    "lede": "Two slits, a sun, a mirror loop, a pool, a blackbody, a half-adder, a big bang, an atom. Each scene is computed live in your tab from integer rules; nothing here is a recording. Open one and watch it happen.",
+    "primary": {
+      "text": "Open STUDIO",
+      "href": "app.html?preset=author"
+    },
+    "secondary": {
+      "text": "Watch the double slit in 3D",
+      "href": "app.html?preset=author&walkthrough=dse-tunnel-rebuild&mode=3d"
+    },
+    "kicker_html": "<b>Discrete fractal physics.</b> Integer rules, Rust compiled to WASM, the same binary in the browser and headless in Node. Efficient enough to run the 3D double slit on an iPhone, offline.",
+    "art": {
+      "src": "images/dse.jpg",
+      "alt": "Three-dimensional double slit: two red slabs, two blue slit tunnels, the detector wall painting its own interference pattern hit by hit"
+    }
+  },
+  "css": ".hero h1{max-width:14ch}\n.brand b{white-space:nowrap}\n.navlinks{gap:18px;font-size:14.5px;white-space:nowrap}\n#proof .sec-head,#proof .sec-head .lede{max-width:none}",
+  "sections": [
+    {
+      "use": "proof",
+      "links": [
+        [
+          "<p class=\"lede\">Each scene opens live in the engine. Click one and watch it compute in your own tab.</p>",
+          "<p class=\"lede\">FRQTL is an actual quantum computer that runs so efficiently it runs in an iPhone. The double-slit experiment, or DSE, is what Richard Feynman, the father of quantum computing called the ‘only mystery’ and ‘absolutely impossible.’ In 1981 Feynman birthed the idea of what the world now calls ‘qubit’ based quantum computing but FRQTL takes a different approach based on the work of Feynman's collaborators at the Manhattan Project. FRQTL uses a Monte Carlo method-like approach based on the work of Stanislaw Ulam and John von Neumann which was continued by Gian-Carlo Rota at Los Alamos National Laboratory and later pursued at Brookhaven National Laboratory Quantum Chromodynamics (QCD) and super-computing projects.</p>"
+        ],
+        [
+          "<p class=\"eyebrow\">Proof</p>",
+          "<p class=\"eyebrow\">Quantum</p>"
+        ]
+      ]
+    },
+    {
+      "hero": true
+    },
+    {
+      "file": "egpt-frqtl/ai.html"
+    },
+    {
+      "use": "technology",
+      "links": [
+        [
+          "<a href=\"https://egpt.descix.net\" target=\"_blank\" rel=\"noopener\">The proofs, as a PDF ↗</a>",
+          "<a href=\"https://egpt.descix.net/#08_LEAN/PROOF_CHAINS.md\" target=\"_blank\" rel=\"noopener\">The three proof chains ↗</a>"
+        ],
+        [
+          "<a href=\"https://egpt.descix.net\" target=\"_blank\" rel=\"noopener\">Axiom build outputs ↗</a>",
+          "<a href=\"https://egpt.descix.net/#08_LEAN/README.md\" target=\"_blank\" rel=\"noopener\">The Lean sources and axiom inventories ↗</a>"
+        ],
+        [
+          "<a href=\"https://egpt-frqtl.descix.net\" target=\"_blank\" rel=\"noopener\">FRQTL ↗</a>",
+          "<a href=\"app.html?preset=author\">STUDIO</a>"
+        ],
+        [
+          "<a href=\"https://egpt-frqtl.descix.net\" target=\"_blank\" rel=\"noopener\">Run it ↗</a>",
+          "<a href=\"app.html?preset=author\">Run it</a>"
+        ],
+        [
+          "<p class=\"eyebrow\">Technology</p>",
+          "<p class=\"eyebrow\">Proof</p>"
+        ]
+      ]
+    },
+    {
+      "file": "egpt-frqtl/products.html"
+    },
+    {
+      "file": "egpt-frqtl/earn.html"
+    },
+    {
+      "use": "media"
+    },
+    {
+      "use": "opencore"
+    },
+    {
+      "use": "heritage",
+      "links": [
+        [
+          "<a href=\"https://egpt.descix.net\" target=\"_blank\" rel=\"noopener\">The full story, with the documents ↗</a>",
+          "<a href=\"https://egpt.descix.net/#00_OUTPUTS/EGPT_Backstory.md\" target=\"_blank\" rel=\"noopener\">The full story, with the documents ↗</a>"
+        ]
+      ]
+    },
+    {
+      "file": "egpt-frqtl/licence.html"
+    }
+  ],
+  "links": [],
+  "self_host": "https://egpt-frqtl.descix.net",
+  "through_line": {
+    "source": "served-roster"
+  },
+  "footer": {
+    "name": "FRQTL",
+    "tag": "physics engine",
+    "links": [
+      {
+        "text": "Open STUDIO",
+        "href": "app.html?preset=author"
+      },
+      {
+        "text": "ROSETTA",
+        "href": "app.html?preset=codec"
+      },
+      {
+        "text": "FAT",
+        "href": "app.html?preset=ide"
+      },
+      {
+        "text": "Courant Group",
+        "href": "https://egpt-courantgroup.descix.net"
+      },
+      {
+        "text": "EGPT library",
+        "href": "https://egpt.descix.net/"
+      },
+      {
+        "text": "Gods World",
+        "href": "https://egpt-godsworld.descix.net"
+      },
+      {
+        "text": "DeSciX",
+        "href": "https://descix.net"
+      }
+    ],
+    "legal_html": "FRQTL is a trademark of Courant Group, LLC. EGPT is a community project on DeSciX."
+  },
+  "scripts": {
+    "codesite": false,
+    "forward": {
+      "query_to": "app.html"
+    },
+    "sdk": true,
+    "modules": [
+      "app-assets/host-view.js"
+    ]
+  }
+}

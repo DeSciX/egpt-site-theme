@@ -1,0 +1,1462 @@
+[
+ {
+  "id": "page.title",
+  "kind": "text",
+  "default": "Courant Group, LLC — Meet Maxi, robotic AI with true imagination"
+ },
+ {
+  "id": "page.description",
+  "kind": "text",
+  "default": "Courant Group licenses Maxi, the imagining AI, and FRQTL, the physics engine that doesn't know any physics equations. Generalized Artificial Physical Intelligence, licensed for robotics, chips and platforms."
+ },
+ {
+  "id": "nav.b",
+  "kind": "text",
+  "default": "Courant Group"
+ },
+ {
+  "id": "nav.span",
+  "kind": "text",
+  "default": "GAPI"
+ },
+ {
+  "id": "nav.a.1",
+  "kind": "text",
+  "default": "Maxi"
+ },
+ {
+  "id": "nav.a.2",
+  "kind": "text",
+  "default": "Technology"
+ },
+ {
+  "id": "nav.a.3",
+  "kind": "text",
+  "default": "Products"
+ },
+ {
+  "id": "nav.a.4",
+  "kind": "text",
+  "default": "Open core"
+ },
+ {
+  "id": "nav.a.5",
+  "kind": "text",
+  "default": "Licensing"
+ },
+ {
+  "id": "nav.a.6",
+  "kind": "text",
+  "default": "Media"
+ },
+ {
+  "id": "nav.mono",
+  "kind": "text",
+  "default": "Request a licence →"
+ },
+ {
+  "id": "hero.img.alt",
+  "kind": "text",
+  "default": "Maxi's imagination: a three-dimensional double-slit experiment, the detector wall painting its own interference pattern hit by hit"
+ },
+ {
+  "id": "hero.eyebrow",
+  "kind": "text",
+  "default": "Generalized Artificial Physical Intelligence"
+ },
+ {
+  "id": "hero.h1",
+  "kind": "html",
+  "default": "Meet Maxi, robotic AI with <em>true imagination.</em>"
+ },
+ {
+  "id": "hero.lede",
+  "kind": "text",
+  "default": "Maxi runs the future before it acts. Give it a scene, let it change something, and watch what it sees, inside the physics engine that doesn't know any physics equations. Now licensable for robotics, chips and platforms."
+ },
+ {
+  "id": "hero.btn.1",
+  "kind": "text",
+  "default": "Request a licence"
+ },
+ {
+  "id": "hero.btn.2",
+  "kind": "text",
+  "default": "Watch Maxi imagine ↗"
+ },
+ {
+  "id": "hero.kicker",
+  "kind": "html",
+  "default": "<b>Built from the Blueprints</b> Ulam and von Neumann left for GAPI, based on their classified <a class=\"hl\" href=\"https://egpt.descix.net\" target=\"_blank\" rel=\"noopener\" tabindex=\"0\">P=NP<span class=\"tip\">“Incidentally, the other day I developed a method that always allows a finite decision for the effective provability question concerning propositions that are built up solely by means of the concepts ‘not’, ‘or’ (thus also ‘and’, ‘follows’, etc.), [and] ‘provable’ … Perhaps, if it interests you, or you have not yet thought of it, then I can write it up.”<small>John von Neumann to Kurt Gödel, Berlin, 12 January 1931. Collected Works vol. V, pp. 340–341. Provenance link to follow.</small></span></a> and <a class=\"hl\" href=\"https://egpt.descix.net\" target=\"_blank\" rel=\"noopener\" tabindex=\"0\">intractable quantum computing<span class=\"tip\">“Let me point to the so-called Monte Carlo approach as an example of one of the methods that can lead to insight into the behavior of complicated systems. Essentially it consists of imitating physical processes on a computer by following a large but manageable number, replacing the trillions or more that are involved in the real process, by thousands of histories of the behavior of individual particles.”<small>Stanislaw Ulam, Science, Computers, and People, pp. 38–39. And Martin Gardner's preface, p. viii: “the Monte Carlo method of solving intractable problems, not only in probability theory but in areas such as number theory where the method would not have been thought applicable.” Provenance links to follow.</small></span></a> work, developed at Los Alamos while working on the Super hydrogen-bomb project. <b>Filed as a patent</b> in 2024. <b>Running on an iPhone</b>, with no internet connection, calmly simulating the impossible double-slit experiment in 3D."
+ },
+ {
+  "id": "footer.b",
+  "kind": "text",
+  "default": "Courant Group, LLC"
+ },
+ {
+  "id": "footer.span",
+  "kind": "text",
+  "default": "Generalized Artificial Physical Intelligence"
+ },
+ {
+  "id": "footer.a.1",
+  "kind": "text",
+  "default": "Maxi"
+ },
+ {
+  "id": "footer.a.2",
+  "kind": "text",
+  "default": "Products"
+ },
+ {
+  "id": "footer.a.3",
+  "kind": "text",
+  "default": "Plan"
+ },
+ {
+  "id": "footer.a.4",
+  "kind": "text",
+  "default": "License"
+ },
+ {
+  "id": "footer.a.5",
+  "kind": "text",
+  "default": "The agreement"
+ },
+ {
+  "id": "footer.a.6",
+  "kind": "text",
+  "default": "Media"
+ },
+ {
+  "id": "footer.a.7",
+  "kind": "text",
+  "default": "Evidence collection"
+ },
+ {
+  "id": "footer.a.8",
+  "kind": "text",
+  "default": "DeSciX"
+ },
+ {
+  "id": "footer.a.9",
+  "kind": "text",
+  "default": "The patent"
+ },
+ {
+  "id": "footer.legal",
+  "kind": "text",
+  "default": "FRQTL and Maxi are trademarks of Courant Group, LLC. EGPT is a community project on DeSciX. © 2012–2026 Courant Group, LLC."
+ },
+ {
+  "id": "gapi.eyebrow",
+  "kind": "text",
+  "default": "The category"
+ },
+ {
+  "id": "gapi.h2",
+  "kind": "text",
+  "default": "This is not a world model."
+ },
+ {
+  "id": "gapi.side.1",
+  "kind": "text",
+  "default": "World models"
+ },
+ {
+  "id": "gapi.h3.1",
+  "kind": "text",
+  "default": "Trained on a corpus."
+ },
+ {
+  "id": "gapi.p.1",
+  "kind": "text",
+  "default": "A million hours of video, or three centuries of equations, compressed into weights or formulas and evaluated forward. Reconstructive compression, the same trick an LLM does with text. They describe what happened well and predict what happens next badly. Move an object and the policy collapses."
+ },
+ {
+  "id": "gapi.td.1",
+  "kind": "text",
+  "default": "How it knows physics"
+ },
+ {
+  "id": "gapi.td.2",
+  "kind": "text",
+  "default": "Video, trajectories, or equations physicists wrote down"
+ },
+ {
+  "id": "gapi.td.3",
+  "kind": "text",
+  "default": "What it can produce"
+ },
+ {
+  "id": "gapi.td.4",
+  "kind": "text",
+  "default": "Rearrangements of what it was shown"
+ },
+ {
+  "id": "gapi.td.5",
+  "kind": "text",
+  "default": "The question it answers"
+ },
+ {
+  "id": "gapi.td.6",
+  "kind": "text",
+  "default": "What did the world do?"
+ },
+ {
+  "id": "gapi.side.2",
+  "kind": "text",
+  "default": "Generalized Artificial Physical Intelligence"
+ },
+ {
+  "id": "gapi.h3.2",
+  "kind": "text",
+  "default": "Formula-free predictive physics."
+ },
+ {
+  "id": "gapi.p.2",
+  "kind": "text",
+  "default": "No corpus, no equations. Give the engine a world and run it; light, heat, contact and gravity emerge from the run. Catching a frisbee is not retrieval; it is running the disc forward and moving to where it will be. Nothing to look up, only something to run."
+ },
+ {
+  "id": "gapi.td.7",
+  "kind": "text",
+  "default": "How it knows physics"
+ },
+ {
+  "id": "gapi.td.8",
+  "kind": "text",
+  "default": "It doesn't. Physics emerges from running the world forward"
+ },
+ {
+  "id": "gapi.td.9",
+  "kind": "text",
+  "default": "What it can produce"
+ },
+ {
+  "id": "gapi.td.10",
+  "kind": "text",
+  "default": "Outcomes never observed and never encoded"
+ },
+ {
+  "id": "gapi.td.11",
+  "kind": "text",
+  "default": "The question it answers"
+ },
+ {
+  "id": "gapi.td.12",
+  "kind": "text",
+  "default": "What will the world do if I do this?"
+ },
+ {
+  "id": "gapi.vs-close",
+  "kind": "text",
+  "default": "Every lab is building the left column. Maxi is the first thing in the right one."
+ },
+ {
+  "id": "maxi.eyebrow",
+  "kind": "text",
+  "default": "Maxi"
+ },
+ {
+  "id": "maxi.h2",
+  "kind": "text",
+  "default": "The loop, closed."
+ },
+ {
+  "id": "maxi.lede",
+  "kind": "text",
+  "default": "Five things Maxi does, in the order it does them. Every stage runs today."
+ },
+ {
+  "id": "maxi.step.1",
+  "kind": "text",
+  "default": "Build"
+ },
+ {
+  "id": "maxi.h3.1",
+  "kind": "text",
+  "default": "Composes a scene."
+ },
+ {
+  "id": "maxi.p.1",
+  "kind": "text",
+  "default": "Seven primitives: a world, its scale layers, the rules that add particles, the objects that collide, a loop, the data out, a renderer."
+ },
+ {
+  "id": "maxi.q.1",
+  "kind": "text",
+  "default": "Anything the engine can hold, Maxi can build. No hand-written physics."
+ },
+ {
+  "id": "maxi.step.2",
+  "kind": "text",
+  "default": "Intervene"
+ },
+ {
+  "id": "maxi.h3.2",
+  "kind": "text",
+  "default": "Changes it, and knows."
+ },
+ {
+  "id": "maxi.p.2",
+  "kind": "text",
+  "default": "Every edit is a declared intervention, so the record tracks what was done, not just what is."
+ },
+ {
+  "id": "maxi.q.2",
+  "kind": "text",
+  "default": "Maxi doesn't guess what changed. It changed it."
+ },
+ {
+  "id": "maxi.step.3",
+  "kind": "text",
+  "default": "Run"
+ },
+ {
+  "id": "maxi.h3.3",
+  "kind": "text",
+  "default": "Runs the counterfactual."
+ },
+ {
+  "id": "maxi.p.3",
+  "kind": "text",
+  "default": "Runs the edited world forward and watches it. Its first instrument is its eyes: it records video of what it is imagining and flies drone-like flybys through the scene to see it from wherever it needs to. Raw data, clocks and stills come second, as they do for a person."
+ },
+ {
+  "id": "maxi.q.3",
+  "kind": "text",
+  "default": "What if I move this? Maxi runs it and looks."
+ },
+ {
+  "id": "maxi.step.4",
+  "kind": "text",
+  "default": "See"
+ },
+ {
+  "id": "maxi.h3.4",
+  "kind": "text",
+  "default": "Compares."
+ },
+ {
+  "id": "maxi.p.4",
+  "kind": "text",
+  "default": "Watches what it recorded against what it expected."
+ },
+ {
+  "id": "maxi.q.4",
+  "kind": "text",
+  "default": "Predict, watch, compare, correct."
+ },
+ {
+  "id": "maxi.step.5",
+  "kind": "text",
+  "default": "Learn"
+ },
+ {
+  "id": "maxi.h3.5",
+  "kind": "text",
+  "default": "Learns the rules."
+ },
+ {
+  "id": "maxi.p.5",
+  "kind": "text",
+  "default": "Infers a scene program from what it saw. It records the counterfactuals that worked and conjectures new ones from what it learned before, and it can branch a world at any tick."
+ },
+ {
+  "id": "maxi.q.5",
+  "kind": "text",
+  "default": "Maxi learns by imagining. The rules it recovers are executable, and the next imagination starts from them."
+ },
+ {
+  "id": "maxi.loop-note",
+  "kind": "html",
+  "default": "<b>See it think.</b> At <a href=\"https://egpt-godsworld.descix.net\" target=\"_blank\" rel=\"noopener\">egpt-godsworld.descix.net</a> you talk to Maxi on one side of the screen and watch its imagination on the other. Say <i>“put light in the scene and let light do what light does”</i> and see what it sees."
+ },
+ {
+  "id": "maxi.h3.6",
+  "kind": "text",
+  "default": "One vocabulary, every domain."
+ },
+ {
+  "id": "maxi.p.6",
+  "kind": "text",
+  "default": "Optics, circuits and mechanics are three vocabularies over the same engine. A grasp, a beam and a wire are the same operators. A model that learns light has learned contact."
+ },
+ {
+  "id": "maxi.h3.7",
+  "kind": "text",
+  "default": "Fidelity is a dial, not a rewrite."
+ },
+ {
+  "id": "maxi.p.7",
+  "kind": "text",
+  "default": "Cheap idealised collisions for geometry; full inter-particle collisions where friction matters. Maxi picks the physics it is imagining."
+ },
+ {
+  "id": "maxi.h3.8",
+  "kind": "text",
+  "default": "The realm is the grader."
+ },
+ {
+  "id": "maxi.p.8",
+  "kind": "text",
+  "default": "“Where will the rings form at these settings” is auto-scorable, so Maxi improves without a human labelling anything."
+ },
+ {
+  "id": "proof.eyebrow",
+  "kind": "text",
+  "default": "Proof"
+ },
+ {
+  "id": "proof.h2",
+  "kind": "text",
+  "default": "Impossible things, running."
+ },
+ {
+  "id": "proof.lede",
+  "kind": "text",
+  "default": "Each scene opens live in the engine. Click one and watch it compute in your own tab."
+ },
+ {
+  "id": "proof.grid-note",
+  "kind": "text",
+  "default": "Nothing here is a recording. Each scene is computed in your tab by an engine that doesn't know any physics equations, and it either shows up or it doesn't. The same engine runs on an iPhone with the network off, simulating the double slit in 3D."
+ },
+ {
+  "id": "technology.eyebrow.1",
+  "kind": "text",
+  "default": "Technology"
+ },
+ {
+  "id": "technology.h2",
+  "kind": "text",
+  "default": "FRQTL: a P=NP hyper-computer."
+ },
+ {
+  "id": "technology.lede",
+  "kind": "text",
+  "default": "Hardware quantum computers, still years away, hope to simulate a hundred particles. FRQTL simulates billions on off-the-shelf chips, today, and the mathematics of why it works is machine-checked and published."
+ },
+ {
+  "id": "technology.p.1",
+  "kind": "text",
+  "default": "FRQTL is the FRame And QuanTum Language virtual machine: physics computed by combinatorics and fractal recursion instead of calculus, quantum “balls” in gravitational frame “boxes.” It exceeds what a superposition-based quantum computer could do in theory, on classical hardware, in your browser."
+ },
+ {
+  "id": "technology.p.2",
+  "kind": "html",
+  "default": "Behind it is a proof of P = NP, formalised in Lean 4 in three independent chains. Two of them use only Lean's two structural axioms, <code>propext</code> and <code>Quot.sound</code>: no <code>sorryAx</code>, no <code>Classical.choice</code>. A choice-free proof is constructive: it does not just say a solution exists, it is the algorithm that finds it."
+ },
+ {
+  "id": "technology.th.1",
+  "kind": "text",
+  "default": "Chain"
+ },
+ {
+  "id": "technology.th.2",
+  "kind": "text",
+  "default": "Capstone"
+ },
+ {
+  "id": "technology.th.3",
+  "kind": "text",
+  "default": "Axioms"
+ },
+ {
+  "id": "technology.td.1",
+  "kind": "text",
+  "default": "Information-theoretic"
+ },
+ {
+  "id": "technology.code.1",
+  "kind": "text",
+  "default": "P_eq_NP_info"
+ },
+ {
+  "id": "technology.td.2",
+  "kind": "html",
+  "default": "<code>propext</code>, <code>Quot.sound</code>"
+ },
+ {
+  "id": "technology.td.3",
+  "kind": "text",
+  "default": "Definitional identity"
+ },
+ {
+  "id": "technology.code.2",
+  "kind": "text",
+  "default": "P_eq_NP"
+ },
+ {
+  "id": "technology.td.4",
+  "kind": "html",
+  "default": "<code>propext</code>, <code>Quot.sound</code>"
+ },
+ {
+  "id": "technology.td.5",
+  "kind": "text",
+  "default": "Standard complexity"
+ },
+ {
+  "id": "technology.code.3",
+  "kind": "text",
+  "default": "P_eq_NP_info_standard"
+ },
+ {
+  "id": "technology.td.6",
+  "kind": "html",
+  "default": "<code>propext</code>, <code>Quot.sound</code>, <code>Classical.choice</code>"
+ },
+ {
+  "id": "technology.a.1",
+  "kind": "text",
+  "default": "FRQTL ↗"
+ },
+ {
+  "id": "technology.a.2",
+  "kind": "text",
+  "default": "The Mathlib PR ↗"
+ },
+ {
+  "id": "technology.a.3",
+  "kind": "text",
+  "default": "The proofs, as a PDF ↗"
+ },
+ {
+  "id": "technology.a.4",
+  "kind": "text",
+  "default": "Axiom build outputs ↗"
+ },
+ {
+  "id": "technology.a.5",
+  "kind": "text",
+  "default": "Run it ↗"
+ },
+ {
+  "id": "technology.eyebrow.2",
+  "kind": "text",
+  "default": "Lean Zulip, 3:47 PM"
+ },
+ {
+  "id": "technology.ax",
+  "kind": "html",
+  "default": "This proof boils down to the following three claims:<br><br><b>axiom</b> Electrons_On_Circuits_Is_Physical_SAT<br><b>axiom</b> RET_Reduction_PhysicsEntropy_to_ShannonEntropy<br><b>axiom</b> ShannonEntropyInPbyShannonCoding"
+ },
+ {
+  "id": "technology.blockquote",
+  "kind": "text",
+  "default": "“Certainly, it follows from these three assumptions that P = NP. I don't know what are the shannon entropy problem and the physical system entropy problem, but the result here suggests that you should really dig into these because at least one of these assumptions is probably faulty.”"
+ },
+ {
+  "id": "technology.cite",
+  "kind": "text",
+  "default": "Mario Carneiro, Lean maintainer, on the first draft of the proof. The entailment conceded, the doubt located in three axioms. The three chains above are those axioms, discharged."
+ },
+ {
+  "id": "technology.tech-close",
+  "kind": "text",
+  "default": "The most publicly and rigorously substantiated quantum and computing breakthrough there is: the impossible calculations run in your browser, and the proofs of why they run are published for anyone to check."
+ },
+ {
+  "id": "products.eyebrow",
+  "kind": "text",
+  "default": "Products"
+ },
+ {
+  "id": "products.h2",
+  "kind": "text",
+  "default": "One model. Two engines. Three tools."
+ },
+ {
+  "id": "products.tag.1",
+  "kind": "text",
+  "default": "The AI model · the VLA stack"
+ },
+ {
+  "id": "products.h3.1",
+  "kind": "text",
+  "default": "Maxi"
+ },
+ {
+  "id": "products.p.1",
+  "kind": "text",
+  "default": "The imagining model. Builds, intervenes, runs the counterfactual, sees, learns. Ships as a stack: the model, its scene-program vocabulary, the capture instruments, and the FRQTL engine it runs in."
+ },
+ {
+  "id": "products.p.2",
+  "kind": "text",
+  "default": "Integrates into a robotics policy as the middle of the chain: observation in, imagined futures out, the policy judges and acts."
+ },
+ {
+  "id": "products.btn.1",
+  "kind": "text",
+  "default": "License Maxi"
+ },
+ {
+  "id": "products.btn.2",
+  "kind": "text",
+  "default": "Talk to it ↗"
+ },
+ {
+  "id": "products.img.alt",
+  "kind": "text",
+  "default": "STUDIO: the double-slit experiment being built on a live 3D canvas, palette on the left, layers and inspector on the right"
+ },
+ {
+  "id": "products.tag.2",
+  "kind": "text",
+  "default": "The engine"
+ },
+ {
+  "id": "products.h3.2",
+  "kind": "text",
+  "default": "FRQTL"
+ },
+ {
+  "id": "products.p.3",
+  "kind": "text",
+  "default": "The physics engine that doesn't know any physics equations. Discrete fractal physics, integer rules, Rust compiled to WASM. Efficient enough to run the 3D double slit on an iPhone, offline. Same binary in the browser and headless in Node. For game-engine developers: a sprite is a quantum, a layer is a dimension, a tick is a tick."
+ },
+ {
+  "id": "products.tag.3",
+  "kind": "text",
+  "default": "Developer alpha of the SDK: after the preview, and it earns DAITA."
+ },
+ {
+  "id": "products.tag.4",
+  "kind": "text",
+  "default": "The arithmetic"
+ },
+ {
+  "id": "products.h3.3",
+  "kind": "text",
+  "default": "EGPT Math"
+ },
+ {
+  "id": "products.p.4",
+  "kind": "text",
+  "default": "Bit-exact real and transcendental arithmetic in place of floating point. Matrices, polynomials, order-finding and transcendental functions on exact values, so error never accumulates."
+ },
+ {
+  "id": "products.tag.5",
+  "kind": "text",
+  "default": "The builder"
+ },
+ {
+  "id": "products.h3.4",
+  "kind": "text",
+  "default": "STUDIO"
+ },
+ {
+  "id": "products.p.5",
+  "kind": "text",
+  "default": "Drag-and-drop desktop physics. Emitters, walls, tunnels, detector walls and logic gates on a palette; a live 2D/3D canvas; layers and an inspector; every project is also code."
+ },
+ {
+  "id": "products.more.1",
+  "kind": "text",
+  "default": "Open STUDIO ↗"
+ },
+ {
+  "id": "products.tag.6",
+  "kind": "text",
+  "default": "The codec builder"
+ },
+ {
+  "id": "products.h3.5",
+  "kind": "text",
+  "default": "ROSETTA"
+ },
+ {
+  "id": "products.p.6",
+  "kind": "text",
+  "default": "A visual flow canvas for building codecs on exact arithmetic, with the code drawer always in sync. Drop a transform, see the chain; edit the code, see the chain rebuild."
+ },
+ {
+  "id": "products.more.2",
+  "kind": "text",
+  "default": "Open ROSETTA ↗"
+ },
+ {
+  "id": "products.tag.7",
+  "kind": "text",
+  "default": "The notebook"
+ },
+ {
+  "id": "products.h3.6",
+  "kind": "text",
+  "default": "FAT"
+ },
+ {
+  "id": "products.p.7",
+  "kind": "html",
+  "default": "Mathematica meets cellular automata, named with a nod to Lean. <code>.frqnb</code> notebooks with math, canvas, chart, view and module cells; the canvas cell is a live simulation. Same files in the browser and in VS Code."
+ },
+ {
+  "id": "products.more.3",
+  "kind": "text",
+  "default": "Open FAT ↗"
+ },
+ {
+  "id": "products.map",
+  "kind": "html",
+  "default": "<b>Which one do you need?</b> Robotics and embodied-AI teams license Maxi. Chip and hardware makers start with FRQTL and the FAT tier. Simulation teams take STUDIO and the engine. Codec and signal-processing teams take ROSETTA and EGPT Math. Research groups start in FAT."
+ },
+ {
+  "id": "opencore.eyebrow",
+  "kind": "text",
+  "default": "Open core"
+ },
+ {
+  "id": "opencore.h2",
+  "kind": "text",
+  "default": "How open core pays the people who do the science."
+ },
+ {
+  "id": "opencore.lede",
+  "kind": "text",
+  "default": "The engines are open inside the DeSciX community. Commercial use is licensed outside it. Licence revenue buys the community's token. That is the whole wheel, and it turns on its own."
+ },
+ {
+  "id": "opencore.svg.aria-label",
+  "kind": "text",
+  "default": "The value-return flywheel: contributors improve Maxi and FRQTL inside DeSciX; Courant Group licenses commercial-grade builds outside; at least 10 percent of licence revenue, 50 percent in year one, buys EGPT tokens back from the pools; contributors who hold EGPT gain, and more contribute."
+ },
+ {
+  "id": "opencore.text.1",
+  "kind": "text",
+  "default": "OPEN INSIDE · DeSciX community"
+ },
+ {
+  "id": "opencore.text.2",
+  "kind": "text",
+  "default": "VALUE RETURN OUTSIDE · Courant Group"
+ },
+ {
+  "id": "opencore.text.3",
+  "kind": "text",
+  "default": "EGPT"
+ },
+ {
+  "id": "opencore.text.4",
+  "kind": "text",
+  "default": "1 · Contribute"
+ },
+ {
+  "id": "opencore.text.5",
+  "kind": "text",
+  "default": "Code, proofs, the corpus, Maxi's training."
+ },
+ {
+  "id": "opencore.text.6",
+  "kind": "text",
+  "default": "Paid in EGPT under the Community Agreement."
+ },
+ {
+  "id": "opencore.text.7",
+  "kind": "text",
+  "default": "2 · Maxi and FRQTL improve"
+ },
+ {
+  "id": "opencore.text.8",
+  "kind": "text",
+  "default": "Every contribution lands in the same engine"
+ },
+ {
+  "id": "opencore.text.9",
+  "kind": "text",
+  "default": "the commercial builds are cut from."
+ },
+ {
+  "id": "opencore.text.10",
+  "kind": "text",
+  "default": "3 · Courant Group licenses"
+ },
+ {
+  "id": "opencore.text.11",
+  "kind": "text",
+  "default": "Commercial-grade builds to OEM, ODM,"
+ },
+ {
+  "id": "opencore.text.12",
+  "kind": "text",
+  "default": "chip and platform companies."
+ },
+ {
+  "id": "opencore.text.13",
+  "kind": "text",
+  "default": "4 · Licences, paid in EGPT"
+ },
+ {
+  "id": "opencore.text.14",
+  "kind": "text",
+  "default": "The licensee buys tokens on the open market."
+ },
+ {
+  "id": "opencore.text.15",
+  "kind": "text",
+  "default": "10M EGPT for the first, 100M for the tenth."
+ },
+ {
+  "id": "opencore.text.16",
+  "kind": "text",
+  "default": "5 · Treasury buys back EGPT"
+ },
+ {
+  "id": "opencore.text.17",
+  "kind": "text",
+  "default": "At least 10% of licence revenue, 50% in year one,"
+ },
+ {
+  "id": "opencore.text.18",
+  "kind": "text",
+  "default": "bought from the open pools."
+ },
+ {
+  "id": "opencore.text.19",
+  "kind": "text",
+  "default": "6 · Contributors gain"
+ },
+ {
+  "id": "opencore.text.20",
+  "kind": "text",
+  "default": "The token they earned is the token being"
+ },
+ {
+  "id": "opencore.text.21",
+  "kind": "text",
+  "default": "bought. More people contribute."
+ },
+ {
+  "id": "opencore.text.22",
+  "kind": "text",
+  "default": "open builds, open science"
+ },
+ {
+  "id": "opencore.text.23",
+  "kind": "text",
+  "default": "source behind the KYC gate;"
+ },
+ {
+  "id": "opencore.text.24",
+  "kind": "text",
+  "default": "builds licensed"
+ },
+ {
+  "id": "opencore.text.25",
+  "kind": "text",
+  "default": "negotiated one by one"
+ },
+ {
+  "id": "opencore.text.26",
+  "kind": "text",
+  "default": "≥ 10% of proceeds · 50% in year one"
+ },
+ {
+  "id": "opencore.text.27",
+  "kind": "text",
+  "default": "demand for EGPT rises"
+ },
+ {
+  "id": "opencore.text.28",
+  "kind": "text",
+  "default": "held by the people who built it"
+ },
+ {
+  "id": "opencore.text.29",
+  "kind": "text",
+  "default": "on-platform AI-credit sales"
+ },
+ {
+  "id": "opencore.text.30",
+  "kind": "text",
+  "default": "also fund buybacks, pro rata by use"
+ },
+ {
+  "id": "opencore.figcaption",
+  "kind": "text",
+  "default": "The value-return flywheel. Inside the line, the work is open and paid in EGPT. Outside it, Courant Group sells commercial-grade licences and sends at least a tenth of the revenue, half in year one, back through the DeSciX treasury to buy the token contributors hold. Each turn makes the engine better and the token scarcer."
+ },
+ {
+  "id": "opencore.h3.1",
+  "kind": "text",
+  "default": "Why open core."
+ },
+ {
+  "id": "opencore.p.1",
+  "kind": "text",
+  "default": "A physics engine nobody can read is a physics engine nobody trusts. Approved developers inside DeSciX read the source, run the builds, and improve them; that is where the science gets done and where it gets checked."
+ },
+ {
+  "id": "opencore.h3.2",
+  "kind": "text",
+  "default": "Why a licence."
+ },
+ {
+  "id": "opencore.p.2",
+  "kind": "text",
+  "default": "Commercial products need optimised, supported, commercial-grade builds, hardware integration, and terms that respect export controls and exclusivity. That is what Courant Group sells, and it is the only thing it sells."
+ },
+ {
+  "id": "opencore.h3.3",
+  "kind": "text",
+  "default": "Why it is decentralized science."
+ },
+ {
+  "id": "opencore.p.3",
+  "kind": "text",
+  "default": "Academic economics pay for publishing. This wheel pays for understanding: the people who make Maxi imagine better are paid in the asset that commercial use buys back. The incentive and the outcome point the same way."
+ },
+ {
+  "id": "media.eyebrow",
+  "kind": "text",
+  "default": "Media"
+ },
+ {
+  "id": "media.h2",
+  "kind": "text",
+  "default": "Watch it."
+ },
+ {
+  "id": "media.b.1",
+  "kind": "text",
+  "default": "FRQTL: the promo film"
+ },
+ {
+  "id": "media.span.1",
+  "kind": "text",
+  "default": "YouTube · opens in a new tab"
+ },
+ {
+  "id": "media.p",
+  "kind": "text",
+  "default": "The FRQTL film from the open-source launch, the press release that announced the first hyper-computer, and the record of the proofs."
+ },
+ {
+  "id": "media.b.2",
+  "kind": "text",
+  "default": "DeSciX Announces Arrival of the World's First Hyper Computer"
+ },
+ {
+  "id": "media.span.2",
+  "kind": "text",
+  "default": "Press release, 18 March 2025"
+ },
+ {
+  "id": "media.b.3",
+  "kind": "text",
+  "default": "The All-In letter"
+ },
+ {
+  "id": "media.span.3",
+  "kind": "text",
+  "default": "An open letter on the Blueprints, September 2026"
+ },
+ {
+  "id": "media.b.4",
+  "kind": "text",
+  "default": "Robotic Imagination"
+ },
+ {
+  "id": "media.span.4",
+  "kind": "text",
+  "default": "An industry report on world models and GAPI, August 2026"
+ },
+ {
+  "id": "heritage.eyebrow",
+  "kind": "text",
+  "default": "Heritage"
+ },
+ {
+  "id": "heritage.h2",
+  "kind": "text",
+  "default": "Why “Courant.”"
+ },
+ {
+  "id": "heritage.div.1",
+  "kind": "html",
+  "default": "<span>1951</span> &nbsp;Rota, Church's star undergraduate, at Princeton; von Neumann in Fine Hall"
+ },
+ {
+  "id": "heritage.div.2",
+  "kind": "html",
+  "default": "<span>1952</span> &nbsp;AEC computer installed at NYU's Courant Institute"
+ },
+ {
+  "id": "heritage.div.3",
+  "kind": "html",
+  "default": "<span>1955</span> &nbsp;Von Neumann takes his seat on the Atomic Energy Commission"
+ },
+ {
+  "id": "heritage.div.4",
+  "kind": "html",
+  "default": "<span>1956</span> &nbsp;Rota arrives at Courant"
+ },
+ {
+  "id": "heritage.div.5",
+  "kind": "html",
+  "default": "<span>1957</span> &nbsp;Von Neumann dies, the new science unpublished"
+ },
+ {
+  "id": "heritage.div.6",
+  "kind": "html",
+  "default": "<span>1991</span> &nbsp;Rota hands the Blueprints to a student"
+ },
+ {
+  "id": "heritage.div.7",
+  "kind": "html",
+  "default": "<span>2012</span> &nbsp;courantgroup.com registered"
+ },
+ {
+  "id": "heritage.div.8",
+  "kind": "html",
+  "default": "<span>2024</span> &nbsp;The FRQTL patent filed"
+ },
+ {
+  "id": "heritage.div.9",
+  "kind": "html",
+  "default": "<span>2026</span> &nbsp;Maxi"
+ },
+ {
+  "id": "heritage.p.1",
+  "kind": "text",
+  "default": "In 1952 the Atomic Energy Commission put an electronic computer at NYU's Courant Institute. Von Neumann, then an AEC commissioner, had corresponded with Courant for decades about computing shocks with difference equations: the continuous world, handled by discrete steps."
+ },
+ {
+  "id": "heritage.p.2",
+  "kind": "text",
+  "default": "In 1951 a star undergraduate of Alonzo Church's named Gian-Carlo Rota was at Princeton, with von Neumann lurking in Fine Hall. A few years later, in 1956, that same young man, now a newly minted Yale PhD, arrived at Courant as a postdoc. Von Neumann died the next year with his new science unpublished. Rota spent the rest of his life at Los Alamos and MIT carrying what Ulam and von Neumann had started, and in 1991 he handed it to a student."
+ },
+ {
+  "id": "heritage.close",
+  "kind": "text",
+  "default": "Courant Group is named for the room where continuous physics met discrete computation, and for the year the work went underground. Maxi is that work, finished: a physics engine that doesn't know any physics equations, and a mind that imagines in it."
+ },
+ {
+  "id": "heritage.overnight",
+  "kind": "html",
+  "default": "Courant Group registered this domain in November 2012. Fourteen years later, this is the <b>overnight success.</b>"
+ },
+ {
+  "id": "heritage.a",
+  "kind": "text",
+  "default": "The full story, with the documents ↗"
+ },
+ {
+  "id": "patent.num",
+  "kind": "html",
+  "default": "<small>The FRQTL patent</small>US 2026/0127327 A1"
+ },
+ {
+  "id": "patent.h3",
+  "kind": "text",
+  "default": "Quantum Computing Fractal Compression and Decentralized Computing for Predictive Physics Simulation"
+ },
+ {
+  "id": "patent.p",
+  "kind": "text",
+  "default": "Filed November 2024. Held for security review for over a year. Published May 2026."
+ },
+ {
+  "id": "patent.a.1",
+  "kind": "text",
+  "default": "USPTO ↗"
+ },
+ {
+  "id": "patent.a.2",
+  "kind": "text",
+  "default": "Google Patents ↗"
+ },
+ {
+  "id": "licensing.eyebrow",
+  "kind": "text",
+  "default": "Licensing"
+ },
+ {
+  "id": "licensing.h2",
+  "kind": "text",
+  "default": "The terms."
+ },
+ {
+  "id": "licensing.lede",
+  "kind": "text",
+  "default": "Licences are paid in EGPT, not dollars. That is the engine of the flywheel: to license Maxi you hold the community's token, and the price scales with the tokens in circulation."
+ },
+ {
+  "id": "licensing.h3.1",
+  "kind": "text",
+  "default": "Open inside"
+ },
+ {
+  "id": "licensing.p.1",
+  "kind": "text",
+  "default": "Anyone can run the engines: the compiled builds are public. The source is open to approved developers inside DeSciX, behind a KYC gate that complies with domicile regulations, including export controls."
+ },
+ {
+  "id": "licensing.p.2",
+  "kind": "text",
+  "default": "The public builds are for learning and experimenting; they are not optimised and not commercial grade. Commercial-grade builds come with a licence."
+ },
+ {
+  "id": "licensing.h3.2",
+  "kind": "text",
+  "default": "Paid in tokens"
+ },
+ {
+  "id": "licensing.p.3",
+  "kind": "text",
+  "default": "A licence is acquired with EGPT. Ten enterprise licences, priced in order of signing, from ten million tokens for the first to a hundred million for the last. No equity. Each negotiated individually; exclusivity by geography or industry available; subject to US export controls."
+ },
+ {
+  "id": "licensing.big.1",
+  "kind": "html",
+  "default": "10M → 100M EGPT<small>first licence to tenth</small>"
+ },
+ {
+  "id": "licensing.h3.3",
+  "kind": "text",
+  "default": "Five-year term"
+ },
+ {
+  "id": "licensing.p.4",
+  "kind": "text",
+  "default": "Licences are not perpetual. The initial term is five years, renewable. A minimum of 10 percent of licence proceeds, 50 percent in year one, returns to the community through the DeSciX treasury."
+ },
+ {
+  "id": "licensing.big.2",
+  "kind": "html",
+  "default": "5 years<small>initial term · renewable</small>"
+ },
+ {
+  "id": "licensing.th.1",
+  "kind": "text",
+  "default": "Licence role"
+ },
+ {
+  "id": "licensing.th.2",
+  "kind": "text",
+  "default": "Who it is for"
+ },
+ {
+  "id": "licensing.th.3",
+  "kind": "text",
+  "default": "Covers"
+ },
+ {
+  "id": "licensing.th.4",
+  "kind": "text",
+  "default": "Term"
+ },
+ {
+  "id": "licensing.td.1",
+  "kind": "text",
+  "default": "Node operator"
+ },
+ {
+  "id": "licensing.td.2",
+  "kind": "text",
+  "default": "A company that runs Maxi or FRQTL as infrastructure for others"
+ },
+ {
+  "id": "licensing.td.3",
+  "kind": "text",
+  "default": "Search, analytics and API infrastructure; earns transaction-fee tokens; a stake of issued tokens qualifies it for governance"
+ },
+ {
+  "id": "licensing.mono.1",
+  "kind": "text",
+  "default": "5 yr"
+ },
+ {
+  "id": "licensing.td.4",
+  "kind": "text",
+  "default": "DApp developer"
+ },
+ {
+  "id": "licensing.td.5",
+  "kind": "text",
+  "default": "Robotics, chip and device makers; software teams"
+ },
+ {
+  "id": "licensing.td.6",
+  "kind": "text",
+  "default": "Commercial-grade builds inside a product; hardware integration; the FAT tier; source access under the KYC gate; STUDIO, ROSETTA and FAT for authoring"
+ },
+ {
+  "id": "licensing.mono.2",
+  "kind": "text",
+  "default": "5 yr"
+ },
+ {
+  "id": "licensing.td.7",
+  "kind": "text",
+  "default": "Reseller"
+ },
+ {
+  "id": "licensing.td.8",
+  "kind": "text",
+  "default": "Aggregators and bulk sellers of search, compute and DApps"
+ },
+ {
+  "id": "licensing.td.9",
+  "kind": "text",
+  "default": "Packaging and reselling licensed builds; shares tokens with the developer it resells"
+ },
+ {
+  "id": "licensing.mono.3",
+  "kind": "text",
+  "default": "5 yr"
+ },
+ {
+  "id": "licensing.td.10",
+  "kind": "text",
+  "default": "Referrer"
+ },
+ {
+  "id": "licensing.td.11",
+  "kind": "text",
+  "default": "Connectors and integrators who bring data or customers in"
+ },
+ {
+  "id": "licensing.td.12",
+  "kind": "text",
+  "default": "A share of the tokens their connection earns"
+ },
+ {
+  "id": "licensing.mono.4",
+  "kind": "text",
+  "default": "5 yr"
+ },
+ {
+  "id": "licensing.map",
+  "kind": "text",
+  "default": "The roles are the delegated-proof-of-stake roles of the DAITA token economy: stakeholders, witness-validators, node operators, developers, delegates, a treasury, referrers and resellers. An enterprise licence is held within one of them; the role sets what the licence covers, the tier sets the price."
+ },
+ {
+  "id": "licensing.tag",
+  "kind": "text",
+  "default": "The agreement"
+ },
+ {
+  "id": "licensing.h3.4",
+  "kind": "text",
+  "default": "A living experiment, with EGPT as the test case."
+ },
+ {
+  "id": "licensing.p.5",
+  "kind": "html",
+  "default": "The economic model is a living and evolving experiment, and EGPT, the token needed to license Maxi and FRQTL, is its test case. The controlling real-world contract is the DeSciX Community License Membership Agreement; read it, it is not summarised here. The whitepapers it references are its conceptual inspiration: <i>DAITA: A Sustainable Data Economy for Artificial Intelligence</i> for the token economy, its roles and its market protocols, and the DeSciX whitepaper for community source and the IP-IPO. Terms will change; the agreement governs."
+ },
+ {
+  "id": "licensing.a.1",
+  "kind": "text",
+  "default": "The Community License Membership Agreement ↗"
+ },
+ {
+  "id": "licensing.a.2",
+  "kind": "text",
+  "default": "DAITA whitepaper ↗"
+ },
+ {
+  "id": "licensing.a.3",
+  "kind": "text",
+  "default": "DeSciX whitepaper ↗"
+ },
+ {
+  "id": "licensing.a.4",
+  "kind": "text",
+  "default": "The plan ↗"
+ },
+ {
+  "id": "licensing.btn",
+  "kind": "text",
+  "default": "Request a licence"
+ },
+ {
+  "id": "request.eyebrow",
+  "kind": "text",
+  "default": "Request a licence"
+ },
+ {
+  "id": "request.h2",
+  "kind": "text",
+  "default": "Tell us what you're building."
+ },
+ {
+  "id": "request.p.1",
+  "kind": "text",
+  "default": "Seven questions. Every request is read by the founder."
+ },
+ {
+  "id": "request.small.1",
+  "kind": "text",
+  "default": "Enterprise, custom-build, integration and reseller licences are all requested here. Say which if you know; if you don't, say what you're building and we'll tell you."
+ },
+ {
+  "id": "request.label.1",
+  "kind": "text",
+  "default": "Who"
+ },
+ {
+  "id": "request.input.placeholder.1",
+  "kind": "text",
+  "default": "Name and role"
+ },
+ {
+  "id": "request.label.2",
+  "kind": "text",
+  "default": "Organisation"
+ },
+ {
+  "id": "request.input.placeholder.2",
+  "kind": "text",
+  "default": "Company, and where it is domiciled"
+ },
+ {
+  "id": "request.label.3",
+  "kind": "text",
+  "default": "Intended use"
+ },
+ {
+  "id": "request.textarea.placeholder",
+  "kind": "text",
+  "default": "What will you build or sell with Maxi or FRQTL?"
+ },
+ {
+  "id": "request.label.4",
+  "kind": "text",
+  "default": "Scale"
+ },
+ {
+  "id": "request.input.placeholder.3",
+  "kind": "text",
+  "default": "Units, users, deployments or seats"
+ },
+ {
+  "id": "request.label.5",
+  "kind": "text",
+  "default": "Timeline"
+ },
+ {
+  "id": "request.input.placeholder.4",
+  "kind": "text",
+  "default": "When you need it"
+ },
+ {
+  "id": "request.label.6",
+  "kind": "text",
+  "default": "Hardware or software"
+ },
+ {
+  "id": "request.label.text.1",
+  "kind": "text",
+  "default": "Software"
+ },
+ {
+  "id": "request.label.text.2",
+  "kind": "text",
+  "default": "Hardware designs"
+ },
+ {
+  "id": "request.label.text.3",
+  "kind": "text",
+  "default": "Both"
+ },
+ {
+  "id": "request.label.7",
+  "kind": "text",
+  "default": "Contact"
+ },
+ {
+  "id": "request.input.placeholder.5",
+  "kind": "text",
+  "default": "Email"
+ },
+ {
+  "id": "request.label.8",
+  "kind": "text",
+  "default": "Licence role"
+ },
+ {
+  "id": "request.option.1",
+  "kind": "text",
+  "default": "Node operator"
+ },
+ {
+  "id": "request.option.2",
+  "kind": "text",
+  "default": "DApp developer"
+ },
+ {
+  "id": "request.option.3",
+  "kind": "text",
+  "default": "Reseller"
+ },
+ {
+  "id": "request.option.4",
+  "kind": "text",
+  "default": "Referrer"
+ },
+ {
+  "id": "request.option.5",
+  "kind": "text",
+  "default": "Not sure yet"
+ },
+ {
+  "id": "request.b",
+  "kind": "text",
+  "default": "Wallet check"
+ },
+ {
+  "id": "request.need.1",
+  "kind": "html",
+  "default": "A licence is paid in EGPT. The next enterprise licence needs <span id=\"need-amt\">10,000,000</span> EGPT."
+ },
+ {
+  "id": "request.btn.1",
+  "kind": "text",
+  "default": "Connect wallet (Powch)"
+ },
+ {
+  "id": "request.bal",
+  "kind": "html",
+  "default": "Balance: <b id=\"bal-amt\">—</b> EGPT · <span id=\"bal-verdict\"></span>"
+ },
+ {
+  "id": "request.btn.2",
+  "kind": "text",
+  "default": "Buy EGPT on the markets ↗"
+ },
+ {
+  "id": "request.need.2",
+  "kind": "text",
+  "default": "Placeholder: on the live site the Powch SDK reads your wallet; nothing is read here."
+ },
+ {
+  "id": "request.btn.3",
+  "kind": "text",
+  "default": "Send the request"
+ },
+ {
+  "id": "request.small.2",
+  "kind": "text",
+  "default": "Name, organisation, intended use and an email are needed."
+ },
+ {
+  "id": "request.h3",
+  "kind": "text",
+  "default": "Thanks. It's on its way."
+ },
+ {
+  "id": "request.p.2",
+  "kind": "text",
+  "default": "Every request is read by the founder. You'll hear back within five business days."
+ },
+ {
+  "id": "request.small.3",
+  "kind": "text",
+  "default": "The form posts to the licensing intake once the Powch integration lands; until then it is a placeholder."
+ }
+]

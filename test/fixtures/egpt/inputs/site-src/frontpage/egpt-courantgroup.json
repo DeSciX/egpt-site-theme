@@ -1,0 +1,53 @@
+{
+  "title": "Courant Group, LLC — Meet Maxi, robotic AI with true imagination",
+  "description": "Courant Group licenses Maxi, the imagining AI, and FRQTL, the physics engine that doesn't know any physics equations. Generalized Artificial Physical Intelligence, licensed for robotics, chips and platforms.",
+  "brand": "template",
+  "nav": "template",
+  "hero": "template",
+  "footer": "template",
+  "sections": [
+    {
+      "use": "gapi"
+    },
+    {
+      "use": "maxi"
+    },
+    {
+      "use": "proof"
+    },
+    {
+      "use": "technology"
+    },
+    {
+      "use": "products"
+    },
+    {
+      "use": "opencore"
+    },
+    {
+      "use": "media"
+    },
+    {
+      "use": "heritage"
+    },
+    {
+      "use": "patent"
+    },
+    {
+      "use": "licensing"
+    },
+    {
+      "use": "request"
+    }
+  ],
+  "links": [],
+  "scripts": {
+    "codesite": true,
+    "sdk": true,
+    "template_scripts": true
+  },
+  "self_host": "https://egpt-courantgroup.descix.net",
+  "through_line": {
+    "source": "served-roster"
+  }
+}

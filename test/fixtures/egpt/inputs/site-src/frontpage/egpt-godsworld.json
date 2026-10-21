@@ -1,0 +1,150 @@
+{
+  "title": "Gods World — Meet Maxi, robotic AI with true imagination",
+  "description": "Maxi builds a scene, changes it, runs it forward, watches what happens and learns from what it watched. Talk to Maxi and watch its imagination.",
+  "brand": {
+    "name": "Gods World",
+    "tag": "Maxi's Lab"
+  },
+  "nav": [
+    {
+      "text": "Maxi",
+      "href": "#maxi"
+    },
+    {
+      "text": "Not a world model",
+      "href": "#gapi"
+    },
+    {
+      "text": "Proof",
+      "href": "#proof"
+    },
+    {
+      "text": "Earn",
+      "href": "#earn"
+    },
+    {
+      "text": "Open core",
+      "href": "#opencore"
+    },
+    {
+      "text": "Open Maxi's Lab →",
+      "href": "app.html",
+      "class": "mono",
+      "style": "color:var(--cyan)"
+    }
+  ],
+  "hero": {
+    "eyebrow": "Generalized Artificial Physical Intelligence",
+    "h1_html": "Meet Maxi, robotic AI with <em>true imagination.</em>",
+    "lede": "Maxi runs the future before it acts. Give it a scene, let it change something, and watch what it sees, inside the physics engine that doesn't know any physics equations. You talk on one side of the screen; its imagination is on the other.",
+    "primary": {
+      "text": "Watch Maxi imagine",
+      "href": "app.html"
+    },
+    "secondary": {
+      "text": "The scenes it imagines in",
+      "href": "#proof"
+    },
+    "kicker_html": "<b>Every stage runs today.</b> Build, intervene, run the counterfactual, see, learn: say \"put light in the scene and let light do what light does\" and see what it sees.",
+    "art": {
+      "src": "images/hero.jpg",
+      "alt": "Maxi's imagination: a three-dimensional double-slit experiment, the detector wall painting its own interference pattern hit by hit"
+    }
+  },
+  "css": ".hero h1{max-width:13ch}\n.brand b{white-space:nowrap}\n.navlinks{gap:18px;font-size:14.5px;white-space:nowrap}",
+  "sections": [
+    {
+      "use": "maxi",
+      "links": [
+        [
+          "<a href=\"https://egpt-godsworld.descix.net\" target=\"_blank\" rel=\"noopener\">egpt-godsworld.descix.net</a>",
+          "<a href=\"app.html\">egpt-godsworld.descix.net</a>"
+        ]
+      ]
+    },
+    {
+      "use": "gapi"
+    },
+    {
+      "use": "proof"
+    },
+    {
+      "file": "egpt-godsworld/earn.html"
+    },
+    {
+      "use": "opencore"
+    },
+    {
+      "use": "heritage",
+      "links": [
+        [
+          "<a href=\"https://egpt.descix.net\" target=\"_blank\" rel=\"noopener\">The full story, with the documents ↗</a>",
+          "<a href=\"https://egpt.descix.net/#00_OUTPUTS/EGPT_Backstory.md\" target=\"_blank\" rel=\"noopener\">The full story, with the documents ↗</a>"
+        ]
+      ]
+    },
+    {
+      "file": "egpt-godsworld/licence.html"
+    }
+  ],
+  "links": [],
+  "self_host": "https://egpt-godsworld.descix.net",
+  "footer": {
+    "name": "Gods World",
+    "tag": "Maxi's Lab",
+    "links": [
+      {
+        "text": "Open Maxi's Lab",
+        "href": "app.html"
+      },
+      {
+        "text": "FRQTL",
+        "href": "https://egpt-frqtl.descix.net"
+      },
+      {
+        "text": "Courant Group",
+        "href": "https://egpt-courantgroup.descix.net"
+      },
+      {
+        "text": "EGPT library",
+        "href": "https://egpt.descix.net/"
+      },
+      {
+        "text": "DeSciX",
+        "href": "https://descix.net"
+      }
+    ],
+    "legal_html": "Maxi and FRQTL are trademarks of Courant Group, LLC. EGPT is a community project on DeSciX."
+  },
+  "scripts": {
+    "codesite": false,
+    "forward": {
+      "query_to": "app.html"
+    },
+    "sdk": true,
+    "modules": [
+      "app-assets/maxi-host-view.js"
+    ],
+    "import_map": true
+  },
+  "share": {
+    "site": "godsworld.ai",
+    "title": "Gods World — Maxi's Lab",
+    "description": "Maxi builds a scene, changes it, runs it forward, watches what happens and learns from what it watched. Talk to Maxi and watch its imagination.",
+    "icon": {
+      "glyph": "G",
+      "ink": "#06202a",
+      "tile": "#5fcbe6",
+      "accent": "#06202a"
+    },
+    "card": {
+      "kicker": "Gods World · Maxi's Lab",
+      "headline": "Talk to Maxi and watch it imagine.",
+      "line": "Robotic AI that runs the future before it acts.",
+      "art": {
+        "template": "template/images/studio.jpg",
+        "fit": "cover"
+      }
+    }
+  }
+}
