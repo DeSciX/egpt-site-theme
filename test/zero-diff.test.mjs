@@ -4,23 +4,19 @@
 // byte for byte, and every output file by sha256. The quotation ground is the library repository at the same commit,
 // fetched from GitHub (ground.mjs githubGround); an unreachable ground is a FAILURE, never a skip.
 //
-// What is normalised: ONLY the line `<body data-frontpage-…>` (the generator stamped data-frontpage-template and the
-// library's HEAD; the theme stamps data-frontpage-theme, data-frontpage-roster and the app repository's HEAD), and that
-// line is itself asserted to name the app, this theme's version and the roster version the build used.
+// The comparison and what it normalises (the stamp line only) are test/lib/expected.mjs diffOf; the stamp line is itself
+// asserted to name the app, this theme's version and the roster version the build used.
 import test from 'node:test';
 import assert from 'node:assert';
-import crypto from 'node:crypto';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { BIN, FIXTURES, SOURCE, THEME, git, commitAll, throughLines, X } from './lib/world.mjs';
 import { THEME_VERSION, pageOutputs } from '../src/page.mjs';
+import { STAMP, diffOf, stampFor, walk } from './lib/expected.mjs';
 
-const STAMP = /^<body data-frontpage-app="[^"]*"[^>\n]*>$/m;
 const ROSTER_VERSION = JSON.parse(fs.readFileSync(path.join(THEME, 'node_modules', '@descix', 'frqtl-web', 'package.json'), 'utf8')).version;
-const sha = b => crypto.createHash('sha256').update(b).digest('hex');
-const walk = d => fs.readdirSync(d, { withFileTypes: true }).flatMap(e => (e.isDirectory() ? walk(path.join(d, e.name)).map(x => `${e.name}/${x}`) : [e.name])).sort();
 const CACHE = fs.mkdtempSync(path.join(os.tmpdir(), 'theme-ground-cache-'));
 
 // The inputs, committed in a throwaway app repository, with the theme's node_modules (the pinned roster and app-sdk).
@@ -43,26 +39,6 @@ function buildAll(T) {
   }
   return runs;
 }
-// The differences of one app's output from the expected files: [] when zero.
-function diffOf(app, dir) {
-  const exp = path.join(FIXTURES, 'expected', app);
-  const want = JSON.parse(fs.readFileSync(path.join(exp, 'files.json'), 'utf8'));
-  const got = walk(dir);
-  const d = [];
-  if (got.join() !== Object.keys(want).sort().join()) d.push(`file set: missing ${Object.keys(want).filter(f => !got.includes(f))}, extra ${got.filter(f => !(f in want))}`);
-  for (const f of got.filter(x => x in want)) {
-    const bytes = fs.readFileSync(path.join(dir, f));
-    if (f === 'index.html') {
-      const a = fs.readFileSync(path.join(exp, 'index.html'), 'utf8'), b = bytes.toString('utf8');
-      if ((b.match(new RegExp(STAMP.source, 'gm')) || []).length !== 1) d.push('index.html: the stamp line is not there exactly once');
-      if (a.replace(STAMP, '<body>') !== b.replace(STAMP, '<body>')) d.push('index.html');
-      if (sha(Buffer.from(a)) !== want[f]) d.push('fixture: expected/index.html is not the file files.json hashes');
-    } else if (sha(bytes) !== want[f]) d.push(f);
-  }
-  if (fs.existsSync(path.join(exp, 'share.json')) && !fs.readFileSync(path.join(exp, 'share.json')).equals(fs.readFileSync(path.join(dir, 'share.json')))) d.push('share.json');
-  return d;
-}
-
 let base;
 test.before(() => {
   const T = inputsRepo();
@@ -75,7 +51,7 @@ for (const app of SOURCE.apps) {
     assert.equal(r.code, 0, r.err);
     assert.deepEqual(diffOf(app, r.out), []);
     const stamp = fs.readFileSync(path.join(r.out, 'index.html'), 'utf8').match(STAMP)[0];
-    assert.equal(stamp, `<body data-frontpage-app="${app}" data-frontpage-theme="${THEME_VERSION}" data-frontpage-roster="${ROSTER_VERSION}" data-frontpage-build="${base.head}">`);
+    assert.equal(stamp, stampFor({ app, theme: THEME_VERSION, roster: ROSTER_VERSION, build: base.head }));
   });
 }
 

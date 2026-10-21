@@ -6,7 +6,7 @@ writer, the view declarer, the share writer and the page gates. Each app owns it
 overrides, and builds its own page with the CLI.
 
 ```
-npm i -D --save-exact @descix/egpt-site-theme@0.1.0-p4.1 @descix/frqtl-web@0.6.1-p2.1 @descix/app-sdk@0.6.0
+npm i -D --save-exact @descix/egpt-site-theme@0.1.0-p5.1 @descix/frqtl-web@0.6.1-p3.1 @descix/app-sdk@0.6.0
 npx egpt-site-theme build frontpage/<app>.json --out site
 ```
 
@@ -100,6 +100,23 @@ kind, is major.
 `npm test` (Node 20+). `test/zero-diff.test.mjs` builds the five fixture pages (`test/fixtures/egpt/`, inputs from the
 library repository at the commit `source.json` names) and holds them to the library generator's own output at that
 commit; it reads the quotation ground from GitHub, so it needs the network.
+
+## Releases
+
+A GitHub Release on this repository tagged `egpt-site-theme-v<version>` publishes that version to npm
+(`.github/workflows/publish.yml`, npm trusted publishing with provenance; no npm token). The run fails on any other tag
+form, and when `<version>` is not `package.json` `version` at the tagged commit. A version already on npm is compared
+with the gated tarball: skipped when it is the same content, a failure when not.
+
+The dist-tag comes from the version alone: a version containing `-` (`0.1.0-p5.1`) publishes to `next`; any other
+version (`0.2.0`) publishes to `latest`, and `next` is moved to it too.
+
+What is published is gated as published, by `scripts/publish-gate.sh`: `npm test`; one `npm pack`; the tarball holds
+exactly `package.json` and the tracked files under `files` (`bin/`, `src/`, `LICENSE.md`, `README.md`), each equal to the
+tagged commit; an install of the tarball with its exact peers into an empty project, whose `egpt-site-theme build` must
+reproduce the `egpt` fixture page (`test/fixtures/egpt/expected/egpt/`); and the tarball's sha256, re-checked before
+`npm publish` takes that file. `bash scripts/publish-gate.sh` runs the same gate locally and prints the sha256 and the
+dist-tag.
 
 ## License
 
