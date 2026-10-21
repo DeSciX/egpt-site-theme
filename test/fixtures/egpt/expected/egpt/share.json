@@ -1,0 +1,9 @@
+{
+ "title": "EGPT-Evidence — the missing corpus",
+ "description": "The primary documents behind EGPT: von Neumann, Ulam and Rota in their own words, three machine-checked proofs, and two machines' answers on the Singularity.",
+ "icon": "images/share/favicon.ico",
+ "og_image": "images/share/share-1200x630.png",
+ "twitter_card": "summary_large_image",
+ "apple_touch_icon": "images/share/icon-180.png",
+ "default_view": "CodeSite"
+}

@@ -1,0 +1,42 @@
+<section class="sec" id="request"><div class="wrap">
+  <div class="form-wrap">
+    <div class="form-side">
+      <p class="eyebrow">{{slot:request.eyebrow}}</p>
+      <h2 style="margin:14px 0 18px">{{slot:request.h2}}</h2>
+      <p>{{slot:request.p.1}}</p>
+      <p class="small">{{slot:request.small.1}}</p>
+    </div>
+    <form id="licence-form" novalidate>
+      <div class="two">
+        <div class="field"><label for="f-who">{{slot:request.label.1}}</label><input id="f-who" name="who" type="text" placeholder="{{slot:request.input.placeholder.1}}" required></div>
+        <div class="field"><label for="f-org">{{slot:request.label.2}}</label><input id="f-org" name="org" type="text" placeholder="{{slot:request.input.placeholder.2}}" required></div>
+      </div>
+      <div class="field"><label for="f-use">{{slot:request.label.3}}</label><textarea id="f-use" name="use" placeholder="{{slot:request.textarea.placeholder}}" required></textarea></div>
+      <div class="two">
+        <div class="field"><label for="f-scale">{{slot:request.label.4}}</label><input id="f-scale" name="scale" type="text" placeholder="{{slot:request.input.placeholder.3}}"></div>
+        <div class="field"><label for="f-when">{{slot:request.label.5}}</label><input id="f-when" name="timeline" type="text" placeholder="{{slot:request.input.placeholder.4}}"></div>
+      </div>
+      <div class="field"><label>{{slot:request.label.6}}</label>
+        <div class="radios">
+          <label><input type="radio" name="kind" id="k-sw" value="software" checked> {{slot:request.label.text.1}}</label>
+          <label><input type="radio" name="kind" id="k-hw" value="hardware"> {{slot:request.label.text.2}}</label>
+          <label><input type="radio" name="kind" id="k-both" value="both"> {{slot:request.label.text.3}}</label>
+        </div>
+      </div>
+      <div class="field"><label for="f-contact">{{slot:request.label.7}}</label><input id="f-contact" name="contact" type="email" placeholder="{{slot:request.input.placeholder.5}}" required></div>
+      <div class="field"><label for="f-role">{{slot:request.label.8}}</label><select id="f-role" name="role"><option value="node">{{slot:request.option.1}}</option><option value="dev">{{slot:request.option.2}}</option><option value="reseller">{{slot:request.option.3}}</option><option value="referrer">{{slot:request.option.4}}</option><option value="unsure">{{slot:request.option.5}}</option></select></div>
+      <div class="wallet" id="wallet">
+        <div class="row"><div><b style="font-family:var(--sans)">{{slot:request.b}}</b><div class="need">{{slot:request.need.1}}</div></div><button class="btn btn-ghost btn-sm" type="button" id="btn-connect">{{slot:request.btn.1}}</button></div>
+        <div class="row" id="wallet-state" hidden><div class="bal">{{slot:request.bal}}</div><a class="btn btn-ghost btn-sm" id="btn-buy" href="https://descix.net" target="_blank" rel="noopener" hidden>{{slot:request.btn.2}}</a></div>
+        <p class="need">{{slot:request.need.2}}</p>
+      </div>
+      <div class="cta-row"><button class="btn btn-primary" type="submit">{{slot:request.btn.3}}</button></div>
+      <p id="form-err" class="small" style="color:var(--gold)" hidden>{{slot:request.small.2}}</p>
+    </form>
+    <div id="form-done" class="done" hidden>
+      <h3>{{slot:request.h3}}</h3>
+      <p>{{slot:request.p.2}}</p>
+      <p class="small" style="color:var(--mute)">{{slot:request.small.3}}</p>
+    </div>
+  </div>
+</div></section>

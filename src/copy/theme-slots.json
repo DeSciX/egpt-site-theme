@@ -1,0 +1,12 @@
+[
+ {
+  "id": "proof.tile.cta",
+  "kind": "text",
+  "default": "Open live ↗"
+ },
+ {
+  "id": "nav.login",
+  "kind": "text",
+  "default": "Log in with Powch"
+ }
+]

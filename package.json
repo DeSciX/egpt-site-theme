@@ -1,0 +1,46 @@
+{
+  "name": "@descix/egpt-site-theme",
+  "version": "0.1.0-p4.1",
+  "description": "The EGPT community's site theme: tokens, partials, the copy layer, the page assembler, the tile writer, the view declarer, the share writer and the page gates.",
+  "license": "SEE LICENSE IN LICENSE.md",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DeSciX/egpt-site-theme.git"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "exports": {
+    "./tokens": "./src/tokens.mjs",
+    "./tokens.css": "./src/tokens.css",
+    "./partials": "./src/partials.mjs",
+    "./copy": "./src/copy.mjs",
+    "./page": "./src/page.mjs",
+    "./tiles": "./src/tiles.mjs",
+    "./bridge": "./src/bridge.mjs",
+    "./share": "./src/share.mjs",
+    "./gates": "./src/gates.mjs",
+    "./package.json": "./package.json"
+  },
+  "bin": {
+    "egpt-site-theme": "bin/egpt-site-theme.mjs"
+  },
+  "files": [
+    "bin",
+    "src",
+    "LICENSE.md",
+    "README.md"
+  ],
+  "scripts": {
+    "test": "node --test test/*.test.mjs"
+  },
+  "peerDependencies": {
+    "@descix/app-sdk": "0.6.0",
+    "@descix/frqtl-web": "0.6.1-p2.1"
+  },
+  "devDependencies": {
+    "@descix/app-sdk": "0.6.0",
+    "@descix/frqtl-web": "0.6.1-p2.1"
+  }
+}

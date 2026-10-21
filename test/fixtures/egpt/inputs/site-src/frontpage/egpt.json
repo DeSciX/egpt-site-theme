@@ -1,0 +1,191 @@
+{
+  "title": "EGPT-Evidence — the missing corpus: 18.313x, the New Manhattan Project",
+  "description": "A digital library of the primary documents behind EGPT: von Neumann and Ulam at Los Alamos, Rota at MIT and the Courant Institute, three machine-checked proofs, a patent, and a conversation with a machine about what it all means.",
+  "brand": {
+    "name": "EGPT-Evidence",
+    "tag": "library"
+  },
+  "nav": [
+    {
+      "text": "The judgment",
+      "href": "#top"
+    },
+    {
+      "text": "The reflection",
+      "href": "#reflection"
+    },
+    {
+      "text": "The question",
+      "href": "#question"
+    },
+    {
+      "text": "Reading list",
+      "href": "#readinglist"
+    },
+    {
+      "text": "Barrier of Meaning",
+      "href": "#barrier"
+    },
+    {
+      "text": "18.313x",
+      "href": "#course"
+    },
+    {
+      "text": "Los Alamos",
+      "href": "#losalamos"
+    },
+    {
+      "text": "Podcast",
+      "href": "#podcast"
+    },
+    {
+      "text": "Open the library →",
+      "href": "library.html",
+      "class": "mono",
+      "style": "color:var(--cyan)"
+    }
+  ],
+  "hero": {
+    "file": "egpt/hero.html"
+  },
+  "css": "/* the jumbotron: one panel — a carousel of four slides until Read or Teleprompt shows the reflection in it (hero fragment egpt/hero.html) */\n.hero--argument{background:radial-gradient(70% 90% at 90% -10%,rgba(95,203,230,.10),transparent 60%),var(--bg)}\n.hero--argument .wrap{padding-block:clamp(22px,3.5vh,40px) clamp(20px,3vh,32px);gap:0;max-width:1120px;min-height:0}\n.jumbo{display:grid;gap:14px}\n.jumbo-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:8px 18px}\n.jumbo-head .eyebrow{margin:0}\n.jumbo-stage{position:relative;height:clamp(300px,45vh,480px);border:1px solid var(--line);border-radius:6px;background:linear-gradient(180deg,#070a0e,#0b0f14);overflow:hidden}\n.slide{position:absolute;inset:0;margin:0;display:grid;grid-template-columns:minmax(0,1fr);gap:28px;padding:clamp(18px,3vh,32px) clamp(18px,3vw,40px) 40px;align-items:center;opacity:0;transition:opacity .8s;pointer-events:none}\n.slide.is-on{opacity:1;pointer-events:auto}\n.slide--one{grid-template-columns:minmax(0,2fr) minmax(0,1fr)}\n.slide--qa{grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(20px,3vw,48px);align-items:center;padding-bottom:44px}\n.slide--qa .slide-text{align-self:center}\n.jumbo-q{margin:0;font-family:var(--serif);font-weight:300;font-size:clamp(22px,2.5vw,34px);line-height:1.14;letter-spacing:-.005em;color:var(--ink);text-wrap:balance;max-width:16ch}\n.jumbo-q::after{content:\"\";display:block;width:44px;height:2px;margin-top:16px;background:var(--cyan)}\n.jumbo-em{font-style:inherit;color:var(--cyan);text-decoration:underline;text-decoration-color:rgba(95,203,230,.45);text-underline-offset:.14em}\n.jumbo-cards{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;margin-top:12px}\n.jcard{position:relative;display:grid;gap:3px;align-content:start;padding:11px 12px 10px;border:1px solid var(--line);border-radius:6px;background:var(--bg2);text-decoration:none!important;color:inherit;min-width:0}\n.jcard-n{position:absolute;right:10px;top:9px;font-family:var(--mono);font-size:10px;letter-spacing:.08em;color:var(--mute)}\n.jcard:hover .jcard-n{color:var(--cyan)}\n.jcard:hover{border-color:var(--cyan)}\n.jcard .tag{margin:0 18px 0 0;font-family:var(--serif);font-size:15px;font-weight:500;line-height:1.2;color:var(--ink)}\n.jcard p{margin:0;font-size:11.5px;line-height:1.38;color:var(--ink2);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}\n.jcard--thumb{grid-template-rows:auto auto auto}\n.jcard img{width:100%;aspect-ratio:3/1;object-fit:cover;object-position:top;border-radius:4px;border:1px solid var(--line2);margin-bottom:3px}\n@media (max-width:1000px){.jumbo-cards{grid-template-columns:repeat(4,minmax(0,1fr))}}\n@media (max-width:800px){.jumbo-cards{grid-template-columns:repeat(3,minmax(0,1fr))}}\n@media (max-width:640px){.jumbo-cards{grid-template-columns:repeat(2,minmax(0,1fr))}}\n.slide-text{display:grid;gap:14px;min-width:0}\n.slide figcaption{font-size:13.5px;color:var(--mute);line-height:1.5}\n.slide figcaption::before{content:\"\\2014\\00a0\"}\n.slide figcaption q{quotes:none;color:var(--ink2)}\n.jumbo-pub{color:var(--ink);font-weight:600}\n.slide--duo{padding-top:14px;padding-bottom:40px;grid-template-columns:minmax(0,4fr) minmax(0,9fr)}\n@media (max-width:980px){.slide--duo{grid-template-columns:1fr}}\n.slide--duo .slide-text{gap:6px}\n.slide--long{align-items:center}\n.slide--long .jumbo-scale code{font-family:var(--mono);font-size:.86em;font-style:normal}\n.slide--duo .jumbo-scale{font-size:clamp(13.5px,1.25vw,16.5px);max-width:none;line-height:1.3}\n.slide--long .jumbo-scale{font-size:clamp(14px,1.3vw,17px);max-width:none;line-height:1.33}\n.slide--duo figcaption{margin-bottom:4px;font-size:13px}\n.slide figcaption a{color:var(--ink2)}\n.jumbo-verdict{position:relative;margin:0;padding-left:.55em;font-family:var(--serif);font-weight:300;font-style:italic;font-size:clamp(20px,2.4vw,31px);line-height:1.18;letter-spacing:-.005em;color:var(--ink);max-width:30ch;text-wrap:balance}\n.jumbo-verdict::before{content:\"\\201C\";position:absolute;left:-.25em;top:-.08em;font-size:1.9em;line-height:1;color:var(--cyan);font-style:normal}\n.jumbo-verdict::after{content:\"\\201D\";color:var(--cyan);font-style:normal}\n.jumbo-scale{position:relative;margin:0;padding-left:.55em;font-family:var(--serif);font-weight:300;font-style:italic;font-size:clamp(16px,1.75vw,23px);line-height:1.32;color:var(--ink);max-width:62ch;text-wrap:pretty}\n.jumbo-scale::before{content:\"\\201C\";position:absolute;left:-.25em;top:-.08em;font-size:1.9em;line-height:1;color:var(--cyan);font-style:normal}\n.jumbo-scale::after{content:\"\\201D\";color:var(--cyan);font-style:normal}\n.jumbo-shot{display:grid;grid-template-rows:minmax(0,1fr) auto;gap:8px;height:100%;min-height:0;justify-items:center;align-self:stretch;text-decoration:none!important}\n.jumbo-shot img{height:100%;min-height:0;width:auto;max-width:100%;object-fit:contain;border:1px solid var(--line2);border-radius:6px;box-shadow:0 20px 60px rgba(0,0,0,.55),0 0 0 1px rgba(95,203,230,.08);transition:transform .25s,border-color .2s}\n.jumbo-shot:hover img{transform:translateY(-2px);border-color:var(--cyan2)}\n.jumbo-shot__link{font-family:var(--mono);font-size:12px;color:var(--cyan);white-space:nowrap}\n.slide--image{grid-template-rows:minmax(0,1fr) auto;gap:10px;justify-items:center}\n.slide--image img{height:100%;min-height:0;width:auto;max-width:100%;object-fit:contain;border-radius:6px;border:1px solid var(--line2)}\n.jumbo-dots{position:absolute;left:0;right:0;bottom:0;display:flex;justify-content:center;gap:0;z-index:2;border-top:1px solid var(--line);background:rgba(11,15,20,.6)}\n.jumbo-dots button{display:flex;align-items:center;gap:8px;padding:9px 14px 10px;border:0;border-top:2px solid transparent;margin-top:-1px;background:transparent;color:var(--mute);font:500 11.5px/1 var(--mono);letter-spacing:.06em;cursor:pointer}\n.jumbo-dots button::before{content:\"\";width:7px;height:7px;border-radius:50%;border:1px solid var(--cyan2)}\n.jumbo-dots button:hover{color:var(--ink)}\n.jumbo-dots button.is-on{color:var(--ink);border-top-color:var(--cyan)}\n.jumbo-dots button.is-on::before{background:var(--cyan);border-color:var(--cyan)}\n.jumbo:not([data-mode=\"carousel\"]) .slide,.jumbo:not([data-mode=\"carousel\"]) .jumbo-dots{display:none}\n.jumbo[data-mode=\"carousel\"] .tp-btn--reading,.jumbo:not([data-mode=\"carousel\"]) .tp-btn--carousel,.jumbo[data-mode=\"read\"] [data-tp=\"restart\"],.jumbo[data-mode=\"read\"] [data-tp=\"slower\"],.jumbo[data-mode=\"read\"] [data-tp=\"toggle\"],.jumbo[data-mode=\"read\"] [data-tp=\"faster\"]{display:none}\n.jumbo[data-mode=\"carousel\"] .tp-cite{display:none}\n.tp-controls{display:flex;align-items:center;gap:6px;flex-wrap:wrap}\n.tp-btn{background:var(--bg2);border:1px solid var(--line2);color:var(--ink);border-radius:4px;font:500 13px/1 var(--mono);padding:8px 11px;cursor:pointer;min-width:36px}\n.tp-btn:hover{border-color:var(--cyan);color:var(--cyan)}\n.tp-btn--play{min-width:72px;background:var(--cyan);color:var(--cyan-ink);border-color:var(--cyan)}\n.tp-btn--play:hover{background:#7ad6ec;color:var(--cyan-ink)}\n.tp-open{font-family:var(--mono);font-size:12.5px;margin-left:10px;white-space:nowrap}\n.tp-stage{position:absolute;inset:0;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--line2) transparent}\n.tp-stage[hidden]{display:none}\n.jumbo[data-mode=\"tele\"] .tp-stage{-webkit-mask-image:linear-gradient(180deg,transparent 0,#000 12%,#000 82%,transparent 100%);mask-image:linear-gradient(180deg,transparent 0,#000 12%,#000 82%,transparent 100%)}\n.tp-stage:focus-visible{outline:2px solid var(--cyan);outline-offset:-2px}\n.tp-roll{padding:34vh 8% 40vh;max-width:70ch;margin:0 auto;font-family:var(--serif);font-size:clamp(19px,1.9vw,25px);line-height:1.5;color:var(--ink2)}\n.jumbo[data-mode=\"read\"] .tp-roll{padding:28px 8% 48px}\n.tp-roll h2{font-size:1.25em;font-weight:500;color:var(--ink);margin:0 0 .9em;line-height:1.15}\n.tp-roll h3{font-family:var(--mono);font-weight:500;font-size:.5em;letter-spacing:.14em;text-transform:uppercase;color:var(--cyan);margin:2.2em 0 .9em}\n.tp-roll p{margin:0 0 .85em}\n.tp-roll b{color:var(--ink);font-weight:500}\n.tp-roll .cut-mark{color:var(--ink);font-size:1.22em;font-weight:500;line-height:1.3;margin:.7em 0 .9em}\n.tp-roll h3.cut-mark{font-family:var(--serif);text-transform:none;letter-spacing:0;font-size:1.22em;color:var(--ink)}\n.tp-roll a{color:var(--cyan)}\n.tp-cite{margin:0;font-size:12.5px;color:var(--mute);line-height:1.5}\n@media (max-width:980px){.slide--one{grid-template-columns:1fr;grid-template-rows:minmax(0,1fr) auto;align-items:start}.jumbo-shot{height:auto;grid-template-rows:auto auto}.jumbo-shot img{height:120px}.slide--qa{grid-template-columns:1fr;align-content:start;gap:14px;padding-bottom:56px;overflow-y:auto;scrollbar-width:thin}.jumbo-q{max-width:none;font-size:clamp(20px,5vw,26px)}.jumbo-q::after{margin-top:10px}.jumbo-scale{font-size:16px}.slide--duo .jumbo-scale,.slide--long .jumbo-scale{font-size:13.5px}.jumbo-dots{overflow-x:auto;justify-content:flex-start;scrollbar-width:none}.jumbo-dots button span{display:none}.jumbo-dots button{padding:10px 12px}}\n/* the question, the definitions and the sound bite (egpt/question.html) */\n.question{background:var(--bg2)}\n.q-title{font-size:clamp(34px,4.6vw,60px);font-weight:300;max-width:20ch;line-height:1.04}\n.q-title em{font-style:italic;font-weight:500;color:var(--cyan)}\n.defs{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:6px;overflow:hidden}\n.def{margin:0;background:var(--bg);padding:18px 20px 16px;display:grid;gap:8px;align-content:start}\n.def-word{font-family:var(--serif);font-style:italic;font-size:19px;color:var(--ink);display:flex;justify-content:space-between;align-items:baseline;gap:10px}\n.def-word span{font-family:var(--mono);font-style:normal;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--cyan);white-space:nowrap}\n.def blockquote{margin:0;font-family:var(--serif);font-size:16.5px;line-height:1.45;color:var(--ink2)}\n.def blockquote::before{content:\"“\";color:var(--cyan)}.def blockquote::after{content:\"”\";color:var(--cyan)}\n.def figcaption{font-size:12.5px;color:var(--mute);line-height:1.5}\n.def figcaption a{color:var(--ink2)}\n.whylib{display:grid;grid-template-columns:1.1fr 1fr;gap:34px;margin-top:40px;padding-top:34px;border-top:1px solid var(--line2);align-items:start}\n.whylib-bite{display:grid;gap:12px}\n.whylib-line{margin:0;font-family:var(--serif);font-size:clamp(24px,2.6vw,34px);line-height:1.2;color:var(--ink);max-width:22ch}\n.whylib-src{display:grid;gap:12px}\n.whylib-src blockquote{margin:0;font-family:var(--serif);font-size:17px;line-height:1.45;color:var(--ink2)}\n.whylib-src cite{font-style:normal;font-family:var(--mono);font-size:12px;color:var(--mute)}\n@media (max-width:980px){.defs{grid-template-columns:1fr}.whylib{grid-template-columns:1fr}}\n@media (max-width:820px){.jumbo-stage{height:64vh}.tp-roll{padding:20vh 6% 30vh}.tp-open{display:none}}\n/* the reading list strip: the same spine the viewer shows */\n.rl{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(6,1fr);gap:0;position:relative}\n.rl::before{content:\"\";position:absolute;left:8%;right:8%;top:17px;height:2px;background:var(--line2)}\n.rl li{position:relative}\n.rl a{display:grid;justify-items:center;text-align:center;gap:8px;padding:0 10px;color:var(--ink);text-decoration:none!important}\n.rl-n{width:36px;height:36px;border-radius:50%;background:var(--bg);border:2px solid var(--cyan2);display:grid;place-items:center;font-family:var(--mono);font-size:13px;color:var(--cyan);position:relative}\n.rl a:hover .rl-n{background:var(--cyan);color:var(--cyan-ink)}\n.rl b{font-family:var(--serif);font-weight:500;font-size:18px;line-height:1.2}\n.rl span:last-child{font-size:13.5px;color:var(--ink2);line-height:1.4}\n@media (max-width:900px){.rl{grid-template-columns:1fr;gap:14px}.rl::before{left:17px;right:auto;top:0;bottom:0;width:2px;height:auto}.rl a{grid-template-columns:36px 1fr;justify-items:start;text-align:left;column-gap:14px;row-gap:2px}.rl-n{grid-row:span 2}}\n.brand b{white-space:nowrap}\n.navlinks{gap:18px;font-size:14.5px;white-space:nowrap}\n@media (max-width:1180px){.navlinks a:nth-child(n+6):not(:last-child){display:none}}\n.prods.ideas{grid-template-columns:repeat(4,1fr)}\n.prods.ideas a.prod{text-decoration:none!important;color:inherit}\n.prods.ideas a.prod:hover{border-color:var(--cyan)}\n.tech .quote blockquote+cite{margin-bottom:6px}\n@media (max-width:1000px){.prods.ideas{grid-template-columns:repeat(2,1fr)}}\n@media (max-width:520px){.prods.ideas{grid-template-columns:1fr}}\n",
+  "sections": [
+    {
+      "file": "egpt/question.html"
+    },
+    {
+      "file": "egpt/readinglist.html"
+    },
+    {
+      "file": "egpt/reading.html"
+    },
+    {
+      "file": "egpt/barrier.html"
+    },
+    {
+      "file": "egpt/course.html"
+    },
+    {
+      "file": "egpt/losalamos.html"
+    },
+    {
+      "use": "heritage",
+      "links": [
+        [
+          "<a href=\"https://egpt.descix.net\" target=\"_blank\" rel=\"noopener\">The full story, with the documents ↗</a>",
+          "<a href=\"library.html#00_OUTPUTS/EGPT_Backstory.md\">The full story, with the documents</a>"
+        ]
+      ]
+    },
+    {
+      "use": "proof"
+    },
+    {
+      "use": "technology",
+      "links": [
+        [
+          "<a href=\"https://egpt.descix.net\" target=\"_blank\" rel=\"noopener\">The proofs, as a PDF ↗</a>",
+          "<a href=\"library.html#08_LEAN/PROOF_CHAINS.md\">The three proof chains</a>"
+        ],
+        [
+          "<a href=\"https://egpt.descix.net\" target=\"_blank\" rel=\"noopener\">Axiom build outputs ↗</a>",
+          "<a href=\"library.html#08_LEAN/README.md\">The Lean sources and axiom inventories</a>"
+        ]
+      ]
+    },
+    {
+      "file": "egpt/podcast.html"
+    },
+    {
+      "use": "opencore"
+    },
+    {
+      "use": "patent"
+    },
+    {
+      "file": "egpt/licence.html"
+    }
+  ],
+  "links": [],
+  "images": [
+    {
+      "from": "frontpage:../site-assets/ChatGPT_Singularity.png",
+      "to": "images/chatgpt-singularity.png"
+    },
+    {
+      "from": "frontpage:egpt/images/impossible-things.png",
+      "to": "images/impossible-things.png"
+    }
+  ],
+  "footer": {
+    "name": "EGPT-Evidence",
+    "tag": "the missing corpus",
+    "links": [
+      {
+        "text": "Read this first",
+        "href": "library.html#12_SINGULARITY/ChatGPT_Logs/I_am_the_Singularity.html"
+      },
+      {
+        "text": "The library",
+        "href": "library.html"
+      },
+      {
+        "text": "Record index",
+        "href": "library.html#RECORD_INDEX.md"
+      },
+      {
+        "text": "CHECKSUMS.txt",
+        "href": "CHECKSUMS.txt"
+      },
+      {
+        "text": "GitHub",
+        "href": "https://github.com/DeSciX/EGPT"
+      },
+      {
+        "text": "Courant Group",
+        "href": "https://egpt-courantgroup.descix.net"
+      },
+      {
+        "text": "DeSciX",
+        "href": "https://descix.net"
+      },
+      {
+        "text": "The patent",
+        "href": "library.html#11_PATENT/README.md"
+      }
+    ],
+    "legal_html": "EGPT is a community project on DeSciX. The basis on which the collection holds its documents is stated in <a href=\"library.html#Copyright_Fair-use_Memo.md\">the fair-use memorandum</a>; CHECKSUMS.txt verifies every file."
+  },
+  "scripts": {
+    "codesite": true,
+    "forward": {
+      "hash_to": "library.html"
+    },
+    "sdk": true,
+    "extra": [
+      "egpt/teleprompter.js"
+    ]
+  },
+  "self_host": "https://egpt.descix.net",
+  "share": {
+    "site": "egpt.cc",
+    "title": "EGPT-Evidence — the missing corpus",
+    "description": "The primary documents behind EGPT: von Neumann, Ulam and Rota in their own words, three machine-checked proofs, and two machines' answers on the Singularity.",
+    "default_view": "CodeSite",
+    "icon": {
+      "glyph": "E",
+      "ink": "#e9eef3",
+      "tile": "#0b0f14",
+      "accent": "#5fcbe6"
+    },
+    "card": {
+      "kicker": "EGPT-Evidence · the library",
+      "headline": "Asked to ChatGPT and to Claude: are you the Singularity?",
+      "line": "The documents, the proofs, and the machines' own answers.",
+      "art": {
+        "from": "site-src/site-assets/ChatGPT_Singularity.png",
+        "fit": "contain"
+      }
+    }
+  }
+}

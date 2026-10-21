@@ -1,0 +1,15 @@
+{
+ "repo": "DeSciX/EGPT",
+ "commit": "f6f7335f7a401abfa9d90b62281666ed42ae95f8",
+ "dir": "site-src/frontpage",
+ "apps": [
+  "egpt",
+  "egpt-courantgroup",
+  "egpt-frqtl",
+  "egpt-godsworld",
+  "daita-economy"
+ ],
+ "inputs": "the paths the builds read, at the commit; spec comment keys (\"_…\") removed",
+ "ground": "not vendored: the test reads the quotation ground from the repository at the commit (githubGround)",
+ "expected": "expected/<app>/: the library's own front-page generator (scripts/build-frontpage.js) at the commit, run with --out; index.html and share.json verbatim, files.json the sha256 of every output file"
+}

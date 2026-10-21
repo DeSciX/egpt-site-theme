@@ -1,0 +1,21 @@
+name: CI
+# Builds the five fixture front pages from their specs with the theme CLI and holds them to the expected output
+# (test/zero-diff.test.mjs), plus the unit suites. No sibling checkout: the inputs are vendored, the roster and the
+# bridge are the pinned npm packages, the quotation ground is fetched from GitHub at the commit the fixtures name.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm ci
+      - run: npm test

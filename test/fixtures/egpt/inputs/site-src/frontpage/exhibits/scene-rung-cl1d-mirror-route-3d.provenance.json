@@ -1,0 +1,25 @@
+{
+  "sceneKey": "scene-rung-cl1d-mirror-route-3d",
+  "rung": "cl1d-mirror-route",
+  "mode": "3d",
+  "link": "./app.html?preset=compare&walkthrough=cl1d-mirror-route&mode=3d",
+  "tick": 1200,
+  "sceneHash": "sha256:fadd930d8f4e5a864850c46c75e9197a97743a30b391daca42318bb2431a8d9e",
+  "seed": 42,
+  "world": [
+    600,
+    400
+  ],
+  "pose": {
+    "azimuth": 0,
+    "elevation": 0,
+    "distance": 780,
+    "roll": 0,
+    "target": null
+  },
+  "wasmSha256": "62d85248bb8bd963d5acfc36d484414067d1dd1d516a59f4eb74c591a9341e68",
+  "servedFrom": "http://127.0.0.1:5933/app.html?preset=compare&walkthrough=cl1d-mirror-route&mode=3d",
+  "siteBuild": "eea65910",
+  "capturedAt": "2026-10-14T02:43:44.661Z",
+  "instrument": "apps/ide/test/tile-stills-capture.spec.js"
+}
