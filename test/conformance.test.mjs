@@ -15,6 +15,7 @@ import { loadPartials, SECTION_IDS } from '../src/partials.mjs';
 import { SPEC_KEYS, normalizeSpec } from '../src/spec.mjs';
 import { CODESITE_SCRIPT } from '../src/bridge.mjs';
 import { gridColumns } from '../src/tokens.mjs';
+import { WRITER_SLOTS } from '../src/gates.mjs';
 
 const PKG = JSON.parse(fs.readFileSync(path.join(THEME, 'package.json'), 'utf8'));
 const README = fs.readFileSync(path.join(THEME, 'README.md'), 'utf8');
@@ -70,7 +71,7 @@ test('COPY_SLOTS: every slot is placed exactly once by the partials (or the tile
   const text = [P.head, P.nav, P.hero, P.footer, P.login, ...Object.values(P.sections)].join('\n');
   const tokens = [...text.matchAll(/\{\{slot:([^}]+)\}\}/g)].map(m => m[1]);
   const ids = COPY_SLOTS.map(s => s.id);
-  assert.deepEqual([...new Set(tokens)].sort(), ids.filter(id => id !== 'proof.tile.cta').sort());
+  assert.deepEqual([...new Set(tokens)].sort(), ids.filter(id => !WRITER_SLOTS.includes(id)).sort());
   assert.equal(tokens.length, new Set(tokens).size, 'no slot placed twice');
   for (const id of SECTION_IDS) assert.ok(ids.some(x => x.startsWith(`${id}.`)), `section ${id} has copy`);
 });
@@ -78,7 +79,7 @@ test('COPY_SLOTS: every slot is placed exactly once by the partials (or the tile
 test('COPY_SLOTS: no hand text left in a partial (outside tags, scripts, styles and tokens)', () => {
   const P = loadPartials();
   for (const [name, html] of Object.entries({ nav: P.nav, hero: P.hero, footer: P.footer, login: P.login, ...P.sections })) {
-    const bare = html.replace(/<svg[\s\S]*?<\/svg>/g, s => s.replace(/<[^>]+>/g, '')).replace(/<[^>]+>/g, '').replace(/\{\{slot:[^}]+\}\}/g, '').replace(/&nbsp;/g, '');
+    const bare = html.replace(/<svg[\s\S]*?<\/svg>/g, s => s.replace(/<[^>]+>/g, '')).replace(/<[^>]+>/g, '').replace(/\{\{(?:slot|request|proposal):[^}]+\}\}/g, '').replace(/&nbsp;/g, '');
     assert.equal(bare.trim(), '', `${name} carries hand text: ${JSON.stringify(bare.trim().slice(0, 60))}`);
     for (const a of html.matchAll(/\s(alt|aria-label|placeholder|title)="([^"]+)"/g)) assert.match(a[2], /^\{\{slot:[^}]+\}\}$/, `${name}: ${a[1]} is copy`);
   }

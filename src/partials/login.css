@@ -1,1 +1,6 @@
 #descix-login,#descix-login:hover{color:var(--cyan-ink)}
+.nav .wrap{justify-content:flex-start}
+.nav .navlinks{margin-left:auto}
+#descix-login{margin-left:6px}
+@media (max-width:820px){#descix-login{margin-left:auto;flex:none;white-space:nowrap}.nav .brand{white-space:nowrap}.nav .brand span{display:none}}
+@media (max-width:374px){.nav .brand b{font-size:18px}#descix-login{padding-inline:12px}}

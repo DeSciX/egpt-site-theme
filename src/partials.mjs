@@ -1,5 +1,5 @@
 // ./partials — the theme's markup: the page head, nav, hero, footer, the sections by id, the login button and the
-// template's own request-form script. Partials carry NO copy: every text is a {{slot:<id>}} token the copy layer
+// auth watcher, login and request-form scripts. Partials carry NO copy: every text is a {{slot:<id>}} token the copy layer
 // (./copy) fills; the head carries one {{theme:tokens.css}} include. The section ids are the files present
 // (enumerated, never listed by hand).
 import fs from 'node:fs';
@@ -16,11 +16,11 @@ const read = rel => fs.readFileSync(path.join(PARTIALS_DIR, rel), 'utf8');
 /** The section ids, in file-name order (the page's order is its spec's). */
 export const SECTION_IDS = Object.freeze(fs.readdirSync(path.join(PARTIALS_DIR, 'sections')).filter(f => f.endsWith('.html')).map(f => f.slice(0, -5)).sort());
 
-/** Every partial, read once: { head, nav, hero, footer, login, loginCss, requestForm, sections: {id: html} }. */
+/** Every partial, read once: { head, nav, hero, footer, login, loginCss, formsCss, authScript, loginScript, requestForm, sections: {id: html} }. */
 export function loadPartials() {
   return Object.freeze({
     head: read('head.html'), nav: read('nav.html'), hero: read('hero.html'), footer: read('footer.html'),
-    login: read('login.html'), loginCss: read('login.css'), requestForm: read('scripts/request-form.js'),
+    login: read('login.html'), loginCss: read('login.css'), formsCss: read('forms.css'), authScript: read('scripts/auth.js'), loginScript: read('scripts/login.js'), requestForm: read('scripts/request-form.js'),
     sections: Object.freeze(Object.fromEntries(SECTION_IDS.map(id => [id, read(`sections/${id}.html`)]))),
   });
 }

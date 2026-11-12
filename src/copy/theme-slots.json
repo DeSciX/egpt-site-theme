@@ -8,5 +8,170 @@
   "id": "nav.login",
   "kind": "text",
   "default": "Log in with Powch"
+ },
+ {
+  "id": "nav.login.signedin",
+  "kind": "text",
+  "default": "Logged In"
+ },
+ {
+  "id": "request.receipt",
+  "kind": "text",
+  "default": "Your reference:"
+ },
+ {
+  "id": "request.fail",
+  "kind": "text",
+  "default": "It didn't go through. Check your connection and send it again."
+ },
+ {
+  "id": "proposal.eyebrow",
+  "kind": "text",
+  "default": "Make a proposal"
+ },
+ {
+  "id": "proposal.h2",
+  "kind": "text",
+  "default": "Tell us what you want to do."
+ },
+ {
+  "id": "proposal.lede",
+  "kind": "text",
+  "default": "An AI reads it first; a person decides."
+ },
+ {
+  "id": "proposal.label.1",
+  "kind": "text",
+  "default": "What kind of proposal"
+ },
+ {
+  "id": "proposal.label.2",
+  "kind": "text",
+  "default": "Who"
+ },
+ {
+  "id": "proposal.input.placeholder.1",
+  "kind": "text",
+  "default": "Your name"
+ },
+ {
+  "id": "proposal.label.3",
+  "kind": "text",
+  "default": "Organisation (optional)"
+ },
+ {
+  "id": "proposal.input.placeholder.2",
+  "kind": "text",
+  "default": "Where you work, if anywhere"
+ },
+ {
+  "id": "proposal.label.4",
+  "kind": "text",
+  "default": "Your proposal"
+ },
+ {
+  "id": "proposal.textarea.placeholder",
+  "kind": "text",
+  "default": "What you want to do, in a few sentences"
+ },
+ {
+  "id": "proposal.label.5",
+  "kind": "text",
+  "default": "Contact"
+ },
+ {
+  "id": "proposal.input.placeholder.3",
+  "kind": "text",
+  "default": "Email"
+ },
+ {
+  "id": "proposal.btn",
+  "kind": "text",
+  "default": "Send the proposal"
+ },
+ {
+  "id": "proposal.small.1",
+  "kind": "text",
+  "default": "Your name, the proposal and an email are needed."
+ },
+ {
+  "id": "proposal.fail",
+  "kind": "text",
+  "default": "It didn't go through. Check your connection and send it again."
+ },
+ {
+  "id": "proposal.h3",
+  "kind": "text",
+  "default": "Thanks. It's on its way."
+ },
+ {
+  "id": "proposal.p.1",
+  "kind": "text",
+  "default": "You'll hear back at the email you gave."
+ },
+ {
+  "id": "proposal.receipt",
+  "kind": "text",
+  "default": "Your reference:"
+ },
+ {
+  "id": "proposal.kind.licence",
+  "kind": "text",
+  "default": "A licence"
+ },
+ {
+  "id": "proposal.kind.seat",
+  "kind": "text",
+  "default": "A seat"
+ },
+ {
+  "id": "proposal.kind.one-thing",
+  "kind": "text",
+  "default": "One thing"
+ },
+ {
+  "id": "proposal.kind.talk",
+  "kind": "text",
+  "default": "A talk"
+ },
+ {
+  "id": "proposal.kind.other",
+  "kind": "text",
+  "default": "Something else"
+ },
+ {
+  "id": "intake.signin",
+  "kind": "text",
+  "default": "Sign in to send"
+ },
+ {
+  "id": "intake.outside",
+  "kind": "text",
+  "default": "Sending needs a DeSciX sign-in. Open this page on DeSciX, sign in, and send it there:"
+ },
+ {
+  "id": "intake.text",
+  "kind": "text",
+  "default": "The proposal needs {min} to {max} characters."
+ },
+ {
+  "id": "intake.refused.field",
+  "kind": "text",
+  "default": "DeSciX did not accept one field. Check it and send again:"
+ },
+ {
+  "id": "intake.refused.identity",
+  "kind": "text",
+  "default": "DeSciX needs to know who is sending. Sign in again, then send."
+ },
+ {
+  "id": "intake.refused.admin",
+  "kind": "text",
+  "default": "Only the app's owner can do that."
+ },
+ {
+  "id": "intake.refused.rate",
+  "kind": "text",
+  "default": "Too many sent in a short time. Wait a few minutes, then send again."
  }
 ]

@@ -5,6 +5,7 @@
 // The `title`, `description`, `brand`, `nav`, `hero`, `footer`, `links` and per-section `links`/`anchors` keys carry
 // the app's page text in the shape the page specs use today; their text moves to the copy file in a later release.
 import { refuse } from './html.mjs';
+import { normalizeProposal, intakeOf, pageForms, REFUSED_SPEC_KEYS, FORMS } from './request.mjs';
 
 const isObj = v => v && typeof v === 'object' && !Array.isArray(v);
 const T = {
@@ -29,17 +30,18 @@ export const SPEC_KEYS = Object.freeze([
   ['login', 'bool', false, false, 'the Powch login button in the theme nav'],
   ['css', 'string|null', false, null, 'app CSS appended to the theme <style>'],
   ['images', 'array', false, [], '[{from: "frontpage:<path in the app dir>" | "<path in the quotation ground>", to: "images/<name>"}]'],
-  ['self_host', 'string|null', false, null, 'the app\'s own public origin: no link to it may remain on the page'],
+  ['self_host', 'string|null', false, null, 'the app\'s own public origin: no link to it may remain on the page; a page with a proposal form sends self_host + "/" as page_url (required then)'],
   ['through_line', 'object', false, null, '{"source": "served-roster"}: the proof grid\'s through-line is the roster\'s'],
   ['share', 'object', false, null, 'the share block (./share SHARE_BLOCK_KEYS); absent: no share.json is written'],
   ['copy', 'string|null', false, null, 'the app\'s copy file (path in the app dir), {"schema": "egpt-site-theme/copy@1", "slots": {…}}'],
+  ['proposal', 'object', false, null, '{"kinds": [<PROPOSAL_KINDS subset>]}: the kinds the proposal section\'s form offers (./request); required when the page uses that section'],
   ['quotes', 'object', false, null, '{"repo": ".", "commit": "HEAD"|<sha>} (the app\'s own repository) or {"repo": "<owner/name>", "commit": "<full sha>"} (a public GitHub repository): the quotation ground'],
 ].map(([key, type, required, dflt, doc]) => Object.freeze({ key, type, required, default: dflt, doc })));
 
 export const SCRIPT_KEYS = Object.freeze({
   sdk: 'bool: the app-side DeSciX bridge file beside the page (@descix/app-sdk SITE_SCAFFOLD_BRIDGE)',
   codesite: 'bool: the inline CodeSite view declarer (./bridge); needs sdk',
-  template_scripts: 'bool: the theme\'s request-form script',
+  template_scripts: 'bool: the theme\'s request-form script (the proposal forms\' sender); needs sdk',
   extra: '[<path in the app dir>]: inline scripts, in order',
   modules: '[<url>]: module scripts, last in the body',
   import_map: 'bool: an EMPTY import-map marker block last in the head, for the app\'s own generator; needs modules',
@@ -52,6 +54,7 @@ export function normalizeSpec(partial, app) {
   const where = `${app}.json`;
   if (!isObj(partial)) refuse(`${where}: a spec is a JSON object`);
   const known = new Set(SPEC_KEYS.map(k => k.key));
+  for (const k of Object.keys(partial)) if (k in REFUSED_SPEC_KEYS) refuse(`${where}: ${REFUSED_SPEC_KEYS[k]}`);
   for (const k of Object.keys(partial)) if (!known.has(k) && !k.startsWith('_')) refuse(`${where}: unknown key "${k}" (SPEC_KEYS lists the keys; a comment key starts with "_")`);
   const oneForm = t => refuse(`${where} through_line ${JSON.stringify(t)}: the one form is {"source": ${THROUGH_SOURCES.map(x => JSON.stringify(x)).join(' | ')}} (omit it to leave the through-line slot empty)`);
   if (partial.through_line !== undefined && !isObj(partial.through_line)) oneForm(partial.through_line);
@@ -74,6 +77,15 @@ export function normalizeSpec(partial, app) {
     if (Object.keys(t).join() !== 'source' || !THROUGH_SOURCES.includes(t.source)) oneForm(t);
   }
   if (bag.scripts.import_map && !(bag.scripts.modules || []).length) refuse(`${where}: scripts.import_map needs scripts.modules — an import map resolves a module script's imports, and this page loads none`);
+  const usesProposal = bag.sections.some(s => s.use === 'proposal');
+  if (!usesProposal && bag.proposal !== null) refuse(`${where}: proposal is declared but the page does not use the proposal section`);
+  if (usesProposal) bag.proposal = normalizeProposal(bag.proposal || {}, where);   // an absent block refuses as unset kinds
+  const forms = pageForms(bag);
+  const sections = forms.map(k => FORMS[k].section).join(' and ');
+  if (forms.length) intakeOf(app, bag.self_host, where);   // refuses a missing or foreign self_host (the form's page_url)
+  if (forms.length && !bag.scripts.template_scripts) refuse(`${where}: the ${sections} section needs scripts.template_scripts (the request-form script sends the proposal)`);
+  if (forms.length && !bag.scripts.sdk) refuse(`${where}: the ${sections} section needs scripts.sdk (the form sends through DeSciX.call, from the bridge file)`);
+  if (!forms.length && bag.scripts.template_scripts) refuse(`${where}: scripts.template_scripts is the proposal forms' script, and the page uses neither the request nor the proposal section`);
   if (bag.scripts.codesite && !bag.scripts.sdk) refuse('scripts.codesite needs scripts.sdk: the CodeSite call goes through the SDK');
   const f = bag.scripts.forward;
   if (f && !f.hash_to && !f.query_to) refuse('scripts.forward needs hash_to or query_to');

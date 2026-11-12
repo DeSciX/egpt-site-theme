@@ -18,9 +18,9 @@
       </div>
       <div class="field"><label>{{slot:request.label.6}}</label>
         <div class="radios">
-          <label><input type="radio" name="kind" id="k-sw" value="software" checked> {{slot:request.label.text.1}}</label>
-          <label><input type="radio" name="kind" id="k-hw" value="hardware"> {{slot:request.label.text.2}}</label>
-          <label><input type="radio" name="kind" id="k-both" value="both"> {{slot:request.label.text.3}}</label>
+          <label><input type="radio" name="licence_type" id="k-sw" value="software" checked> {{slot:request.label.text.1}}</label>
+          <label><input type="radio" name="licence_type" id="k-hw" value="hardware"> {{slot:request.label.text.2}}</label>
+          <label><input type="radio" name="licence_type" id="k-both" value="both"> {{slot:request.label.text.3}}</label>
         </div>
       </div>
       <div class="field"><label for="f-contact">{{slot:request.label.7}}</label><input id="f-contact" name="contact" type="email" placeholder="{{slot:request.input.placeholder.5}}" required></div>
@@ -30,12 +30,15 @@
         <div class="row" id="wallet-state" hidden><div class="bal">{{slot:request.bal}}</div><a class="btn btn-ghost btn-sm" id="btn-buy" href="https://descix.net" target="_blank" rel="noopener" hidden>{{slot:request.btn.2}}</a></div>
         <p class="need">{{slot:request.need.2}}</p>
       </div>
-      <div class="cta-row"><button class="btn btn-primary" type="submit">{{slot:request.btn.3}}</button></div>
+      <div class="cta-row"><button class="btn btn-primary" type="submit" disabled>{{slot:request.btn.3}}</button></div>
       <p id="form-err" class="small" style="color:var(--gold)" hidden>{{slot:request.small.2}}</p>
+      <p id="form-fail" class="small" style="color:var(--gold)" hidden>{{slot:request.fail}}</p>
+      <p id="form-refused" class="small" style="color:var(--gold)" role="status" hidden></p>
     </form>
     <div id="form-done" class="done" hidden>
       <h3>{{slot:request.h3}}</h3>
       <p>{{slot:request.p.2}}</p>
+      <p class="small" id="form-receipt">{{slot:request.receipt}} <b id="form-receipt-id"></b></p>
       <p class="small" style="color:var(--mute)">{{slot:request.small.3}}</p>
     </div>
   </div>

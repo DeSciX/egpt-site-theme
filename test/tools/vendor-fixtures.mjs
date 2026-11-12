@@ -7,13 +7,19 @@
 // Inputs: exactly the paths each app's build reads (buildPage().inputs), spec files with their comment keys ("_…")
 // removed — the build never reads them. The quotation ground is NOT vendored (it is the library's primary documents):
 // the zero-diff test reads it from the public repository at the commit (ground.mjs githubGround).
-// Expected: each app's index.html and share.json verbatim, and files.json, the sha256 of every output file.
+// Expected: each app's index.html and share.json verbatim, and files.json, the sha256 of every output file except the
+// bridge (DeSciXAppSDK.js): that file is @descix/app-sdk's, and test/lib/expected.mjs holds it to the pinned package.
+// The zero-diff test compares index.html outside the form-hook and login-script regions on the pages that carry them
+// (expected.mjs HOOK_REGIONS, LOGIN_REGIONS): the generator predates both.
 import crypto from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import { buildPage } from '../../src/page.mjs';
 import { gitGround } from '../../src/ground.mjs';
+import { loadBridgeFile } from '../../src/bridge.mjs';
+
+const BRIDGE_FILE = (await loadBridgeFile(path.resolve(new URL('../../', import.meta.url).pathname))).name;
 
 const args = process.argv.slice(2);
 const opt = n => { const i = args.indexOf(n); if (i < 0 || !args[i + 1]) throw new Error(`${n} is required`); return args[i + 1]; };
@@ -48,12 +54,12 @@ for (const app of apps) {
   const e = path.join(expected, app), o = path.join(out, 'expected', app);
   fs.mkdirSync(o, { recursive: true });
   for (const f of ['index.html', 'share.json']) if (fs.existsSync(path.join(e, f))) fs.copyFileSync(path.join(e, f), path.join(o, f));
-  fs.writeFileSync(path.join(o, 'files.json'), JSON.stringify(Object.fromEntries(walk(e).map(f => [f, sha(path.join(e, f))])), null, 1) + '\n');
+  fs.writeFileSync(path.join(o, 'files.json'), JSON.stringify(Object.fromEntries(walk(e).filter(f => f !== BRIDGE_FILE).map(f => [f, sha(path.join(e, f))])), null, 1) + '\n');
 }
 fs.writeFileSync(path.join(out, 'source.json'), JSON.stringify({
   repo, commit, dir, apps,
   inputs: 'the paths the builds read, at the commit; spec comment keys ("_…") removed',
   ground: 'not vendored: the test reads the quotation ground from the repository at the commit (githubGround)',
-  expected: `expected/<app>/: the library's own front-page generator (scripts/build-frontpage.js) at the commit, run with --out; index.html and share.json verbatim, files.json the sha256 of every output file`,
+  expected: `expected/<app>/: the library's own front-page generator (scripts/build-frontpage.js) at the commit, run with --out; index.html and share.json verbatim, files.json the sha256 of every output file except the bridge (DeSciXAppSDK.js is @descix/app-sdk's file, held to the pinned package by the test)`,
 }, null, 1) + '\n');
 console.log(`vendored ${inputs.size} input paths and ${apps.length} expected pages → ${out} (the builds read ${ground.reads.size} ground files)`);
