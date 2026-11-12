@@ -1,3 +1,7 @@
+// The generator's pages predate the proposal intake: a fixture page that carries the licence form is compared outside
+// the forms' regions (expected.mjs HOOK_REGIONS), and one whose spec lacks self_host (the form's page_url) gets the
+// app's own host planted (FIXTURE_SELF_HOST); test/request holds the regions themselves.
+//
 // Zero diff: the theme CLI, run on the vendored inputs of the five EGPT-community front pages (test/fixtures/egpt,
 // source.json names the library repository and commit they come from), writes exactly the files the library's own
 // generator wrote at that commit (expected/<app>/): index.html byte for byte except the one provenance line, share.json
@@ -14,15 +18,26 @@ import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { BIN, FIXTURES, SOURCE, THEME, git, commitAll, throughLines, X } from './lib/world.mjs';
 import { THEME_VERSION, pageOutputs } from '../src/page.mjs';
-import { STAMP, diffOf, stampFor, walk } from './lib/expected.mjs';
+import { STAMP, diffOf, stampFor, walk, BRIDGE, appSdkPinDrift, unPhone } from './lib/expected.mjs';
 
 const ROSTER_VERSION = JSON.parse(fs.readFileSync(path.join(THEME, 'node_modules', '@descix', 'frqtl-web', 'package.json'), 'utf8')).version;
 const CACHE = fs.mkdtempSync(path.join(os.tmpdir(), 'theme-ground-cache-'));
+
+const FIXTURE_SELF_HOST = app => `https://${app}.descix.net`;
+const specOf = (dir, app) => JSON.parse(fs.readFileSync(path.join(dir, `${app}.json`), 'utf8'));
+const HOOKED = SOURCE.apps.filter(a => specOf(path.join(FIXTURES, 'inputs', SOURCE.dir), a).sections.some(x => x.use === 'request'));
+const LOGIN = SOURCE.apps.filter(a => specOf(path.join(FIXTURES, 'inputs', SOURCE.dir), a).login === true);
+// the theme owns the login button's script now: a login page's spec drops the app's own login.js from scripts.extra
+const plantLogin = dir => { for (const a of LOGIN) { const s = specOf(dir, a); fs.writeFileSync(path.join(dir, `${a}.json`), JSON.stringify({ ...s, scripts: { ...s.scripts, extra: s.scripts.extra.filter(f => f !== 'login.js') } })); } };
+const opts = app => ({ hook: HOOKED.includes(app), login: LOGIN.includes(app) });
+const plantRequest = dir => { for (const a of HOOKED) { const s = specOf(dir, a); if (!s.self_host) fs.writeFileSync(path.join(dir, `${a}.json`), JSON.stringify({ ...s, self_host: FIXTURE_SELF_HOST(a) })); } };
 
 // The inputs, committed in a throwaway app repository, with the theme's node_modules (the pinned roster and app-sdk).
 function inputsRepo(plant) {
   const T = fs.mkdtempSync(path.join(os.tmpdir(), 'theme-zero-diff-'));
   fs.cpSync(path.join(FIXTURES, 'inputs'), T, { recursive: true });
+  plantRequest(path.join(T, SOURCE.dir));
+  plantLogin(path.join(T, SOURCE.dir));
   if (plant) plant(path.join(T, SOURCE.dir));
   fs.writeFileSync(path.join(T, '.gitignore'), 'node_modules\n');
   fs.symlinkSync(path.join(THEME, 'node_modules'), path.join(T, 'node_modules'));
@@ -49,7 +64,7 @@ for (const app of SOURCE.apps) {
   test(`${app}: the theme writes the generator's files (index.html except the stamp line, share.json, every asset by sha256)`, () => {
     const r = base.runs[app];
     assert.equal(r.code, 0, r.err);
-    assert.deepEqual(diffOf(app, r.out), []);
+    assert.deepEqual(diffOf(app, r.out, opts(app)), []);
     const stamp = fs.readFileSync(path.join(r.out, 'index.html'), 'utf8').match(STAMP)[0];
     assert.equal(stamp, stampFor({ app, theme: THEME_VERSION, roster: ROSTER_VERSION, build: base.head }));
   });
@@ -86,12 +101,39 @@ test('negative control: a planted copy override in one slot shows up only in tha
   const runs = buildAll(T);
   for (const app of SOURCE.apps) {
     assert.equal(runs[app].code, 0, runs[app].err);
-    const d = diffOf(app, runs[app].out);
+    const d = diffOf(app, runs[app].out, opts(app));
     assert.deepEqual(d, app === victim ? ['index.html'] : [], app);
   }
-  const lines = f => fs.readFileSync(f, 'utf8').replace(STAMP, '<body>').split('\n');
-  const a = lines(path.join(FIXTURES, 'expected', victim, 'index.html')), b = lines(path.join(runs[victim].out, 'index.html'));
+  const lines = h => h.replace(STAMP, '<body>').split('\n');
+  const a = lines(fs.readFileSync(path.join(FIXTURES, 'expected', victim, 'index.html'), 'utf8')), b = lines(unPhone(fs.readFileSync(path.join(runs[victim].out, 'index.html'), 'utf8')));
   const changed = a.map((l, i) => [l, b[i]]).filter(([x, y]) => x !== y);
   assert.equal(a.length, b.length);
   assert.deepEqual(changed.map(([, y]) => y.trim()), ['<p class="lede">PLANTED copy override.</p>']);
+});
+
+// The bridge gate: DeSciXAppSDK.js is held to the pinned @descix/app-sdk's file, and the installed package to the pin.
+test('negative control: a wrong or missing bridge file fails the page; an installed app-sdk other than the pin fails', () => {
+  const T = fs.mkdtempSync(path.join(os.tmpdir(), 'theme-bridge-'));
+  fs.cpSync(base.runs.egpt.out, T, { recursive: true });
+  assert.deepEqual(diffOf('egpt', T), [], 'the copy starts equal');
+  fs.writeFileSync(path.join(T, BRIDGE.name), Buffer.concat([BRIDGE.data, Buffer.from('\n// planted')]));
+  assert.deepEqual(diffOf('egpt', T), [`${BRIDGE.name} (not the pinned @descix/app-sdk bridge)`]);
+  fs.rmSync(path.join(T, BRIDGE.name));
+  assert.match(diffOf('egpt', T)[0], new RegExp(`file set: missing ${BRIDGE.name}`));
+  const pkg = JSON.parse(fs.readFileSync(path.join(THEME, 'package.json'), 'utf8'));
+  const installed = JSON.parse(fs.readFileSync(path.join(THEME, 'node_modules', '@descix', 'app-sdk', 'package.json'), 'utf8')).version;
+  assert.equal(appSdkPinDrift(pkg, installed), null, 'installed == pin');
+  assert.match(appSdkPinDrift(pkg, '0.6.0'), /@descix\/app-sdk 0\.6\.0 is installed but package\.json pins 0\.9\.0/);
+});
+
+// The phone-width rules: on every page, once, at the end of the theme CSS (tokens.css); the fixture comparison takes
+// them out exactly once (expected.mjs unPhone). What they do is LOOKed at 320, 375 and 390 (scrollWidth == innerWidth).
+test('the theme CSS ends with the phone-width rules: the technology column and the chains and roles tables never widen a phone page', () => {
+  const css = fs.readFileSync(path.join(THEME, 'src', 'tokens.css'), 'utf8');
+  assert.match(css, /\/\* phone width \*\/\n@media \(max-width:900px\)\{\.tech\{grid-template-columns:minmax\(0,1fr\)\}\.chains td,\.chains th\{overflow-wrap:anywhere\}\}@media \(max-width:400px\)\{\.roles td,\.roles th\{padding-right:8px;overflow-wrap:anywhere\}\.roles td\.mono\{white-space:normal\}\}\n$/);
+  for (const app of SOURCE.apps) {
+    const h = fs.readFileSync(path.join(base.runs[app].out, 'index.html'), 'utf8');
+    assert.doesNotThrow(() => unPhone(h), app);
+    assert.throws(() => unPhone(unPhone(h)), /0 times, wants 1/);
+  }
 });

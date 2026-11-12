@@ -18,8 +18,11 @@ overrides, and runs `egpt-site-theme build`. README.md owns the exports, the CLI
 - The showcase roster (tiles, through-line, tile stills' names, the tile link) is `@descix/frqtl-web/registry`'s; this
   package writes it, never restates it. The share.json contract is `@descix/app-sdk/share`'s.
 - Byte identity is the gate for any change that is not meant to change a page: `npm test` holds the five fixture pages
-  to their expected output (`test/zero-diff.test.mjs`); a change that moves a page byte re-vendors the fixtures
-  (`test/tools/vendor-fixtures.mjs`) in the same change and says why.
+  to their expected output (`test/zero-diff.test.mjs`): every file by sha256, `index.html` byte for byte outside the
+  stamp line and, on pages that carry them, the proposal-form and login-script regions (`test/lib/expected.mjs`), and
+  `DeSciXAppSDK.js` to the pinned `@descix/app-sdk` bridge (its installed version must equal the pin). A change that moves
+  a page byte outside those regions re-vendors the fixtures (`test/tools/vendor-fixtures.mjs`) in the same change and
+  says why; a change inside a region is held by its own test (`test/request.test.mjs`, `test/login.test.mjs`).
 - Vendored inputs carry no private repository name, local path or decider's words: vendor-fixtures drops the specs'
   `_…` comment keys, and the quotation ground is never vendored (the test reads it at its commit).
 - Pins are exact (`peerDependencies` = `devDependencies`); `package-lock.json` is committed.

@@ -1,0 +1,27 @@
+<section class="sec" id="proposal"><div class="wrap">
+  <div class="sec-head">
+    <p class="eyebrow">{{slot:proposal.eyebrow}}</p>
+    <h2>{{slot:proposal.h2}}</h2>
+    <p class="lede">{{slot:proposal.lede}}</p>
+  </div>
+  <div style="max-width:720px">
+    <form id="proposal-form" novalidate>
+      <div class="field"><label for="p-kind">{{slot:proposal.label.1}}</label><select id="p-kind" name="kind" required>{{proposal:kinds}}</select></div>
+      <div class="two">
+        <div class="field"><label for="p-who">{{slot:proposal.label.2}}</label><input id="p-who" name="who" type="text" placeholder="{{slot:proposal.input.placeholder.1}}" required></div>
+        <div class="field"><label for="p-org">{{slot:proposal.label.3}}</label><input id="p-org" name="org" type="text" placeholder="{{slot:proposal.input.placeholder.2}}"></div>
+      </div>
+      <div class="field"><label for="p-use">{{slot:proposal.label.4}}</label><textarea id="p-use" name="use" placeholder="{{slot:proposal.textarea.placeholder}}" required></textarea></div>
+      <div class="field"><label for="p-contact">{{slot:proposal.label.5}}</label><input id="p-contact" name="contact" type="email" placeholder="{{slot:proposal.input.placeholder.3}}" required></div>
+      <div class="cta-row"><button class="btn btn-primary" type="submit" disabled>{{slot:proposal.btn}}</button></div>
+      <p id="proposal-err" class="small" style="color:var(--gold)" hidden>{{slot:proposal.small.1}}</p>
+      <p id="proposal-fail" class="small" style="color:var(--gold)" hidden>{{slot:proposal.fail}}</p>
+      <p id="proposal-refused" class="small" style="color:var(--gold)" role="status" hidden></p>
+    </form>
+    <div id="proposal-done" class="done" hidden>
+      <h3>{{slot:proposal.h3}}</h3>
+      <p>{{slot:proposal.p.1}}</p>
+      <p class="small" id="proposal-receipt">{{slot:proposal.receipt}} <b id="proposal-receipt-id"></b></p>
+    </div>
+  </div>
+</div></section>

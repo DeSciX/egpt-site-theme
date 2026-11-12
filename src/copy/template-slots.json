@@ -1457,6 +1457,6 @@
  {
   "id": "request.small.3",
   "kind": "text",
-  "default": "The form posts to the licensing intake once the Powch integration lands; until then it is a placeholder."
+  "default": "It is sent to DeSciX under your sign-in; the founder reads it."
  }
 ]

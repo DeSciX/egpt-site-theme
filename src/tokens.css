@@ -247,3 +247,5 @@ footer .row{display:flex;flex-wrap:wrap;gap:8px 24px}
 footer .row a{color:var(--ink2)}
 footer .legal{max-width:80ch;font-size:13px}
 @media (prefers-reduced-motion:reduce){.tile img{transition:none}}
+/* phone width */
+@media (max-width:900px){.tech{grid-template-columns:minmax(0,1fr)}.chains td,.chains th{overflow-wrap:anywhere}}@media (max-width:400px){.roles td,.roles th{padding-right:8px;overflow-wrap:anywhere}.roles td.mono{white-space:normal}}

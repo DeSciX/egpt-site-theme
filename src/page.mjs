@@ -21,11 +21,12 @@ import { loadPartials, sectionOf, themeImage, TOKENS_INCLUDE } from './partials.
 import { tokensCss, gridColumns } from './tokens.mjs';
 import { loadRoster, stillName, tileOf, tileHtml } from './tiles.mjs';
 import { CODESITE_SCRIPT, loadBridgeFile } from './bridge.mjs';
-import { loadShareContract, shareFiles } from './share.mjs';
+import { loadShareContract, shareFiles, validatePages, SHARE_DIR } from './share.mjs';
 import { PAGE_FILE, IMAGES_OUT } from './outputs.mjs';
 import { assertTheme, assertPage, stampOf, THROUGH_SLOT, THROUGH_MARK, EXHIBITS_MARK } from './gates.mjs';
 import { gitGround, githubGround } from './ground.mjs';
 import { library } from './library.mjs';
+import { fillRequestScript, fillProposalSection, SCRIPT_SLOTS, REFUSALS } from './request.mjs';
 
 export const THEME_VERSION = JSON.parse(fs.readFileSync(new URL('../package.json', import.meta.url), 'utf8')).version;
 /** What a build may write into the output directory, from each output's owner (the bridge and share.json names are @descix/app-sdk's). */
@@ -166,9 +167,10 @@ export async function buildPage(specFile, opts = {}) {
     if (spec.nav === 'template') {
       let nav = rewrite(fill(partials.nav), spec.links);
       if (spec.login) {
-        const at = '</a>\n  </div>\n</div></nav>';
-        if (!nav.includes(at)) refuse('theme nav: no place for the login button');
-        nav = nav.replace(at, `</a>${fill(partials.login)}\n  </div>\n</div></nav>`);
+        // in the header, after the nav links (not inside them): the links collapse at phone width, the button stays
+        const at = '\n  </div>\n</div></nav>';
+        if (nav.split(at).length !== 2) refuse('theme nav: no place for the login button');
+        nav = nav.replace(at, `\n  </div>\n  ${fill(partials.login)}\n</div></nav>`);
       }
       return nav;
     }
@@ -218,7 +220,10 @@ export async function buildPage(specFile, opts = {}) {
   const heroPlaced = spec.sections.some(s => s.hero === true);
   const bodySections = spec.sections.map(s => {
     if (s.hero === true) return heroOut;
-    if (s.use) return fillSlots(reanchor(rewrite(rewrite(fill(sectionOf(partials, s.use)), spec.links), s.links), s.anchors), `theme section ${s.use}`);
+    if (s.use) {
+      const section = fill(sectionOf(partials, s.use));
+      return fillSlots(reanchor(rewrite(rewrite(s.use === 'proposal' ? fillProposalSection(section, spec.proposal, copy, used) : section, spec.links), s.links), s.anchors), `theme section ${s.use}`);
+    }
     return gate(fragment(s.file), s.file);
   });
 
@@ -231,8 +236,20 @@ export async function buildPage(specFile, opts = {}) {
     return `<script>if(location.search)location.replace(${JSON.stringify(f.query_to)}+location.search+location.hash);</script>`;
   };
   const sdk = spec.scripts.sdk ? await loadBridgeFile(dir) : null;
-  const scripts = [spec.scripts.template_scripts ? partials.requestForm.trim() : '', spec.scripts.codesite ? CODESITE_SCRIPT : '',
-    ...(spec.scripts.extra || []).map(f => { if (!repo.exists(f)) refuse(`script not found: ${f}`); return repo.read(f, 'utf8'); })].filter(Boolean);
+  // the login button's behaviour is the theme's (partials/scripts/login.js), placed when the spec asks for the button
+  const loginScript = () => { used.add('nav.login.signedin'); return partials.loginScript.trim().replace('{{login:config}}', () => JSON.stringify({ signedIn: copy['nav.login.signedin'] }).replace(/</g, '\\u003c')); };
+  // the proposal forms' script: its config carries the intake, the forms' fields and its lines (./request scriptConfig)
+  const requestScript = () => { for (const id of [...Object.values(SCRIPT_SLOTS), ...Object.values(REFUSALS)]) used.add(id); return fillRequestScript(partials.requestForm.trim(), app, spec, copy); };
+  // the theme's auth watcher (partials/scripts/auth.js): the one reader of the sign-in state, placed once, before the
+  // login and request-form scripts that consume it
+  const authScript = spec.login || spec.scripts.template_scripts ? partials.authScript.trim() : '';
+  const scripts = [authScript, spec.scripts.template_scripts ? requestScript() : '', spec.scripts.codesite ? CODESITE_SCRIPT : '', spec.login ? loginScript() : '',
+    ...(spec.scripts.extra || []).map(f => {
+      if (!repo.exists(f)) refuse(`script not found: ${f}`);
+      const js = repo.read(f, 'utf8');
+      if (spec.login && js.includes('descix-login')) refuse(`${f} drives #descix-login; the theme's login script owns the login button's behaviour (spec "login": true) — drop ${f} from scripts.extra`);
+      return js;
+    })].filter(Boolean);
 
   // head: the theme's, its CSS included, retitled through the copy, forwarder first
   let head = fill(partials.head).replace(TOKENS_INCLUDE, () => css);
@@ -241,6 +258,11 @@ export async function buildPage(specFile, opts = {}) {
   if (spec.login) {
     if (!head.includes('--cyan-ink:')) refuse('login button: the theme CSS has no --cyan-ink token');
     head = head.replace('</style>', () => `\n/* login */\n${partials.loginCss}\n</style>`);
+  }
+  // the proposal forms' CSS (partials/forms.css: a refused control's border), placed with the forms' script
+  if (spec.scripts.template_scripts) {
+    if (!head.includes('--gold:')) refuse('proposal forms: the theme CSS has no --gold token');
+    head = head.replace('</style>', () => `\n/* forms */\n${partials.formsCss}\n</style>`);
   }
   if (spec.scripts.import_map) {
     const at = head.lastIndexOf('</head>');
@@ -274,6 +296,10 @@ ${sdk ? `<script src="${sdk.name}"></script>\n` : ''}${scripts.map(s => `<script
 
   // images: what the page uses, from the theme, the stills home, the app dir or the ground
   const usedImages = new Set([...html.matchAll(new RegExp(`(?:src|href)="${IMAGES_OUT}/([^"]+)"`, 'g'))].map(m => m[1]));
+  // a view card's image is a use too (share.pages.<slug>.image): the card shows it even when the page body does not.
+  // The share writer's own images (images/share/) are not resolved here; the share block writes them.
+  const cardPages = spec.share && spec.share.pages !== undefined ? validatePages(app, spec.share.pages) : {};
+  for (const p of Object.values(cardPages)) if (p.image && p.image.startsWith(`${IMAGES_OUT}/`) && !p.image.startsWith(`${SHARE_DIR}/`)) usedImages.add(p.image.slice(IMAGES_OUT.length + 1));
   const extra = new Map(spec.images.map(i => [i.to.replace(new RegExp(`^${IMAGES_OUT}/`), ''), i.from]));
   const files = new Map();
   for (const name of usedImages) {
@@ -294,12 +320,13 @@ ${sdk ? `<script src="${sdk.name}"></script>\n` : ''}${scripts.map(s => `<script
     }
     files.set(`${IMAGES_OUT}/${name}`, data);
   }
-  for (const name of extra.keys()) if (!usedImages.has(name)) refuse(`spec declares an unused image: ${name}`);
+  for (const name of extra.keys()) if (!usedImages.has(name)) refuse(`spec declares an unused image: ${name} (neither the page nor a share.pages card references it)`);
   files.set(PAGE_FILE, Buffer.from(html));
   if (spec.share) {
     const assets = repo.door(`${app}/share`);
-    const { files: sf } = shareFiles(app, spec.share, await loadShareContract(dir), assets);
+    const { files: sf, json } = shareFiles(app, spec.share, await loadShareContract(dir), assets);
     for (const [k, v] of sf) files.set(k, v);
+    for (const [slug, p] of Object.entries(json.pages || {})) if (p.image !== undefined && !files.has(p.image)) refuse(`${app}: share.pages.${slug}.image "${p.image}" is not a file this build writes into the site bundle (it writes: ${[...files.keys()].filter(k => k.startsWith(`${IMAGES_OUT}/`)).join(', ')})`);
   }
   if (sdk) files.set(sdk.name, sdk.data);
   const log = `${app}: index.html (${Math.round(Buffer.byteLength(html) / 1024)} KB) from theme ${THEME_VERSION} at HEAD ${repo.head}; ${spec.sections.filter(s => !s.hero).length} sections${heroPlaced ? ' (hero placed among them)' : ''} (${spec.sections.filter(s => s.use).length} reused, ${spec.sections.filter(s => s.file).length} fragments), ${lib.state.gated} quotations gated, ${usedImages.size} images`;
