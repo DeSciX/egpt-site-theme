@@ -1,5 +1,7 @@
 // ./tiles — the one tile writer. A tile is a bag of TILE_FIELDS built by tileOf(row, ctx) from one showcase-roster
-// row (the EXHIBITS of @descix/frqtl-web/registry, the app's pinned release), and tileHtml(bag) is the only markup.
+// row, and tileHtml(bag) is the only markup. The rows are the app's pinned @descix/frqtl-web/registry's: the EXHIBITS it
+// ships (0.6), or, for a registry that ships none (0.7: normalizeRoster), the showcase cards of the app's own roster
+// file (spec "roster"), read through the registry's readers (rosterView).
 //   href      the roster's own link writer: showcaseHref(row) (relative) on the showcase app's page, else
 //             showcaseUrl(row) (absolute on SHOWCASE_SITE.origin); the page is the showcase app's iff
 //             ctx.app === SHOWCASE_SITE.app
@@ -19,11 +21,13 @@ export const TILE_IMG_FIELDS = Object.freeze(['src', 'alt', 'lazy']);
 export const TILE_LINE = 'tile';
 
 /**
- * The pinned roster, imported by package name from `fromDir` (the app). Returns { X, release, version }; refuses a
- * package that is not installed (naming npm ci), one that fails to load (as itself), or one that lacks the rows,
- * sceneKey or the link writer.
+ * The pinned roster, imported by package name from `fromDir` (the app). `file` is the app's roster file
+ * ({ path, json, url }: the spec's "roster", read from the app's committed inputs) or null. Returns { X, release,
+ * version }; refuses a package that is not installed (naming npm ci), one that fails to load (as itself), one that lacks
+ * the rows, sceneKey or the link writer, a registry that ships no rows when the spec names no roster file (and one that
+ * ships rows when it does), and a roster file the registry's normalizeRoster refuses (naming the file).
  */
-export async function loadRoster(fromDir) {
+export async function loadRoster(fromDir, file = null) {
   let X;
   try { X = await importFrom(fromDir, ROSTER_EXPORT); }
   catch (e) {
@@ -32,6 +36,10 @@ export async function loadRoster(fromDir) {
   }
   const version = versionFrom(fromDir, ROSTER_PKG);
   const release = `${ROSTER_PKG}@${version}`;
+  if (typeof X.normalizeRoster === 'function') {
+    if (!file) refuse(`roster unreadable: ${ROSTER_EXPORT} (${release}) ships no rows (normalizeRoster); declare the app's roster file in the spec: "roster": "<path in the app dir>"`);
+    X = rosterView(X, file, release);
+  } else if (file) refuse(`${file.path}: ${ROSTER_EXPORT} (${release}) ships its own rows (EXHIBITS), so the spec's "roster" file would not be read — drop "roster", or pin a release with normalizeRoster`);
   if (!Array.isArray(X.EXHIBITS) || !X.EXHIBITS.length || typeof X.sceneKey !== 'function') refuse(`roster unreadable: ${ROSTER_EXPORT} (${release}) exports no EXHIBITS rows / sceneKey`);
   const lacks = ['showcaseHref', 'showcaseUrl'].filter(n => typeof X[n] !== 'function');
   const site = X.SHOWCASE_SITE;
@@ -41,6 +49,28 @@ export async function loadRoster(fromDir) {
     if (r.still && (typeof r.still.alt !== 'string' || !r.still.alt.trim())) refuse(`roster row ${r.id} declares a still without its alt text (still.alt, roster ${release}) — a tile never ships alt=""`);
   }
   return { X, release, version };
+}
+
+/**
+ * The registry's readers over the app's roster file, in the shape the tile writer reads: the rows are the showcase
+ * cards, sceneKey/showcaseHref/showcaseUrl are bound to the normalized roster, SHOWCASE_SITE is the showcase's
+ * siteOrigin (the app is its host's first label, the self_host rule) and the through-line is the showcase's. The roster's
+ * href is the file's own URL: the tile links are written from siteOrigin, never from where the roster was read.
+ */
+function rosterView(R, file, release) {
+  let roster;
+  try { roster = R.normalizeRoster(file.json, file.url); }
+  catch (e) { refuse(`roster file ${file.path}: ${release} normalizeRoster refuses it: ${e.message}`); }
+  const sc = roster.showcase;
+  if (!sc) refuse(`roster file ${file.path} declares no showcase: the tiles are its showcase cards`);
+  return Object.freeze({
+    EXHIBITS: sc.rows,
+    sceneKey: k => R.sceneKey(roster, { id: k.id, modeId: k.modeId }),
+    showcaseHref: row => R.showcaseHref(roster, row),
+    showcaseUrl: row => R.showcaseUrl(roster, row),
+    SHOWCASE_SITE: Object.freeze({ app: new URL(sc.siteOrigin).hostname.split('.')[0], origin: sc.siteOrigin }),
+    SHOWCASE_THROUGH_LINE: sc.throughLine,
+  });
 }
 
 /** A row's still file name: the roster's own sceneKey. */

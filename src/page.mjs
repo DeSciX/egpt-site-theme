@@ -3,6 +3,7 @@
 //
 //   <dir>/<app>.json              the spec (spec.mjs SPEC_KEYS), the app id is its file name
 //   <dir>/<fragment>              the files its sections, hero and scripts name
+//   <roster>                      the app's roster file, when the pinned registry ships no rows (spec "roster")
 //   <dir>/exhibits/<sceneKey>.png the tile stills (+ .provenance.json), one per roster row that declares a still
 //   <dir>/<app>/share/            the rendered share images, when the spec has a share block
 //
@@ -14,6 +15,7 @@
 import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
+import { pathToFileURL } from 'node:url';
 import { esc, refuse, ThemeError } from './html.mjs';
 import { normalizeSpec } from './spec.mjs';
 import { normalizeCopy, overriddenOf, fillCopy, slotKind, COPY_SCHEMA } from './copy.mjs';
@@ -114,8 +116,17 @@ export async function buildPage(specFile, opts = {}) {
   const used = new Set();
   const fill = markup => fillCopy(markup, copy, used);
 
+  // the app's roster file (spec "roster"), read now from the committed inputs: missing or not JSON refuses here
+  let rosterFile = null;
+  if (spec.roster !== null) {
+    if (!repo.exists(spec.roster)) refuse(`${app}.json roster: ${path.join(dir, spec.roster)} does not exist`);
+    let json;
+    try { json = JSON.parse(repo.read(spec.roster, 'utf8')); }
+    catch (e) { refuse(`${app}.json roster: ${path.join(dir, spec.roster)} is not JSON: ${e.message}`); }
+    rosterFile = { path: path.join(dir, spec.roster), json, url: pathToFileURL(repo.door(spec.roster)).href };
+  }
   // the showcase roster: imported now, a failure raised only where a page needs it
-  const rosterTry = await loadRoster(dir).then(v => ({ v }), err => ({ err }));
+  const rosterTry = await loadRoster(dir, rosterFile).then(v => ({ v }), err => ({ err }));
   let roster = null, stills = null;
   function needRoster() {
     if (roster) return roster;

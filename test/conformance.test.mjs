@@ -38,10 +38,12 @@ test('exports map: README "Exports" table names exactly the doors, in order', ()
   assert.deepEqual(rows, Object.keys(PKG.exports).filter(d => d !== './package.json'));
 });
 
-test('exports map: pins are exact; the peers are the dev pins', () => {
+test('exports map: a peer is one exact version or exact alternatives (a || b); the tests install every alternative', () => {
   for (const [n, v] of Object.entries(PKG.peerDependencies)) {
-    assert.match(v, /^\d+\.\d+\.\d+(-[\w.]+)?$/, `${n} is pinned exactly`);
-    assert.equal(PKG.devDependencies[n], v, `${n}: the tests run the version the theme names as its peer`);
+    const alts = v.split(' || ');
+    for (const a of alts) assert.match(a, /^\d+\.\d+\.\d+(-[\w.]+)?$/, `${n}: ${a} is an exact version`);
+    assert.equal(PKG.devDependencies[n], alts[0], `${n}: the dev pin is the peer's first alternative`);
+    for (const a of alts.slice(1)) assert.ok(Object.values(PKG.devDependencies).includes(`npm:${n}@${a}`), `${n}@${a}: installed for the tests as a devDependency alias npm:${n}@${a}`);
   }
 });
 
