@@ -4,8 +4,9 @@
 // naming its replacement, so an override that still names it refuses.
 //   text  plain text, escaped where it is placed
 //   html  inline HTML, placed as written; an override is held to HTML_ALLOWLIST
-// The defaults are the template page's text verbatim (copy/template-slots.json) plus the two texts the page writer
-// itself shows (copy/theme-slots.json). An app overrides slots in its copy file:
+// The defaults are the template page's text verbatim (copy/template-slots.json) plus the texts the page writer and
+// its scripts show (copy/theme-slots.json). The header and footer carry no slots: their text is the chrome data
+// (./chrome). An app overrides slots in its copy file:
 //   { "schema": "egpt-site-theme/copy@1", "slots": { "<id>": "<text>" | { "html": "<inline html>" } } }
 import fs from 'node:fs';
 import { esc, refuse } from './html.mjs';
@@ -14,8 +15,16 @@ const data = f => JSON.parse(fs.readFileSync(new URL(`./copy/${f}`, import.meta.
 export const COPY_SCHEMA = 'egpt-site-theme/copy@1';
 export const COPY_KINDS = Object.freeze(['text', 'html']);
 export const COPY_SLOTS = Object.freeze([...data('template-slots.json'), ...data('theme-slots.json')].map(Object.freeze));
-/** Removed slot ids → the id that replaced them (none removed yet). */
-export const REFUSED_SLOTS = Object.freeze({});
+const BRAND = "the spec's brand.name", TAG = "the spec's brand.tag", NAV = "a link in the spec's nav (./chrome)";
+const FOOT = "a link in the spec's footer.links (./chrome)";
+/** Removed slot ids → what replaced them: the header and footer text is chrome data in the spec, not copy. */
+export const REFUSED_SLOTS = Object.freeze({
+  'nav.b': BRAND, 'nav.span': TAG,
+  ...Object.fromEntries(['nav.a.1', 'nav.a.2', 'nav.a.3', 'nav.a.4', 'nav.a.5', 'nav.a.6', 'nav.mono'].map(id => [id, NAV])),
+  'footer.b': "the spec's footer.name", 'footer.span': "the spec's footer.tag",
+  ...Object.fromEntries(['footer.a.1', 'footer.a.2', 'footer.a.3', 'footer.a.4', 'footer.a.5', 'footer.a.6', 'footer.a.7', 'footer.a.8', 'footer.a.9'].map(id => [id, FOOT])),
+  'footer.legal': "the spec's footer.legal_html",
+});
 /** Text the page shows that is NOT copy: the showcase roster owns it, and no copy file may override it. */
 export const ROSTER_OWNED = Object.freeze({
   'proof.throughline': 'SHOWCASE_THROUGH_LINE', 'proof.tile.title': 'EXHIBITS[].title',

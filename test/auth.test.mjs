@@ -11,9 +11,12 @@ import { loadPartials } from '../src/partials.mjs';
 import { tokensCss } from '../src/tokens.mjs';
 import { assertTheme, AUTH_READERS } from '../src/gates.mjs';
 import { unAuth } from './lib/expected.mjs';
+import { normalizeCopy } from '../src/copy.mjs';
+
+const COPY = normalizeCopy(null);
 
 const ORIGIN = app => `https://${app}.descix.net`;
-const PAGE = { scripts: { sdk: true, template_scripts: true }, login: true, nav: 'template', brand: 'template', proposal: { kinds: ['talk'] } };
+const PAGE = { scripts: { sdk: true, template_scripts: true }, login: true, proposal: { kinds: ['talk'] } };
 let built;
 const page = () => (built = built || world({ specs: { both: spec(ORIGIN('both'), [{ use: 'proposal' }], PAGE), lone: spec('https://lone.example', [{ use: 'proof' }]) } }));
 
@@ -97,6 +100,45 @@ test('outside the shell (no bridge, standalone, embedded without a readable bus)
   }
 });
 
+// A stub document for the failure notice: the body's children, first first.
+const doc = () => {
+  const body = { children: [], insertBefore(n, ref) { this.children.splice(ref ? this.children.indexOf(ref) : 0, 0, n); }, get firstChild() { return this.children[0] || null; } };
+  return { body, createElement: tag => ({ tag, attrs: {}, style: {}, textContent: '', setAttribute(k, v) { this.attrs[k] = v; } }) };
+};
+async function failing(js, DeSciX) {
+  const seen = [], document = doc();
+  const r = runScripts([js, 'egptSiteAuth.watch(function(s){__seen.push(s);});'], { bus: { DeSciX, shellWindow: { addEventListener() {} } }, globals: { __seen: seen, document } });
+  await settle();
+  return { ...r, seen, notice: document.body.children.find(n => n.attrs.role === 'alert') || null };
+}
+
+test('a rejected DeSciX.ready() fails loud and visibly: logged, a role=alert line with the auth.fail copy at the top of the body, and the state carries the error', async () => {
+  const js = authScriptOf(page().build('both').html);
+  const fail = slot => slot.textContent.startsWith(COPY['auth.fail']);
+  for (const [why, DeSciX, msg] of [
+    ['ready() rejects', { bridgeLevel: 1, ready: () => Promise.reject(new Error('bus gone')) }, 'bus gone'],
+    ['subscribing throws', { bridgeLevel: 1, ready: async () => ({ mode: 'shell', members: ['powch'] }), powch: { on() { throw new Error('no auth event'); } } }, 'no auth event'],
+  ]) {
+    const r = await failing(js, DeSciX);
+    assert.equal(r.errors.length, 1, `${why}: logged`);
+    assert.match(String(r.errors[0][0]), /sign-in is unavailable: DeSciX\.ready\(\) failed/);
+    assert.ok(r.notice && fail(r.notice) && r.notice.textContent.endsWith(`(${msg})`), `${why}: the notice shows the copy and the error`);
+    assert.deepEqual(r.seen[r.seen.length - 1], { shell: false, powch: false, signedIn: false, address: null, error: msg }, `${why}: the state`);
+  }
+  // the copy reaches the script's config
+  assert.ok(js.includes(`var A=${JSON.stringify({ fail: COPY['auth.fail'] })};`));
+  // plants: the failure swallowed, and the notice dropped → red
+  const bad = { bridgeLevel: 1, ready: () => Promise.reject(new Error('bus gone')) };
+  const silent = js.replace('}).then(null,fail);', '}).then(null,function(){});');
+  assert.notEqual(silent, js);
+  const s = await failing(silent, bad);
+  assert.equal(s.errors.length, 0, 'the plant: nothing logged');
+  assert.equal(s.notice, null, 'the plant: nothing shown');
+  const hidden = js.replace("document.body.insertBefore(n,document.body.firstChild);", '');
+  assert.notEqual(hidden, js);
+  assert.equal((await failing(hidden, bad)).notice, null, 'the plant: logged but not shown');
+});
+
 test('one reader: the theme gate refuses a login or request-form script that reads the sign-in state itself, or skips the watcher', () => {
   const P = loadPartials(), css = tokensCss();
   assert.doesNotThrow(() => assertTheme(P, css));
@@ -118,6 +160,7 @@ test('one reader: the theme gate refuses a login or request-form script that rea
   }
   assert.throws(() => assertTheme({ ...P, loginScript: P.loginScript.replace('egptSiteAuth.watch(', 'egptSiteAuth.look(') }, css), /the login script does not take the sign-in state from the auth watcher/);
   assert.throws(() => assertTheme({ ...P, authScript: P.authScript.replace('window.egptSiteAuth=', 'window.siteAuth=') }, css), /does not define window\.egptSiteAuth exactly once/);
+  assert.throws(() => assertTheme({ ...P, authScript: P.authScript.replace('var A={{auth:config}};', '') }, css), /var A=\{\{auth:config\}\}; 0 times, needs exactly once/);
 });
 
 test('the fixture comparison takes the watcher out of a built page exactly once where it belongs, and refuses it twice, missing or misplaced', () => {

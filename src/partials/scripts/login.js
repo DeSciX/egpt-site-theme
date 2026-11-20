@@ -10,6 +10,9 @@
   egptSiteAuth.watch(function(s){st=s;btn.textContent=s.signedIn?L.signedIn:label;});
   btn.addEventListener('click',function(e){
     if(!(st&&st.powch)) return;
-    e.preventDefault(); DeSciX.powch.login();
+    e.preventDefault();
+    // drive the label from the watcher, never from this promise; a refusal other than the visitor's own cancel is logged
+    var q=DeSciX.powch.login();
+    if(q&&typeof q.then==='function')q.then(null,function(x){if(!(x&&x.code==='USER_CANCELLED'))console.error('descix-login: sign-in did not complete:',x);});
   });
 })();

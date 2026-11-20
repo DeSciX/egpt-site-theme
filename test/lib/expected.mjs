@@ -2,13 +2,16 @@
 // the file set and every file by sha256 (files.json) except the bridge file (the pinned @descix/app-sdk's, below), index.html byte for byte except the one provenance line, and
 // share.json byte for byte. Used by test/zero-diff.test.mjs and by scripts/publish-gate.sh's install smoke test.
 //
-// What is normalised: the proposal forms' regions on a page that carries the licence form (HOOK_REGIONS), and the line `<body data-frontpage-…>` (the generator stamped data-frontpage-template and the
+// What is normalised: the head's fonts (unFonts), the one Courant nav link's attribute order on a page planted with the
+// Courant chrome (unMono), the proposal forms' regions on a page that carries the licence form (HOOK_REGIONS), and the line `<body data-frontpage-…>` (the generator stamped data-frontpage-template and the
 // library's HEAD; the theme stamps data-frontpage-theme, data-frontpage-roster and the app repository's HEAD).
 import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { loadBridgeFile } from '../../src/bridge.mjs';
+import { FONT_FILES, FONTS_DIR, FONTS_OUT, fontsCss } from '../../src/chrome.mjs';
+import { tokensCss } from '../../src/tokens.mjs';
 
 export const EXPECTED = fileURLToPath(new URL('../fixtures/egpt/expected/', import.meta.url));
 // The bridge file is @descix/app-sdk's (SITE_SCAFFOLD_BRIDGE), not the generator's: the fixtures were generated at app-sdk
@@ -28,7 +31,7 @@ const specOf = app => JSON.parse(fs.readFileSync(new URL(`../fixtures/egpt/input
 export const expectedFiles = app => {
   const want = JSON.parse(fs.readFileSync(path.join(EXPECTED, app, 'files.json'), 'utf8'));
   if (BRIDGE.name in want) throw new Error(`fixture: expected/${app}/files.json carries ${BRIDGE.name}; the bridge is @descix/app-sdk's file, not a vendored hash`);
-  return { want, files: [...Object.keys(want), ...(specOf(app).scripts.sdk ? [BRIDGE.name] : [])].sort() };
+  return { want, files: [...Object.keys(want), ...(specOf(app).scripts.sdk ? [BRIDGE.name] : []), ...FONT_FILES.map(f => `${FONTS_OUT}/${f}`)].sort() };
 };
 export const STAMP = /^<body data-frontpage-app="[^"]*"[^>\n]*>$/m;
 const sha = b => crypto.createHash('sha256').update(b).digest('hex');
@@ -76,6 +79,29 @@ export const unPlaceLogin = (h, on) => {
   if (n !== (on ? 1 : 0)) throw new Error(`built page: the login button is in the header ${n} times, wants ${on ? 1 : 0}`);
   return h.replace(LOGIN_IN_HEADER, '$1\n  </div>\n</div></nav>');
 };
+// The fonts: the generator's pages linked Google Fonts in the head; the theme self-hosts them (./chrome): the built head
+// opens its <style> with fonts.css and the tokens' header line, and writes the font files under fonts/ (held to the
+// package's own files below). Each side's form is taken out exactly once.
+export const GOOGLE_FONTS_HEAD = '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">\n<style>\n';
+export const SELF_HOSTED_HEAD = `<style>\n${fontsCss()}${tokensCss().split('\n')[0]}\n`;
+const once = (h, from, to, side) => {
+  const n = h.split(from).length - 1;
+  if (n !== 1) throw new Error(`${side}: ${JSON.stringify(from.slice(0, 60))} is there ${n} times, wants 1`);
+  return h.replace(from, () => to);
+};
+export const unFonts = (h, side = 'built page') => once(h, side === 'built page' ? SELF_HOSTED_HEAD : GOOGLE_FONTS_HEAD, '<style>\n', side);
+// The chrome is data (./chrome renderChrome): a page whose vendored spec said "template" gets the Courant chrome data
+// (test/fixtures/courant-chrome.json), and the one link the generator wrote class-first is written href-first by the
+// one link writer (./chrome linkHtml). The generator's page is moved to that order, exactly once.
+export const COURANT_MONO = ['<a class="mono" href="#request" style="color:var(--cyan)">', '<a href="#request" class="mono" style="color:var(--cyan)">'];
+/** A fixture page whose vendored spec says "template" for its chrome: the test plants the Courant chrome data in it. */
+export const plantedChrome = app => specOf(app).nav === 'template';
+export const unMono = h => once(h, COURANT_MONO[0], COURANT_MONO[1], 'generator page');
+/** The generator's page and the built page, each with its own known difference taken out (opts as diffOf's). */
+export const sidesOf = (a, b, opts = {}) => [
+  (opts.chrome ? unMono : x => x)(unFonts(a, 'generator page')).replace(STAMP, '<body>'),
+  unPlaceLogin(unForms(unAuth(unPhone(unFonts(b)), opts.hook || opts.login), opts.hook), opts.login).replace(STAMP, '<body>'),
+];
 const maskWith = (regions, h) => regions.reduce((x, re) => { if (!re.test(x)) throw new Error(`fixture: region ${re} is not on the page`); return x.replace(re, '<!-- region -->'); }, h);
 const masked = (h, opts) => [[opts.hook, HOOK_REGIONS], [opts.login, LOGIN_REGIONS]].reduce((x, [on, regions]) => (on ? maskWith(regions, x) : x), h);
 
@@ -93,10 +119,12 @@ export function diffOf(app, dir, opts = {}) {
     if (f === 'index.html') {
       const a = fs.readFileSync(path.join(exp, 'index.html'), 'utf8'), b = bytes.toString('utf8');
       if ((b.match(new RegExp(STAMP.source, 'gm')) || []).length !== 1) d.push('index.html: the stamp line is not there exactly once');
-      if (masked(a.replace(STAMP, '<body>'), opts) !== masked(unPlaceLogin(unForms(unAuth(unPhone(b), opts.hook || opts.login), opts.hook), opts.login).replace(STAMP, '<body>'), opts)) d.push('index.html');
+      const [ea, eb] = sidesOf(a, b, { ...opts, chrome: plantedChrome(app) });
+      if (masked(ea, opts) !== masked(eb, opts)) d.push('index.html');
       if (sha(Buffer.from(a)) !== want[f]) d.push('fixture: expected/index.html is not the file files.json hashes');
       if ((opts.hook || opts.login) && a === b) d.push('index.html: the hook regions are the generator\'s (the hook did not reach the page)');
     } else if (f === BRIDGE.name) { if (!bytes.equals(BRIDGE.data)) d.push(`${f} (not the pinned @descix/app-sdk bridge)`);
+    } else if (f.startsWith(`${FONTS_OUT}/`)) { if (!bytes.equals(fs.readFileSync(path.join(FONTS_DIR, f.slice(FONTS_OUT.length + 1))))) d.push(`${f} (not the theme's font file)`);
     } else if (sha(bytes) !== want[f]) d.push(f);
   }
   if (fs.existsSync(path.join(exp, 'share.json')) && !fs.readFileSync(path.join(exp, 'share.json')).equals(fs.readFileSync(path.join(dir, 'share.json')))) d.push('share.json');

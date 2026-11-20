@@ -19,11 +19,12 @@ import { normalizeSpec } from './spec.mjs';
 import { normalizeCopy, overriddenOf, fillCopy, slotKind, COPY_SCHEMA } from './copy.mjs';
 import { loadPartials, sectionOf, themeImage, TOKENS_INCLUDE } from './partials.mjs';
 import { tokensCss, gridColumns } from './tokens.mjs';
+import { renderChrome, linkHtml as link, FONTS_OUT } from './chrome.mjs';
 import { loadRoster, stillName, tileOf, tileHtml } from './tiles.mjs';
 import { CODESITE_SCRIPT, loadBridgeFile } from './bridge.mjs';
 import { loadShareContract, shareFiles, validatePages, SHARE_DIR } from './share.mjs';
 import { PAGE_FILE, IMAGES_OUT } from './outputs.mjs';
-import { assertTheme, assertPage, stampOf, THROUGH_SLOT, THROUGH_MARK, EXHIBITS_MARK } from './gates.mjs';
+import { assertPage, stampOf, THROUGH_SLOT, THROUGH_MARK, EXHIBITS_MARK } from './gates.mjs';
 import { gitGround, githubGround } from './ground.mjs';
 import { library } from './library.mjs';
 import { fillRequestScript, fillProposalSection, SCRIPT_SLOTS, REFUSALS } from './request.mjs';
@@ -31,7 +32,7 @@ import { fillRequestScript, fillProposalSection, SCRIPT_SLOTS, REFUSALS } from '
 export const THEME_VERSION = JSON.parse(fs.readFileSync(new URL('../package.json', import.meta.url), 'utf8')).version;
 /** What a build may write into the output directory, from each output's owner (the bridge and share.json names are @descix/app-sdk's). */
 export async function pageOutputs(fromDir) {
-  return Object.freeze([PAGE_FILE, `${IMAGES_OUT}/`, (await loadBridgeFile(fromDir)).name, (await loadShareContract(fromDir)).SHARE_JSON_FILE]);
+  return Object.freeze([PAGE_FILE, `${IMAGES_OUT}/`, `${FONTS_OUT}/`, (await loadBridgeFile(fromDir)).name, (await loadShareContract(fromDir)).SHARE_JSON_FILE]);
 }
 export const STILLS_DIR = 'exhibits';
 /** The app's import-map block: two marker lines its own generator fills (scripts.import_map). */
@@ -85,7 +86,6 @@ function reanchor(html, anchors) {
   }
   return html;
 }
-const link = a => `<a href="${esc(a.href)}"${/^https?:/.test(a.href) ? ' target="_blank" rel="noopener"' : ''}${a.class ? ` class="${esc(a.class)}"` : ''}${a.style ? ` style="${esc(a.style)}"` : ''}>${a.html || esc(a.text)}</a>`;
 
 /**
  * Assembles one page. opts.ground: a ground object (ground.mjs) for the quotation gate, or null (then spec.quotes, if
@@ -100,9 +100,7 @@ export async function buildPage(specFile, opts = {}) {
   const spec = normalizeSpec(JSON.parse(repo.read(`${app}.json`, 'utf8')), app);
 
   const partials = loadPartials();
-  const css = tokensCss();
-  assertTheme(partials, css);
-  const columns = gridColumns(css);
+  const columns = gridColumns(tokensCss());
 
   if (opts.ground && spec.quotes) refuse(`${app}.json declares quotes and a ground was passed too; one ground per build`);
   const ground = opts.ground || (spec.quotes === null ? null
@@ -163,24 +161,9 @@ export async function buildPage(specFile, opts = {}) {
     if (!repo.exists(f)) refuse(`fragment not found: ${f}`);
     return repo.read(f, 'utf8');
   };
-  function navHtml() {
-    if (spec.nav === 'template') {
-      let nav = rewrite(fill(partials.nav), spec.links);
-      if (spec.login) {
-        // in the header, after the nav links (not inside them): the links collapse at phone width, the button stays
-        const at = '\n  </div>\n</div></nav>';
-        if (nav.split(at).length !== 2) refuse('theme nav: no place for the login button');
-        nav = nav.replace(at, `\n  </div>\n  ${fill(partials.login)}\n</div></nav>`);
-      }
-      return nav;
-    }
-    return `<nav class="nav"><div class="wrap">
-  <a class="brand" href="#top"><b>${esc(spec.brand.name)}</b><span>${esc(spec.brand.tag)}</span></a>
-  <div class="navlinks">
-    ${spec.nav.map(link).join('')}
-  </div>
-</div></nav>`;
-  }
+  // the chrome (the theme CSS, the header with its login button, the footer): ./chrome renderChrome, its one renderer
+  if (spec.login) used.add('nav.login');
+  const chrome = renderChrome({ brand: spec.brand, nav: spec.nav, footer: spec.footer, ...(spec.css ? { app_css: { name: app, css: spec.css } } : {}), ...(spec.login ? { login: copy['nav.login'] } : {}) }, { partials, where: `${app}.json` });
   function heroHtml() {
     if (spec.hero === 'template') return rewrite(fill(partials.hero), spec.links);
     if (spec.hero.file) {
@@ -203,17 +186,6 @@ export async function buildPage(specFile, opts = {}) {
     ${h.kicker_html ? `<p class="kicker">${h.kicker_html}</p>` : ''}
   </div>
 </header>`;
-  }
-  function footerHtml() {
-    if (spec.footer === 'template') return rewrite(fill(partials.footer), spec.links);
-    const f = spec.footer;
-    return `<footer><div class="wrap">
-  <div class="brand"><b>${esc(f.name)}</b><span>${esc(f.tag)}</span></div>
-  <div class="row">
-    ${f.links.map(link).join('')}
-  </div>
-  <p class="legal">${f.legal_html}</p>
-</div></footer>`;
   }
 
   const heroOut = gate(heroHtml(), 'hero');
@@ -242,7 +214,7 @@ export async function buildPage(specFile, opts = {}) {
   const requestScript = () => { for (const id of [...Object.values(SCRIPT_SLOTS), ...Object.values(REFUSALS)]) used.add(id); return fillRequestScript(partials.requestForm.trim(), app, spec, copy); };
   // the theme's auth watcher (partials/scripts/auth.js): the one reader of the sign-in state, placed once, before the
   // login and request-form scripts that consume it
-  const authScript = spec.login || spec.scripts.template_scripts ? partials.authScript.trim() : '';
+  const authScript = spec.login || spec.scripts.template_scripts ? (used.add('auth.fail'), partials.authScript.trim().replace('{{auth:config}}', () => JSON.stringify({ fail: copy['auth.fail'] }).replace(/</g, '\\u003c'))) : '';
   const scripts = [authScript, spec.scripts.template_scripts ? requestScript() : '', spec.scripts.codesite ? CODESITE_SCRIPT : '', spec.login ? loginScript() : '',
     ...(spec.scripts.extra || []).map(f => {
       if (!repo.exists(f)) refuse(`script not found: ${f}`);
@@ -251,14 +223,9 @@ export async function buildPage(specFile, opts = {}) {
       return js;
     })].filter(Boolean);
 
-  // head: the theme's, its CSS included, retitled through the copy, forwarder first
-  let head = fill(partials.head).replace(TOKENS_INCLUDE, () => css);
+  // head: the theme's, the chrome's CSS included, retitled through the copy, forwarder first
+  let head = fill(partials.head).replace(TOKENS_INCLUDE, () => chrome.css);
   head = head.replace('<meta charset="utf-8">', `<meta charset="utf-8">\n${forwarder()}`);
-  if (spec.css) head = head.replace('</style>', () => `\n/* ${app} */\n${spec.css}\n</style>`);
-  if (spec.login) {
-    if (!head.includes('--cyan-ink:')) refuse('login button: the theme CSS has no --cyan-ink token');
-    head = head.replace('</style>', () => `\n/* login */\n${partials.loginCss}\n</style>`);
-  }
   // the proposal forms' CSS (partials/forms.css: a refused control's border), placed with the forms' script
   if (spec.scripts.template_scripts) {
     if (!head.includes('--gold:')) refuse('proposal forms: the theme CSS has no --gold token');
@@ -268,8 +235,8 @@ export async function buildPage(specFile, opts = {}) {
     const at = head.lastIndexOf('</head>');
     head = `${head.slice(0, at)}${IMPORT_MAP_BEGIN}\n${IMPORT_MAP_END}\n${head.slice(at)}`;
   }
-  const footerOut = gate(footerHtml(), 'footer');
-  const navOut = navHtml();
+  const footerOut = gate(chrome.footer, 'footer');
+  const navOut = chrome.nav;
   const body = `
 
 ${navOut}
@@ -322,6 +289,7 @@ ${sdk ? `<script src="${sdk.name}"></script>\n` : ''}${scripts.map(s => `<script
   }
   for (const name of extra.keys()) if (!usedImages.has(name)) refuse(`spec declares an unused image: ${name} (neither the page nor a share.pages card references it)`);
   files.set(PAGE_FILE, Buffer.from(html));
+  for (const [k, v] of chrome.files) files.set(k, v);
   if (spec.share) {
     const assets = repo.door(`${app}/share`);
     const { files: sf, json } = shareFiles(app, spec.share, await loadShareContract(dir), assets);

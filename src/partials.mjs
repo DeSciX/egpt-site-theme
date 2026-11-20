@@ -1,6 +1,7 @@
 // ./partials — the theme's markup: the page head, nav, hero, footer, the sections by id, the login button and the
 // auth watcher, login and request-form scripts. Partials carry NO copy: every text is a {{slot:<id>}} token the copy layer
-// (./copy) fills; the head carries one {{theme:tokens.css}} include. The section ids are the files present
+// (./copy) fills, or, in the nav, footer and login button, a {{chrome:<key>}} token ./chrome renderChrome fills from the
+// app's chrome data; the head carries one {{theme:tokens.css}} include, where renderChrome's CSS goes. The section ids are the files present
 // (enumerated, never listed by hand).
 import fs from 'node:fs';
 import path from 'node:path';
