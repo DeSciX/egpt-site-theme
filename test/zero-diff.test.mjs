@@ -18,7 +18,7 @@ import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { BIN, FIXTURES, SOURCE, THEME, git, commitAll, throughLines, X } from './lib/world.mjs';
 import { THEME_VERSION, pageOutputs } from '../src/page.mjs';
-import { STAMP, diffOf, stampFor, walk, BRIDGE, appSdkPinDrift, unPhone } from './lib/expected.mjs';
+import { STAMP, diffOf, stampFor, walk, BRIDGE, appSdkPinDrift, unPhone, sidesOf, plantedChrome } from './lib/expected.mjs';
 
 const ROSTER_VERSION = JSON.parse(fs.readFileSync(path.join(THEME, 'node_modules', '@descix', 'frqtl-web', 'package.json'), 'utf8')).version;
 const CACHE = fs.mkdtempSync(path.join(os.tmpdir(), 'theme-ground-cache-'));
@@ -30,6 +30,10 @@ const LOGIN = SOURCE.apps.filter(a => specOf(path.join(FIXTURES, 'inputs', SOURC
 // the theme owns the login button's script now: a login page's spec drops the app's own login.js from scripts.extra
 const plantLogin = dir => { for (const a of LOGIN) { const s = specOf(dir, a); fs.writeFileSync(path.join(dir, `${a}.json`), JSON.stringify({ ...s, scripts: { ...s.scripts, extra: s.scripts.extra.filter(f => f !== 'login.js') } })); } };
 const opts = app => ({ hook: HOOKED.includes(app), login: LOGIN.includes(app) });
+// the chrome is the app's data now (./chrome): a vendored spec that said "template" gets the Courant chrome data, the
+// header and footer the theme's partials carried until 0.1.0-p8 (test/fixtures/courant-chrome.json)
+const COURANT_CHROME = JSON.parse(fs.readFileSync(path.join(THEME, 'test', 'fixtures', 'courant-chrome.json'), 'utf8'));
+const plantChrome = dir => { for (const a of SOURCE.apps.filter(plantedChrome)) { const s = specOf(dir, a); fs.writeFileSync(path.join(dir, `${a}.json`), JSON.stringify({ ...s, ...COURANT_CHROME })); } };
 const plantRequest = dir => { for (const a of HOOKED) { const s = specOf(dir, a); if (!s.self_host) fs.writeFileSync(path.join(dir, `${a}.json`), JSON.stringify({ ...s, self_host: FIXTURE_SELF_HOST(a) })); } };
 
 // The inputs, committed in a throwaway app repository, with the theme's node_modules (the pinned roster and app-sdk).
@@ -38,6 +42,7 @@ function inputsRepo(plant) {
   fs.cpSync(path.join(FIXTURES, 'inputs'), T, { recursive: true });
   plantRequest(path.join(T, SOURCE.dir));
   plantLogin(path.join(T, SOURCE.dir));
+  plantChrome(path.join(T, SOURCE.dir));
   if (plant) plant(path.join(T, SOURCE.dir));
   fs.writeFileSync(path.join(T, '.gitignore'), 'node_modules\n');
   fs.symlinkSync(path.join(THEME, 'node_modules'), path.join(T, 'node_modules'));
@@ -104,8 +109,8 @@ test('negative control: a planted copy override in one slot shows up only in tha
     const d = diffOf(app, runs[app].out, opts(app));
     assert.deepEqual(d, app === victim ? ['index.html'] : [], app);
   }
-  const lines = h => h.replace(STAMP, '<body>').split('\n');
-  const a = lines(fs.readFileSync(path.join(FIXTURES, 'expected', victim, 'index.html'), 'utf8')), b = lines(unPhone(fs.readFileSync(path.join(runs[victim].out, 'index.html'), 'utf8')));
+  const [ea, eb] = sidesOf(fs.readFileSync(path.join(FIXTURES, 'expected', victim, 'index.html'), 'utf8'), fs.readFileSync(path.join(runs[victim].out, 'index.html'), 'utf8'), { ...opts(victim), chrome: plantedChrome(victim) });
+  const a = ea.split('\n'), b = eb.split('\n');
   const changed = a.map((l, i) => [l, b[i]]).filter(([x, y]) => x !== y);
   assert.equal(a.length, b.length);
   assert.deepEqual(changed.map(([, y]) => y.trim()), ['<p class="lede">PLANTED copy override.</p>']);
@@ -123,7 +128,7 @@ test('negative control: a wrong or missing bridge file fails the page; an instal
   const pkg = JSON.parse(fs.readFileSync(path.join(THEME, 'package.json'), 'utf8'));
   const installed = JSON.parse(fs.readFileSync(path.join(THEME, 'node_modules', '@descix', 'app-sdk', 'package.json'), 'utf8')).version;
   assert.equal(appSdkPinDrift(pkg, installed), null, 'installed == pin');
-  assert.match(appSdkPinDrift(pkg, '0.6.0'), /@descix\/app-sdk 0\.6\.0 is installed but package\.json pins 0\.9\.0/);
+  assert.equal(appSdkPinDrift(pkg, '0.6.0'), `@descix/app-sdk 0.6.0 is installed but package.json pins ${pkg.peerDependencies['@descix/app-sdk']} — run npm ci`);
 });
 
 // The phone-width rules: on every page, once, at the end of the theme CSS (tokens.css); the fixture comparison takes

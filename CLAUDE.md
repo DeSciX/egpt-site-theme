@@ -2,7 +2,7 @@
 LANE: app          ENV: none (an npm package, not an app: no .descix/workspace.json, nothing uploaded)
 SDK: the published @descix/cli and @descix/app-sdk only, as an external developer — the handbook below, never platform source
 INDEX: this file — a standalone public package repo; the HANDBOOK below is its reference
-HANDBOOK: 1 `npx -y -p @descix/cli@4.2.0 descix tell-me-how "<question>"`  2 the docs shipped inside @descix/cli (agent-assets/) and @descix/app-sdk (README.md)  3 the canonical app-developer runbook, live at https://descix.net/prod/daita-docs/site/app-sdk/app-developer-runbook.html
+HANDBOOK: 1 `npx -y -p @descix/cli@5.1.0 descix tell-me-how "<question>"`  2 the docs shipped inside @descix/cli (agent-assets/) and @descix/app-sdk (README.md)  3 the canonical app-developer runbook, live at https://descix.net/prod/daita-docs/site/app-sdk/app-developer-runbook.html
 PLATFORM WALL: when the handbook does not answer — stop, write the question with evidence (command, output, the CLI's origin line), hand it to your orchestrator; the orchestrator asks the owner to open a platform session. Never open platform source to answer it.
 
 # egpt-site-theme — the EGPT community's site theme, npm `@descix/egpt-site-theme`

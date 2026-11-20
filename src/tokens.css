@@ -1,3 +1,4 @@
+/* tokens: dark only. Every consumer page is dark (color-scheme:dark); the theme has no light set and follows no prefers-color-scheme. */
 :root{
   --bg:#0b0f14; --bg2:#10161e; --panel:#151d27; --line:#233040; --line2:#2f3f52;
   --ink:#e9eef3; --ink2:#b3bfcc; --mute:#7f8ea0;

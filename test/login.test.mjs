@@ -9,7 +9,7 @@ import { world, spec } from './lib/world.mjs';
 import { COPY_SCHEMA } from '../src/copy.mjs';
 import { unPlaceLogin } from './lib/expected.mjs';
 
-const S = (extra = {}) => spec('https://login.example', [], { login: true, nav: 'template', brand: 'template', ...extra });
+const S = (extra = {}) => spec('https://login.example', [], { login: true, ...extra });
 const scriptOf = html => html.match(/<script>\n(\(function\(\)\{\n  \/\/ The Powch login button[\s\S]*?)\n<\/script>/)[1];
 
 // Runs the page's auth watcher and login script against one stub bus (test/lib/bus.mjs); returns the button.
@@ -69,6 +69,23 @@ test('the login script takes the sign-in state from the auth watcher: the label 
     assert.equal(c.click(), 0);
     assert.equal(c.btn.textContent, 'Log in with Powch');
   }
+  // a refused login() is logged, the visitor's own cancel is not; nothing is left unhandled
+  for (const [err, logged] of [[{ code: 'POWCH_UNAVAILABLE', message: 'x' }, 1], [{ code: 'USER_CANCELLED', message: 'closed' }, 0]]) {
+    const rb = stubBus({ signedIn: false });
+    const rr = await run(html, rb);
+    rb.DeSciX.powch.login = () => Promise.reject(err);
+    assert.equal(rr.click(), 1);
+    await settle();
+    assert.equal(rr.errors.length, logged, err.code);
+    if (logged) assert.match(String(rr.errors[0][0]), /descix-login: sign-in did not complete/);
+  }
+  const unlogged = html.replace("if(!(x&&x.code==='USER_CANCELLED'))console.error('descix-login: sign-in did not complete:',x);", '');
+  assert.notEqual(unlogged, html);
+  const ub = stubBus({ signedIn: false });
+  const ur = await run(unlogged, ub);
+  ub.DeSciX.powch.login = () => Promise.reject({ code: 'POWCH_UNAVAILABLE' });
+  ur.click(); await settle();
+  assert.equal(ur.errors.length, 0, 'the plant: a refusal goes unlogged');
   // plant: the label ignores the state → red
   const deaf = html.replace('btn.textContent=s.signedIn?L.signedIn:label;', '');
   assert.notEqual(deaf, html);

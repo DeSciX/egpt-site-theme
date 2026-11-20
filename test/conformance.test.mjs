@@ -79,7 +79,7 @@ test('COPY_SLOTS: every slot is placed exactly once by the partials (or the tile
 test('COPY_SLOTS: no hand text left in a partial (outside tags, scripts, styles and tokens)', () => {
   const P = loadPartials();
   for (const [name, html] of Object.entries({ nav: P.nav, hero: P.hero, footer: P.footer, login: P.login, ...P.sections })) {
-    const bare = html.replace(/<svg[\s\S]*?<\/svg>/g, s => s.replace(/<[^>]+>/g, '')).replace(/<[^>]+>/g, '').replace(/\{\{(?:slot|request|proposal):[^}]+\}\}/g, '').replace(/&nbsp;/g, '');
+    const bare = html.replace(/<svg[\s\S]*?<\/svg>/g, s => s.replace(/<[^>]+>/g, '')).replace(/<[^>]+>/g, '').replace(/\{\{(?:slot|request|proposal|chrome):[^}]+\}\}/g, '').replace(/&nbsp;/g, '');
     assert.equal(bare.trim(), '', `${name} carries hand text: ${JSON.stringify(bare.trim().slice(0, 60))}`);
     for (const a of html.matchAll(/\s(alt|aria-label|placeholder|title)="([^"]+)"/g)) assert.match(a[2], /^\{\{slot:[^}]+\}\}$/, `${name}: ${a[1]} is copy`);
   }
@@ -105,7 +105,7 @@ test('SPEC_KEYS: README "Spec" table names exactly the keys; normalizeSpec refus
   const sec = README.split('## Spec')[1].split('\n## ')[0];
   const rows = [...sec.matchAll(/^\| `([^`]+)` \|/gm)].map(m => m[1]);
   assert.deepEqual(rows, SPEC_KEYS.map(k => k.key));
-  const min = { title: 't', description: 'd', brand: 'template', nav: 'template', hero: 'template', sections: [], footer: 'template', scripts: {} };
+  const min = { title: 't', description: 'd', brand: { name: 'b', tag: 't' }, nav: [], hero: 'template', sections: [], footer: { name: 'f', tag: 't', links: [], legal_html: 'l' }, scripts: {} };
   const bag = normalizeSpec(min, 'a');
   for (const k of SPEC_KEYS.filter(k => !k.required)) assert.deepEqual(bag[k.key], k.default, k.key);
   assert.throws(() => normalizeSpec({ ...min, anchorz: [] }, 'a'), /unknown key "anchorz"/);

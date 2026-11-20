@@ -15,6 +15,11 @@
   "default": "Logged In"
  },
  {
+  "id": "auth.fail",
+  "kind": "text",
+  "default": "Sign-in is unavailable on this page: the DeSciX App Shell did not answer. Reload the page to try again."
+ },
+ {
   "id": "request.receipt",
   "kind": "text",
   "default": "Your reference:"

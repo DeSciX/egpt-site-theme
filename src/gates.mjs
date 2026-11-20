@@ -12,9 +12,18 @@ export const EXHIBITS_MARK = /<[a-z][a-z0-9]*\b[^>]*\bdata-exhibits\b[^>]*>/g;
 export const THROUGH_MARK = /<[a-z][a-z0-9]*\b[^>]*\bdata-showcase-throughline\b[^>]*>/g;
 export const THROUGH_SLOT = /<([a-z][a-z0-9]*)\b([^>]*\bdata-showcase-throughline\b[^>]*)>([\s\S]*?)<\/\1>/g;
 const HAND_TILE = /<a\b[^>]*\bclass="tile[\s"]/g;
-/** The slots no partial places: the tile writer places proof.tile.cta; the login script's config carries
- *  nav.login.signedin; the request-form script's config and the kind chooser carry ./request INTAKE_SLOTS. */
-export const WRITER_SLOTS = Object.freeze(['proof.tile.cta', 'nav.login.signedin', ...INTAKE_SLOTS]);
+/** The slots no partial places: the tile writer places proof.tile.cta; the chrome's login button carries nav.login
+ *  (./chrome login); the login script's config carries nav.login.signedin; the auth watcher's config carries auth.fail;
+ *  the request-form script's config and the kind chooser carry ./request INTAKE_SLOTS. */
+export const WRITER_SLOTS = Object.freeze(['proof.tile.cta', 'nav.login', 'nav.login.signedin', 'auth.fail', ...INTAKE_SLOTS]);
+/** A reference that makes the browser load a resource from another origin: an absolute or scheme-relative URL in an
+ *  href or src attribute, a CSS url() (an @import url(…) included) or a bare @import "…". A page's head and the theme CSS carry none (the fonts are
+ *  self-hosted, ./chrome FONTS_OUT): a third-party request is refused where an app's upload refuses it. */
+export const REMOTE_REF = /\b(?:href|src)\s*=\s*["']?\s*(?:[a-z][a-z0-9+.-]*:)?\/\/|url\(\s*["']?\s*(?:[a-z][a-z0-9+.-]*:)?\/\/|@import\s+["']\s*(?:[a-z][a-z0-9+.-]*:)?\/\//i;
+export function assertNoRemote(text, where) {
+  const m = text.match(REMOTE_REF);
+  if (m) refuse(`${where} references another origin (${JSON.stringify(text.slice(m.index, m.index + 80))}); the theme's head and CSS load nothing from a third party — self-host it beside the page`);
+}
 /** The <body> provenance stamp: attribute → the stampOf key it carries, in order (a null roster is omitted). */
 export const STAMP_ATTRS = Object.freeze([['data-frontpage-app', 'app'], ['data-frontpage-theme', 'theme'], ['data-frontpage-roster', 'roster'], ['data-frontpage-build', 'build']].map(Object.freeze));
 
@@ -66,6 +75,9 @@ export function assertTheme(partials, css) {
     const own = AUTH_READERS.find(([, re]) => re.test(js));
     if (own) refuse(`${where}: the ${name} script reads the sign-in state itself (${own[0]}); the auth watcher (partials/scripts/auth.js) is its one reader`);
   }
+  if (partials.authScript.split('var A={{auth:config}};').length !== 2) refuse(`${where}: the auth watcher script carries var A={{auth:config}}; ${partials.authScript.split('var A={{auth:config}};').length - 1} times, needs exactly once`);
+  assertNoRemote(partials.head, `${where}: the head`);
+  assertNoRemote(css, `${where}: the theme CSS`);
   if (partials.head.split(TOKENS_INCLUDE).length !== 2) refuse(`${where}: the head carries ${TOKENS_INCLUDE} ${partials.head.split(TOKENS_INCLUDE).length - 1} times, needs exactly once`);
   if (!partials.head.includes('</head>')) refuse(`${where}: the head has no </head>`);
   // every slot is placed exactly once, by one partial or by the tile writer; no partial names a slot COPY_SLOTS lacks
@@ -89,13 +101,15 @@ export function stampOf(values) {
  * | null, columns }. Refuses: a stamp that does not name the app and the pins the build used; an unfilled slot or
  * include token; a data-exhibits element whose content is not exactly the roster's tiles (tileOf/tileHtml, in roster
  * order); a through-line marker that does not hold the roster's line (declared) or nothing (undeclared); a link left
- * pointing at the app's own public origin.
+ * pointing at the app's own public origin; a <head> that loads anything from another origin (REMOTE_REF).
  */
 export function assertPage(html, ctx) {
   const { app, theme, build, spec, copy, roster, columns } = ctx;
   const stamp = `<body ${stampOf({ app, theme, roster: roster && roster.version, build })}>`;
   if (!html.includes(stamp)) refuse(`${app}: the page's <body> stamp is not ${stamp}`);
-  const left = html.match(/\{\{(?:slot|theme|request|login|proposal):[^}]*\}\}/);
+  const left = html.match(/\{\{(?:slot|theme|request|login|proposal|chrome|auth):[^}]*\}\}/);
+  if (html.indexOf('</head>') < 0) refuse(`${app}: the page has no </head>`);
+  assertNoRemote(html.slice(0, html.indexOf('</head>')), `${app}: the page's <head>`);
   if (left) refuse(`${app}: an unfilled token remains: ${left[0]}`);
   for (const m of html.matchAll(EXHIBITS_MARK)) {
     const rest = html.slice(m.index + m[0].length);

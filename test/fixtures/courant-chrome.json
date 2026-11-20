@@ -1,0 +1,81 @@
+{
+ "brand": {
+  "name": "Courant Group",
+  "tag": "GAPI"
+ },
+ "nav": [
+  {
+   "text": "Maxi",
+   "href": "#maxi"
+  },
+  {
+   "text": "Technology",
+   "href": "#technology"
+  },
+  {
+   "text": "Products",
+   "href": "#products"
+  },
+  {
+   "text": "Open core",
+   "href": "#opencore"
+  },
+  {
+   "text": "Licensing",
+   "href": "#licensing"
+  },
+  {
+   "text": "Media",
+   "href": "#media"
+  },
+  {
+   "text": "Request a licence →",
+   "href": "#request",
+   "class": "mono",
+   "style": "color:var(--cyan)"
+  }
+ ],
+ "footer": {
+  "name": "Courant Group, LLC",
+  "tag": "Generalized Artificial Physical Intelligence",
+  "links": [
+   {
+    "text": "Maxi",
+    "href": "#maxi"
+   },
+   {
+    "text": "Products",
+    "href": "#products"
+   },
+   {
+    "text": "Plan",
+    "href": "https://egpt.descix.net"
+   },
+   {
+    "text": "License",
+    "href": "#request"
+   },
+   {
+    "text": "The agreement",
+    "href": "#licensing"
+   },
+   {
+    "text": "Media",
+    "href": "#media"
+   },
+   {
+    "text": "Evidence collection",
+    "href": "https://egpt.descix.net"
+   },
+   {
+    "text": "DeSciX",
+    "href": "https://descix.net"
+   },
+   {
+    "text": "The patent",
+    "href": "https://patents.google.com/patent/US20260127327A1/en"
+   }
+  ],
+  "legal_html": "FRQTL and Maxi are trademarks of Courant Group, LLC. EGPT is a community project on DeSciX. © 2012–2026 Courant Group, LLC."
+ }
+}

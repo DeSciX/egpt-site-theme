@@ -10,51 +10,6 @@
   "default": "Courant Group licenses Maxi, the imagining AI, and FRQTL, the physics engine that doesn't know any physics equations. Generalized Artificial Physical Intelligence, licensed for robotics, chips and platforms."
  },
  {
-  "id": "nav.b",
-  "kind": "text",
-  "default": "Courant Group"
- },
- {
-  "id": "nav.span",
-  "kind": "text",
-  "default": "GAPI"
- },
- {
-  "id": "nav.a.1",
-  "kind": "text",
-  "default": "Maxi"
- },
- {
-  "id": "nav.a.2",
-  "kind": "text",
-  "default": "Technology"
- },
- {
-  "id": "nav.a.3",
-  "kind": "text",
-  "default": "Products"
- },
- {
-  "id": "nav.a.4",
-  "kind": "text",
-  "default": "Open core"
- },
- {
-  "id": "nav.a.5",
-  "kind": "text",
-  "default": "Licensing"
- },
- {
-  "id": "nav.a.6",
-  "kind": "text",
-  "default": "Media"
- },
- {
-  "id": "nav.mono",
-  "kind": "text",
-  "default": "Request a licence →"
- },
- {
   "id": "hero.img.alt",
   "kind": "text",
   "default": "Maxi's imagination: a three-dimensional double-slit experiment, the detector wall painting its own interference pattern hit by hit"
@@ -88,66 +43,6 @@
   "id": "hero.kicker",
   "kind": "html",
   "default": "<b>Built from the Blueprints</b> Ulam and von Neumann left for GAPI, based on their classified <a class=\"hl\" href=\"https://egpt.descix.net\" target=\"_blank\" rel=\"noopener\" tabindex=\"0\">P=NP<span class=\"tip\">“Incidentally, the other day I developed a method that always allows a finite decision for the effective provability question concerning propositions that are built up solely by means of the concepts ‘not’, ‘or’ (thus also ‘and’, ‘follows’, etc.), [and] ‘provable’ … Perhaps, if it interests you, or you have not yet thought of it, then I can write it up.”<small>John von Neumann to Kurt Gödel, Berlin, 12 January 1931. Collected Works vol. V, pp. 340–341. Provenance link to follow.</small></span></a> and <a class=\"hl\" href=\"https://egpt.descix.net\" target=\"_blank\" rel=\"noopener\" tabindex=\"0\">intractable quantum computing<span class=\"tip\">“Let me point to the so-called Monte Carlo approach as an example of one of the methods that can lead to insight into the behavior of complicated systems. Essentially it consists of imitating physical processes on a computer by following a large but manageable number, replacing the trillions or more that are involved in the real process, by thousands of histories of the behavior of individual particles.”<small>Stanislaw Ulam, Science, Computers, and People, pp. 38–39. And Martin Gardner's preface, p. viii: “the Monte Carlo method of solving intractable problems, not only in probability theory but in areas such as number theory where the method would not have been thought applicable.” Provenance links to follow.</small></span></a> work, developed at Los Alamos while working on the Super hydrogen-bomb project. <b>Filed as a patent</b> in 2024. <b>Running on an iPhone</b>, with no internet connection, calmly simulating the impossible double-slit experiment in 3D."
- },
- {
-  "id": "footer.b",
-  "kind": "text",
-  "default": "Courant Group, LLC"
- },
- {
-  "id": "footer.span",
-  "kind": "text",
-  "default": "Generalized Artificial Physical Intelligence"
- },
- {
-  "id": "footer.a.1",
-  "kind": "text",
-  "default": "Maxi"
- },
- {
-  "id": "footer.a.2",
-  "kind": "text",
-  "default": "Products"
- },
- {
-  "id": "footer.a.3",
-  "kind": "text",
-  "default": "Plan"
- },
- {
-  "id": "footer.a.4",
-  "kind": "text",
-  "default": "License"
- },
- {
-  "id": "footer.a.5",
-  "kind": "text",
-  "default": "The agreement"
- },
- {
-  "id": "footer.a.6",
-  "kind": "text",
-  "default": "Media"
- },
- {
-  "id": "footer.a.7",
-  "kind": "text",
-  "default": "Evidence collection"
- },
- {
-  "id": "footer.a.8",
-  "kind": "text",
-  "default": "DeSciX"
- },
- {
-  "id": "footer.a.9",
-  "kind": "text",
-  "default": "The patent"
- },
- {
-  "id": "footer.legal",
-  "kind": "text",
-  "default": "FRQTL and Maxi are trademarks of Courant Group, LLC. EGPT is a community project on DeSciX. © 2012–2026 Courant Group, LLC."
  },
  {
   "id": "gapi.eyebrow",
@@ -447,7 +342,7 @@
  {
   "id": "technology.p.2",
   "kind": "html",
-  "default": "Behind it is a proof of P = NP, formalised in Lean 4 in three independent chains. Two of them use only Lean's two structural axioms, <code>propext</code> and <code>Quot.sound</code>: no <code>sorryAx</code>, no <code>Classical.choice</code>. A choice-free proof is constructive: it does not just say a solution exists, it is the algorithm that finds it."
+  "default": "Behind it is a proof of P = NP, formalised in Lean 4 in three independent chains. The capstone theorems of all three use only Lean's two structural axioms, <code>propext</code> and <code>Quot.sound</code>: no <code>sorryAx</code>, no <code>Classical.choice</code>. A choice-free proof is constructive: it does not just say a solution exists, it is the algorithm that finds it."
  },
  {
   "id": "technology.th.1",
@@ -507,7 +402,7 @@
  {
   "id": "technology.td.6",
   "kind": "html",
-  "default": "<code>propext</code>, <code>Quot.sound</code>, <code>Classical.choice</code>"
+  "default": "<code>propext</code>, <code>Quot.sound</code>"
  },
  {
   "id": "technology.a.1",

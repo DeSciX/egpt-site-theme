@@ -355,12 +355,12 @@ footer .legal{max-width:80ch;font-size:13px}
   <div class="tech">
     <div class="body">
       <p>FRQTL is the FRame And QuanTum Language virtual machine: physics computed by combinatorics and fractal recursion instead of calculus, quantum “balls” in gravitational frame “boxes.” It exceeds what a superposition-based quantum computer could do in theory, on classical hardware, in your browser.</p>
-      <p>Behind it is a proof of P = NP, formalised in Lean 4 in three independent chains. Two of them use only Lean's two structural axioms, <code>propext</code> and <code>Quot.sound</code>: no <code>sorryAx</code>, no <code>Classical.choice</code>. A choice-free proof is constructive: it does not just say a solution exists, it is the algorithm that finds it.</p>
+      <p>Behind it is a proof of P = NP, formalised in Lean 4 in three independent chains. The capstone theorems of all three use only Lean's two structural axioms, <code>propext</code> and <code>Quot.sound</code>: no <code>sorryAx</code>, no <code>Classical.choice</code>. A choice-free proof is constructive: it does not just say a solution exists, it is the algorithm that finds it.</p>
       <table class="chains">
         <tr><th>Chain</th><th>Capstone</th><th>Axioms</th></tr>
         <tr><td>Information-theoretic</td><td><code>P_eq_NP_info</code></td><td><code>propext</code>, <code>Quot.sound</code></td></tr>
         <tr><td>Definitional identity</td><td><code>P_eq_NP</code></td><td><code>propext</code>, <code>Quot.sound</code></td></tr>
-        <tr><td>Standard complexity</td><td><code>P_eq_NP_info_standard</code></td><td><code>propext</code>, <code>Quot.sound</code>, <code>Classical.choice</code></td></tr>
+        <tr><td>Standard complexity</td><td><code>P_eq_NP_info_standard</code></td><td><code>propext</code>, <code>Quot.sound</code></td></tr>
       </table>
       <div class="tech-links">
         <a href="https://egpt-frqtl.descix.net" target="_blank" rel="noopener">FRQTL ↗</a>

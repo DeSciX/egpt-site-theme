@@ -2,9 +2,11 @@
 // images, share block, the copy file and the quotation ground). SPEC_KEYS is the one table of top-level keys,
 // normalizeSpec(partial, app) the one reader: it returns the full bag (absent optional keys at their defaults) and
 // refuses an unknown key (a key starting with "_" is a comment), a wrong type, or a malformed nested entry.
-// The `title`, `description`, `brand`, `nav`, `hero`, `footer`, `links` and per-section `links`/`anchors` keys carry
-// the app's page text in the shape the page specs use today; their text moves to the copy file in a later release.
+// The `title`, `description`, `hero`, `links` and per-section `links`/`anchors` keys carry the app's page text in the
+// shape the page specs use today; their text moves to the copy file in a later release. `brand`, `nav` and `footer`
+// are the page chrome, read by ./chrome normalizeChrome (the one reader of chrome data).
 import { refuse } from './html.mjs';
+import { normalizeChrome } from './chrome.mjs';
 import { normalizeProposal, intakeOf, pageForms, REFUSED_SPEC_KEYS, FORMS } from './request.mjs';
 
 const isObj = v => v && typeof v === 'object' && !Array.isArray(v);
@@ -14,19 +16,18 @@ const T = {
   array: v => Array.isArray(v),
   object: isObj,
   'template|object': v => v === 'template' || isObj(v),
-  'template|array': v => v === 'template' || Array.isArray(v),
   'string|null': v => v === null || typeof v === 'string',
 };
 export const SPEC_KEYS = Object.freeze([
   ['title', 'string', true, undefined, 'the <title> (fills page.title)'],
   ['description', 'string', true, undefined, 'the meta description (fills page.description)'],
-  ['brand', 'template|object', true, undefined, '"template", or {name, tag} for a generated nav'],
-  ['nav', 'template|array', true, undefined, '"template", or [{text, href, class?, style?, html?}]'],
+  ['brand', 'object', true, undefined, '{name, tag}: the header brand (./chrome)'],
+  ['nav', 'array', true, undefined, '[{text | html, href, class?, style?}]: the header links (./chrome)'],
   ['hero', 'template|object', true, undefined, '"template"; {file} (an app fragment); or {eyebrow, h1_html, lede|lede_html, primary, secondary?, kicker_html?, art?, src?}'],
   ['sections', 'array', true, undefined, '[{use: <theme section id>, links?, anchors?} | {file: <fragment>} | {hero: true}]'],
-  ['footer', 'template|object', true, undefined, '"template", or {name, tag, links, legal_html}'],
+  ['footer', 'object', true, undefined, '{name, tag, links, legal_html}: the footer (./chrome)'],
   ['scripts', 'object', true, undefined, 'SCRIPT_KEYS'],
-  ['links', 'array', false, [], '[[from, to]] rewrites over the theme nav, hero, footer and sections'],
+  ['links', 'array', false, [], '[[from, to]] rewrites over the theme hero and sections (the chrome is data: brand, nav, footer)'],
   ['login', 'bool', false, false, 'the Powch login button in the theme nav'],
   ['css', 'string|null', false, null, 'app CSS appended to the theme <style>'],
   ['images', 'array', false, [], '[{from: "frontpage:<path in the app dir>" | "<path in the quotation ground>", to: "images/<name>"}]'],
@@ -59,11 +60,13 @@ export function normalizeSpec(partial, app) {
   const oneForm = t => refuse(`${where} through_line ${JSON.stringify(t)}: the one form is {"source": ${THROUGH_SOURCES.map(x => JSON.stringify(x)).join(' | ')}} (omit it to leave the through-line slot empty)`);
   if (partial.through_line !== undefined && !isObj(partial.through_line)) oneForm(partial.through_line);
   const bag = {};
+  for (const k of ['brand', 'nav', 'footer']) if (partial[k] === 'template') refuse(`${where}: ${k} "template" is removed: the theme's header and footer carry no links or text of their own; the chrome is the app's data — brand {name, tag}, nav [{text, href, class?, style?}], footer {name, tag, links, legal_html} (README "Chrome")`);
   for (const k of SPEC_KEYS) {
     if (!(k.key in partial)) { if (k.required) refuse(`${where}: spec lacks ${k.key}`); bag[k.key] = k.default; continue; }
     if (!T[k.type](partial[k.key])) refuse(`${where}: ${k.key} must be ${k.type}`);
     bag[k.key] = partial[k.key];
   }
+  normalizeChrome({ brand: bag.brand, nav: bag.nav, footer: bag.footer }, where);
   for (const k of Object.keys(bag.scripts)) if (!(k in SCRIPT_KEYS) && !k.startsWith('_')) refuse(`${where}: unknown scripts key "${k}" (SCRIPT_KEYS lists them)`);
   for (const s of bag.sections) {
     if (!isObj(s)) refuse(`${where}: a sections entry is an object`);

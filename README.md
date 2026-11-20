@@ -1,12 +1,13 @@
 # @descix/egpt-site-theme
 
 The EGPT community's site theme: one versioned package every community app's front page is built from. The theme
-owns the look (CSS tokens, the nav/hero/footer/section partials), the default copy, the page assembler, the tile
-writer, the view declarer, the share writer and the page gates. Each app owns its spec, its fragments and its copy
-overrides, and builds its own page with the CLI.
+owns the look (CSS tokens, the self-hosted fonts, the nav/hero/footer/section partials), the chrome renderer, the
+default copy, the page assembler, the tile writer, the view declarer, the share writer and the page gates. Each app
+owns its spec, its chrome data (brand, links, legal line), its fragments and its copy overrides, and builds its own page
+with the CLI; an app that writes its own page takes the same chrome from `./chrome` `renderChrome`.
 
 ```
-npm i -D --save-exact @descix/egpt-site-theme@0.1.0-p8 @descix/frqtl-web@0.6.1-p3.1 @descix/app-sdk@0.9.0
+npm i -D --save-exact @descix/egpt-site-theme@0.2.0-p1 @descix/frqtl-web@0.6.1-p3.1 @descix/app-sdk@0.10.1
 npx egpt-site-theme build frontpage/<app>.json --out site
 ```
 
@@ -21,14 +22,15 @@ One owner module per door.
 | Door | Owner | Publishes |
 |---|---|---|
 | `./tokens` | `src/tokens.mjs` | `TOKENS_FILE`, `tokensCss()`, `gridColumns(css)` — the proof grid's desktop column count, read off the CSS |
-| `./tokens.css` | `src/tokens.css` | the `:root` tokens and classes every page carries in its `<style>` |
+| `./tokens.css` | `src/tokens.css` | the `:root` tokens and classes every page carries in its `<style>` (dark only) |
 | `./partials` | `src/partials.mjs` | `loadPartials()`, `SECTION_IDS`, `sectionOf`, `THEME_IMAGES`, `themeImage`, `PARTIALS_DIR`, `TOKENS_INCLUDE` |
+| `./chrome` | `src/chrome.mjs` | `renderChrome(data, opts)` (the one renderer of the theme CSS, header and footer), `normalizeChrome`, `CHROME_KEYS`, `LINK_KEYS`, `CHROME_TOKENS`, `linkHtml`, `fontsCss()`, `FONT_FILES`, `FONTS_DIR`, `FONTS_OUT` |
 | `./copy` | `src/copy.mjs` | `COPY_SLOTS`, `normalizeCopy(partial)`, `fillCopy`, `COPY_SCHEMA`, `COPY_KINDS`, `REFUSED_SLOTS`, `ROSTER_OWNED`, `HTML_ALLOWLIST` |
 | `./page` | `src/page.mjs` | `buildPage(specFile, opts)`, `writePage`, `main` (the CLI), `pageOutputs(fromDir)`, `THEME_VERSION`, the import-map markers |
 | `./tiles` | `src/tiles.mjs` | `TILE_FIELDS`, `tileOf(row, ctx)`, `tileHtml(bag)`, `loadRoster(fromDir)`, `stillName` |
 | `./bridge` | `src/bridge.mjs` | `CODESITE_SCRIPT` (the page's one view declaration), `loadBridgeFile(fromDir)` |
 | `./share` | `src/share.mjs` | `shareJson`, `shareFiles`, `validateShareBlock`, `loadShareContract(fromDir)`, `SHARE_ASSETS`, `SHARE_DIR` (the file name is `@descix/app-sdk/share` `SHARE_JSON_FILE`) |
-| `./gates` | `src/gates.mjs` | `assertPage(html, ctx)` (the one check of an assembled page), `assertTheme(partials, css)`, `stampOf` |
+| `./gates` | `src/gates.mjs` | `assertPage(html, ctx)` (the one check of an assembled page), `assertTheme(partials, css)`, `assertNoRemote(text, where)`, `REMOTE_REF`, `stampOf` |
 | `./request` | `src/request.mjs` | `REQUEST_FIELDS` (the one table of the forms' controls and the record field each fills), `FORMS`, `formFields(key)`, `INTAKE`, `PROPOSAL_KINDS`, `TEXT_LIMITS`, `EXTRA_MAX_KEYS`, `RECORD_FIELDS`, `REFUSALS`, `SIGNED_OUT_MESSAGE`, `intakeOf`, `scriptConfig`, `normalizeProposal`, `REFUSED_SPEC_KEYS` |
 
 ## CLI
@@ -40,8 +42,9 @@ egpt-site-theme build <dir>/<app>.json --out <dir> [--dry-run]
 
 The app id is the spec's file name. Every input is read from the app's git repository and must be committed; an
 uncommitted input refuses, naming it. The output is `pageOutputs(fromDir)`: `index.html`, `images/` (theme images, tile stills,
-declared images, `images/share/`), `DeSciXAppSDK.js` (when `scripts.sdk`), `share.json` (when the spec has a share
-block). `<body>` carries the provenance stamp `data-frontpage-app`, `data-frontpage-theme` (this package's version),
+declared images, `images/share/`), `fonts/` (the self-hosted fonts and their licences, see "Chrome"), `DeSciXAppSDK.js`
+(when `scripts.sdk`), `share.json` (when the spec has a share block). An app's upload manifest carries all of them:
+a manifest that omits `fonts/**` serves the page without its fonts. `<body>` carries the provenance stamp `data-frontpage-app`, `data-frontpage-theme` (this package's version),
 `data-frontpage-roster` (the `@descix/frqtl-web` version, when the page has tiles) and `data-frontpage-build` (the app
 repository's HEAD, the full sha).
 
@@ -58,15 +61,15 @@ fetched once into a sha-keyed cache (`$EGPT_SITE_THEME_CACHE`, else `~/.cache/eg
 |---|---|---|
 | `title` | yes | the `<title>` (fills `page.title`) |
 | `description` | yes | the meta description (fills `page.description`) |
-| `brand` | yes | `"template"`, or `{name, tag}` for a generated nav |
-| `nav` | yes | `"template"`, or `[{text, href, class?, style?, html?}]` |
+| `brand` | yes | `{name, tag}`: the header brand (see "Chrome") |
+| `nav` | yes | `[{text \| html, href, class?, style?}]`: the header links, in order |
 | `hero` | yes | `"template"`; `{file}` (an app fragment, `<header class="hero…" id="top">`); or `{eyebrow, h1_html, lede \| lede_html, primary, secondary?, kicker_html?, art?, src?}` |
 | `sections` | yes | `[{use: <theme section id>, links?, anchors?} \| {file: <fragment>} \| {hero: true}]`, in page order |
-| `footer` | yes | `"template"`, or `{name, tag, links, legal_html}` |
+| `footer` | yes | `{name, tag, links, legal_html}`: the footer |
 | `scripts` | yes | `{sdk?, codesite?, template_scripts?, extra?, modules?, import_map?, forward?}` (`SCRIPT_KEYS`) |
-| `links` | no | `[[from, to]]` rewrites over the theme nav, hero, footer and sections |
+| `links` | no | `[[from, to]]` rewrites over the theme hero and sections |
 | `login` | no | `true`: the Powch login button in the theme nav, and the theme's login script (see "Login button") |
-| `css` | no | app CSS appended to the theme `<style>` |
+| `css` | no | app CSS in the theme `<style>`, after the tokens and before the login CSS (`./chrome` `app_css`) |
 | `images` | no | `[{from: "frontpage:<path in the app dir>" \| "<path in the ground>", to: "images/<name>"}]` |
 | `self_host` | with a proposal form | the app's own public origin (`https://<app id>.descix.net`): no link to it may remain on the page; a proposal form sends `self_host` + `/` as `page_url` (see "Proposal forms") |
 | `through_line` | no | `{"source": "served-roster"}`: the proof grid's through-line is the roster's `SHOWCASE_THROUGH_LINE` |
@@ -78,6 +81,48 @@ fetched once into a sha-keyed cache (`$EGPT_SITE_THEME_CACHE`, else `~/.cache/eg
 Theme sections (`use`): the files of `src/partials/sections/` (`SECTION_IDS`). The page's own fragments are any HTML
 in the app dir. Tiles: a `<div … data-exhibits></div>` gets one tile per roster row (`./tiles`). A tile links with the
 roster's `showcaseHref(row)` on the showcase app's own page (`app === SHOWCASE_SITE.app`), else `showcaseUrl(row)`.
+
+## Chrome
+
+`renderChrome({brand, nav, footer, login?, app_css?}, {partials?, where?})` (`./chrome`) renders the page chrome from
+data and returns `{css, nav, footer, files}`:
+
+- `css`: the theme CSS for one `<style>`: the fonts' `@font-face` rules, `tokens.css`, the app's CSS (`app_css`,
+  under a `/* <name> */` line) and, with a login button, the login CSS, in that order.
+- `nav`: the `<nav class="nav">` header: the brand, the links and, when `login` is set, the Powch login button
+  (`#descix-login`, its label `login`) after the links. The button is markup only; on a built page the theme's login
+  script drives it (see "Login button").
+- `footer`: the `<footer>`: `footer.name`, `footer.tag`, `footer.links` and `footer.legal_html` (inline HTML, as written).
+- `files`: `Map('fonts/<file>' → Buffer)`, the font files and licences `css` names; write them beside the page.
+
+A link is `{text | html, href, class?, style?}` (`LINK_KEYS`): an `http(s):` href opens in a new tab. `normalizeChrome`
+is the one reader of this data, and refuses an unknown key, a missing part or a malformed link. `buildPage` renders
+its chrome through `renderChrome` (spec `brand`, `nav`, `footer`, `css` and, with `"login": true`, the `nav.login`
+copy as the label), so a page an app writes with its own generator carries the same strings. The partials carry no
+links and no text of their own: the brand, links and legal line are always the app's data. A spec whose `brand`,
+`nav` or `footer` is `"template"` refuses, and the header and footer copy slots (`nav.b`, `nav.span`, `nav.a.1`–`6`,
+`nav.mono`, `footer.b`, `footer.span`, `footer.a.1`–`9`, `footer.legal`) are in `REFUSED_SLOTS`, naming the chrome
+key that replaced each.
+
+**Fonts.** The theme self-hosts its three families, so no page loads anything from another origin, and it offers
+exactly the faces 0.1.0-p8's Google Fonts request offered: Fraunces 300, 500 and 600, IBM Plex Sans 400, 500 and 600,
+IBM Plex Mono 400 and 500, upright only. Each `@font-face` rule declares one weight, so a weight a page asks for
+resolves to the face it resolved under p8 and is drawn at that face's weight: Fraunces 400 is drawn as 500, Fraunces
+700 as 600, and italic is synthesised from the upright face. The files: Fraunces (the opsz and wght variable font,
+latin, latin-ext and vietnamese subsets, from `@fontsource-variable/fraunces` 5.3.0), IBM Plex Sans (IBM's own
+variable split files, Latin1, Latin2 and Latin3, from `@ibm/plex-sans-variable` 1.0.0) and IBM Plex Mono (IBM's own
+split files, Latin1, Latin2 and Latin3, from `@ibm/plex-mono` 2.5.0); arrows and symbols outside them, such as `→`,
+fall to the system font, as they did under Google Fonts. Each was measured headless against p8's Google files, at
+every weight and in both styles, to equal text widths. All three are under the SIL Open Font License 1.1, which allows
+redistribution with software when the licence travels with the fonts: `fonts/OFL-Fraunces.txt` and
+`fonts/OFL-IBM-Plex.txt` ship in the package and beside every page. Plex's Reserved Font Name "Plex" binds modified
+versions; the Plex files are IBM's own, unmodified. The `@font-face` rules name the files relative to the page
+(`url(fonts/<file>)`). The theme gate refuses a head or theme CSS that loads anything from another origin
+(`REMOTE_REF`: an absolute or scheme-relative `href`/`src`, `url()` or `@import`), and `assertPage` refuses a built
+page whose `<head>` does.
+
+**Tokens.** The tokens are dark only: every consumer page is dark (`color-scheme:dark`), and the theme has no light
+set and follows no `prefers-color-scheme`.
 
 ## Copy slots
 
@@ -130,6 +175,9 @@ form (`scripts.template_scripts`). It defines `window.egptSiteAuth.watch(cb)`; `
 - `DeSciX.ready()` not in mode `shell` (or no bridge on the page): `shell: false`, once.
 - In the shell, `powch` is `true` once `DeSciX.powch` is on the shell's bus: at `ready()` when its `members` name
   `powch`; otherwise when the shell fires `DESCX_BRIDGE_READY` on the shell's window (`DeSciX.bridgeLevel` frames up).
+- `DeSciX.ready()` rejects, or subscribing throws: the error is logged, a `role="alert"` line (`#egpt-auth-fail`, the
+  `auth.fail` copy and the error's message) is placed at the top of the body, and `cb` gets `{shell: false, powch:
+  false, signedIn: false, address: null, error: <message>}`.
 - Then `DeSciX.powch.on('auth')`, which calls back at once with `{signedIn, address}` and on each change, sets
   `signedIn` and `address`. The subscription is dropped at `pagehide` (kept for the back-forward cache).
 
@@ -145,7 +193,8 @@ collapse, it keeps the header's right end on one line and the brand drops its ta
 (`src/partials/login.css`); below 375px both tighten so the header fits 320px. A page whose spec has no `login` has
 no button. Once Powch is on the
 shell's bus (the auth watcher's `powch`), a click opens Powch (`DeSciX.powch.login()`); before that and outside the
-shell, the button is a plain link to the platform. The label follows the auth watcher: `nav.login.signedin` while
+shell, the button is a plain link to the platform. A rejected `login()` is logged to the console unless its code is
+`USER_CANCELLED` (the visitor closed Powch); the label never reads the promise. The label follows the auth watcher: `nav.login.signedin` while
 signed in, `nav.login` otherwise. An app script in `scripts.extra` that names `descix-login` refuses to build.
 
 ## Proposal forms
@@ -214,11 +263,20 @@ held to the platform's literals by `test/intake-contract.test.mjs`, and deleted 
 
 ## Tests
 
-`npm test` (Node 20+). The theme CSS ends with its phone-width rules (`/* phone width */` in `src/tokens.css`): no
+`npm test` (Node 20+). `test/chrome.test.mjs` holds `buildPage`'s chrome to `renderChrome`'s (shown red on a page
+planted with one changed byte and on a `buildPage` planted with its own header), and the theme's head and CSS to no
+third-party origin (shown red on a planted Google Fonts link). `test/fonts.test.mjs` holds every family, weight (100 to 900 and
+every weight the theme CSS names) and style to the face p8's Google Fonts request resolved, drawn at the same weight
+(shown red on the variable Fraunces declared 100 to 900 that 0.2.0-p1 first shipped), and pins each font file by
+sha256 to the bytes measured equal to p8. The theme CSS ends with its phone-width rules (`/* phone width */` in `src/tokens.css`): no
 column or table makes a page wider than a 320px viewport. `test/zero-diff.test.mjs` builds the five fixture pages (`test/fixtures/egpt/`, inputs from the
 library repository at the commit `source.json` names) and holds them to the library generator's own output at that
 commit; it reads the quotation ground from GitHub, so it needs the network. `DeSciXAppSDK.js` is held to the pinned
-`@descix/app-sdk` bridge file instead of the fixture's hash (the fixtures were generated at app-sdk 0.6.0).
+`@descix/app-sdk` bridge file instead of the fixture's hash (the fixtures were generated at app-sdk 0.6.0), and
+`fonts/` to the package's own files. Two known differences are taken out, each exactly once (`test/lib/expected.mjs`):
+the generator's Google Fonts link against the built `<style>`'s fonts and tokens header line, and, on the two pages
+whose vendored spec said `"template"` (the test plants the Courant chrome data, `test/fixtures/courant-chrome.json`),
+the one nav link the generator wrote class-first.
 
 ## Releases
 
@@ -239,4 +297,6 @@ dist-tag.
 
 ## License
 
-DeSciX Community License and Membership Agreement (DCMA) v1: [LICENSE.md](LICENSE.md).
+DeSciX Community License and Membership Agreement (DCMA) v1: [LICENSE.md](LICENSE.md). The font files under
+`src/fonts/` are third-party and keep their own licence, the SIL Open Font License 1.1 (`src/fonts/OFL-*.txt`).
+They are Pre-existing Material under DCMA v1 Part III Section C: the DCMA does not relicense them, and their OFL binds.
