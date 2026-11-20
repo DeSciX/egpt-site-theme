@@ -36,6 +36,7 @@ export const SPEC_KEYS = Object.freeze([
   ['share', 'object', false, null, 'the share block (./share SHARE_BLOCK_KEYS); absent: no share.json is written'],
   ['copy', 'string|null', false, null, 'the app\'s copy file (path in the app dir), {"schema": "egpt-site-theme/copy@1", "slots": {…}}'],
   ['proposal', 'object', false, null, '{"kinds": [<PROPOSAL_KINDS subset>]}: the kinds the proposal section\'s form offers (./request); required when the page uses that section'],
+  ['roster', 'string|null', false, null, 'the app\'s roster file (path in the app dir), for a pinned @descix/frqtl-web/registry that ships no rows (normalizeRoster): the tiles are its showcase cards'],
   ['quotes', 'object', false, null, '{"repo": ".", "commit": "HEAD"|<sha>} (the app\'s own repository) or {"repo": "<owner/name>", "commit": "<full sha>"} (a public GitHub repository): the quotation ground'],
 ].map(([key, type, required, dflt, doc]) => Object.freeze({ key, type, required, default: dflt, doc })));
 

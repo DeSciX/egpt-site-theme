@@ -1,0 +1,7 @@
+{
+ "repo": "DeSciX/egpt-frqtl",
+ "path": "scenes/roster.json",
+ "registry": "@descix/frqtl-web 0.7.0-p3 (devDependency alias frqtl-web-0.7)",
+ "use": "roster.json is the showcase app's own roster, verbatim (its sha256 is the sha256 key): a 0.7 registry ships no rows, so a spec names its roster file (\"roster\"); its showcase cards' sceneKeys are the stills of test/fixtures/egpt/inputs (the stills home)",
+ "sha256": "7cb359c54c996f24574cc2dd8cb6f5601fbb5b28a5ca2ea431d6bd2059a1e3ba"
+}

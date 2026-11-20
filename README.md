@@ -7,13 +7,16 @@ owns its spec, its chrome data (brand, links, legal line), its fragments and its
 with the CLI; an app that writes its own page takes the same chrome from `./chrome` `renderChrome`.
 
 ```
-npm i -D --save-exact @descix/egpt-site-theme@0.2.0-p1 @descix/frqtl-web@0.6.1-p3.1 @descix/app-sdk@0.10.1
+npm i -D --save-exact @descix/egpt-site-theme@0.2.0-p2 @descix/frqtl-web@0.6.1-p3.1 @descix/app-sdk@0.10.1
+# or @descix/frqtl-web@0.7.0-p3, with the app's roster file named in the spec ("roster")
 npx egpt-site-theme build frontpage/<app>.json --out site
 ```
 
 `@descix/frqtl-web` (the showcase roster: `./registry`) and `@descix/app-sdk` (the bridge file: `./scaffold`; the
 share.json contract: `./share`) are peer dependencies, pinned exactly by the app; the build resolves both from the app's
-directory, so the tiles are the roster release the app pins.
+directory, so the tiles are the roster release the app pins. The `@descix/frqtl-web` peer accepts `0.6.1-p3.1` (its
+registry ships the showcase rows, `EXHIBITS`) or `0.7.0-p3` (its registry ships none: the rows are the app's own roster
+file, normalized by the registry's `normalizeRoster`; the spec names it, `roster`).
 
 ## Exports
 
@@ -76,10 +79,11 @@ fetched once into a sha-keyed cache (`$EGPT_SITE_THEME_CACHE`, else `~/.cache/eg
 | `share` | no | `{site, title, description, icon, card, default_view?, pages?}`: writes `share.json` and `images/share/` (see "Per-view share cards") |
 | `copy` | no | the app's copy file (path in the app dir) |
 | `proposal` | with the `proposal` section | `{"kinds": ["seat", "one-thing", "talk", "other"]}`: the kinds its form's chooser offers, in order, a subset of `./request` `PROPOSAL_KINDS` (see "Proposal forms") |
+| `roster` | with a `@descix/frqtl-web` whose registry ships no rows (0.7) | the app's roster file, a path in the app dir (e.g. `"../scenes/roster.json"`): the tiles and the through-line are its showcase's cards and `throughLine`, read through the registry (`normalizeRoster`, `sceneKey`, `showcaseHref`, `showcaseUrl`); its `siteOrigin` is `SHOWCASE_SITE.origin` and that host's first label the showcase app. Read from the committed inputs at its own `file:` URL, which reaches no page (the tile links come from `siteOrigin`). Missing, not JSON, refused by `normalizeRoster`, or without a showcase: the build refuses, naming the file; declared with a registry that ships rows (0.6): refuses |
 | `quotes` | no | `{"repo": ".", "commit": "HEAD" \| <sha>}` (the app's own repository) or `{"repo": "<owner/name>", "commit": "<full sha>"}` |
 
 Theme sections (`use`): the files of `src/partials/sections/` (`SECTION_IDS`). The page's own fragments are any HTML
-in the app dir. Tiles: a `<div … data-exhibits></div>` gets one tile per roster row (`./tiles`). A tile links with the
+in the app dir. Tiles: a `<div … data-exhibits></div>` gets one tile per roster row (`./tiles`; a 0.7 registry's rows are the spec's `roster` file's showcase cards). A tile links with the
 roster's `showcaseHref(row)` on the showcase app's own page (`app === SHOWCASE_SITE.app`), else `showcaseUrl(row)`.
 
 ## Chrome
@@ -277,6 +281,10 @@ commit; it reads the quotation ground from GitHub, so it needs the network. `DeS
 the generator's Google Fonts link against the built `<style>`'s fonts and tokens header line, and, on the two pages
 whose vendored spec said `"template"` (the test plants the Courant chrome data, `test/fixtures/courant-chrome.json`),
 the one nav link the generator wrote class-first.
+
+`test/roster-file.test.mjs` builds with the real 0.7 registry (the devDependency alias `frqtl-web-0.7`) and the
+showcase app's own roster (`test/fixtures/roster-0.7`, vendored by sha256): the tiles, links, stills and through-line,
+the page gate on a planted href, and each roster-file refusal.
 
 ## Releases
 

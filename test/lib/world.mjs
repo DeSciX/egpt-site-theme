@@ -15,6 +15,8 @@ export const FIXTURES = path.join(THEME, 'test', 'fixtures', 'egpt');
 export const SOURCE = JSON.parse(fs.readFileSync(path.join(FIXTURES, 'source.json'), 'utf8'));
 export const FIXTURE_DIR = path.join(FIXTURES, 'inputs', SOURCE.dir);
 export const PKG = '@descix/frqtl-web';
+/** The 0.7 registry (normalizeRoster, no rows), installed for the tests as a devDependency alias. */
+export const ROSTER_07 = 'frqtl-web-0.7';
 const req = createRequire(path.join(THEME, 'package.json'));
 let PKG_DIR, REGISTRY_FILE;
 try { PKG_DIR = path.dirname(req.resolve(`${PKG}/package.json`)); REGISTRY_FILE = req.resolve(`${PKG}/registry`); }
@@ -36,7 +38,8 @@ export const THROUGH_DECL = { through_line: { source: 'served-roster' } };
 /**
  * world({ stills, pkg, specs, undeclare, serve, files })
  *   stills     'real' (the vendored stills home) or a filter over its file names
- *   pkg        true (the real package), false (none), 'broken' (./registry resolves but fails to load)
+ *   pkg        true (the real package), false (none), 'broken' (./registry resolves but fails to load), '0.7' (the
+ *              0.7 release, a registry that ships no rows: the devDependency alias ROSTER_07)
  *   specs      { <app>: spec } beside the defaults: the showcase app's, other and bare
  *   undeclare  a roster row id the fixture package serves WITHOUT its still (its files leave the home too)
  *   serve      a JS object expression over X whose keys replace the package's exports
@@ -64,7 +67,8 @@ export function world({ stills = 'real', pkg = true, specs = {}, undeclare = nul
     fs.mkdirSync(scope, { recursive: true });
     fs.symlinkSync(path.join(THEME, 'node_modules', '@descix', 'app-sdk'), path.join(scope, 'app-sdk'));
     const dir = path.join(scope, 'frqtl-web');
-    if (pkg === 'broken') {
+    if (pkg === '0.7') fs.symlinkSync(path.dirname(req.resolve(`${ROSTER_07}/package.json`)), dir);
+    else if (pkg === 'broken') {
       fs.mkdirSync(dir);
       fs.writeFileSync(path.join(dir, 'package.json'), JSON.stringify({ name: PKG, version: '0.0.0-broken', type: 'module', exports: { './registry': './registry.js', './package.json': './package.json' } }));
       fs.writeFileSync(path.join(dir, 'registry.js'), "export * from './absent.js';\n");

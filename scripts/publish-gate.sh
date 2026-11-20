@@ -9,7 +9,7 @@
 #            .publish/, .github/, scripts/ or CLAUDE.md; LICENSE.md, README.md and package.json present);
 #         2. every file in it byte-equals the committed file at HEAD (package.json: the same JSON), and its LICENSE.md
 #            byte-equals the repository's LICENSE.md at HEAD;
-#         3. install smoke: in a fresh temp project, `npm install` the tarball and its exact peer pins from the registry,
+#         3. install smoke: in a fresh temp project, `npm install` the tarball and each peer at its dev pin from the registry,
 #            commit the vendored inputs of one fixture page (test/fixtures/egpt), run the INSTALLED `egpt-site-theme
 #            build`, and hold the page to that fixture's expected output, stamp line normalised and itself checked;
 #         4. the tarball's sha256 is unchanged after the smoke test.
@@ -256,7 +256,8 @@ NODE
 say "── 3. install smoke: npm install the tarball + exact peers, build fixture page '$SMOKE_APP' with the installed CLI"
 SMOKE="$WORK/smoke"
 mkdir -p "$SMOKE"
-PEERS="$(node -e "const p=require(process.argv[1]).peerDependencies||{};console.log(Object.entries(p).map(([n,v])=>n+'@'+v).join(' '))" "$PKGDIR/package.json")"
+# each peer at its dev pin (the version the fixture page is built with), which must be one of the peer's exact alternatives
+PEERS="$(node -e "const p=require(process.argv[1]);console.log(Object.entries(p.peerDependencies||{}).map(([n,v])=>{const d=(p.devDependencies||{})[n];if(!v.split(' || ').includes(d))throw new Error(n+': dev pin '+d+' is not an alternative of the peer range '+v);return n+'@'+d;}).join(' '))" "$PKGDIR/package.json")" || red "3. the peers' dev pins"
 node -e "require('fs').writeFileSync(process.argv[1], JSON.stringify({ name: 'egpt-site-theme-smoke', private: true }, null, 2) + '\n')" "$SMOKE/package.json"
 # shellcheck disable=SC2086
 ( cd "$SMOKE" && npm install --save-exact --no-audit --no-fund --ignore-scripts "$TGZ" $PEERS >"$WORK/install.log" 2>&1 ) || { cat "$WORK/install.log" >&2; red "3. npm install of the tarball and its peers ($PEERS)"; }
