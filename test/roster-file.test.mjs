@@ -8,7 +8,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { createRequire } from 'node:module';
 import { pathToFileURL } from 'node:url';
-import { world, spec, tiles, throughLines, THEME, THROUGH_DECL, ROSTER_07 } from './lib/world.mjs';
+import { world, spec, tiles, throughLines, THEME, THROUGH_DECL, ROSTER_07, PKG_ALIASES, installedVersion } from './lib/world.mjs';
 import { tokensCss, gridColumns } from '../src/tokens.mjs';
 import { assertPage } from '../src/gates.mjs';
 import { loadRoster } from '../src/tiles.mjs';
@@ -25,9 +25,15 @@ const COLUMNS = gridColumns(tokensCss());
 const stillOf = c => `images/${R.sceneKey(ROSTER, { id: c.id, modeId: c.mode })}.png`;
 const withRoster = (selfHost, extra = {}) => spec(selfHost, [{ use: 'proof' }], { ...THROUGH_DECL, roster: 'scenes/roster.json', ...extra });
 const world07 = (o = {}) => world({ pkg: '0.7', ...o, files: { 'scenes/roster.json': JSON_TEXT, ...(o.files || {}) } });
+const v07 = installedVersion(ROSTER_07), v06 = installedVersion('@descix/frqtl-web');
+const reEsc = s => s.replace(/[.]/g, '\\.');
+// every 0.7 alternative of the peer range the tests install (a devDependency alias): each builds the showcase page
+const ALIASES_07 = Object.keys(PKG_ALIASES).filter(a => /^0\.7\./.test(PKG_ALIASES[a]));
+assert.ok(ALIASES_07.includes(ROSTER_07), `${ROSTER_07} is one of the installed 0.7 alternatives (${ALIASES_07.join(', ')})`);
 
-test('0.7 roster file: the showcase app\'s page has one tile per showcase card, in order, relative links from showcaseHref', () => {
-  const w = world07({ specs: { [SHOW]: withRoster(ORIGIN) } });
+for (const alias of ALIASES_07) test(`0.7 roster file (${PKG_ALIASES[alias]}): the showcase app's page has one tile per showcase card, in order, relative links from showcaseHref`, () => {
+  assert.equal(installedVersion(alias), PKG_ALIASES[alias], `${alias} is installed at its alternative`);
+  const w = world07({ pkg: alias, specs: { [SHOW]: withRoster(ORIGIN) } });
   const r = w.build(SHOW);
   assert.equal(r.code, 0, r.err);
   const got = tiles(r.html);
@@ -40,7 +46,7 @@ test('0.7 roster file: the showcase app\'s page has one tile per showcase card, 
     if (c.still) { assert.equal(got[i].alt, c.still.alt); assert.ok(fs.existsSync(path.join(r.out, stillOf(c))), `${stillOf(c)} written`); }
   });
   assert.deepEqual(throughLines(r.html), [ROSTER.showcase.throughLine.join('')]);
-  assert.match(r.html, /data-frontpage-roster="0\.7\.0-p3"/);
+  assert.match(r.html, new RegExp(`data-frontpage-roster="${reEsc(PKG_ALIASES[alias])}"`));
   assert.doesNotMatch(r.html, /file:/, 'the roster file\'s own URL never reaches the page');
 });
 
@@ -81,7 +87,7 @@ test('roster file: missing, not JSON, refused by normalizeRoster, or without a s
 
   const j = JSON.parse(JSON_TEXT); delete j.rows[0].group;
   const refused = world07({ specs: { a: withRoster('https://a.example') }, files: { 'scenes/roster.json': JSON.stringify(j) } }).build('a');
-  assert.equal(refused.code, 1); assert.match(refused.err, /roster file .*scenes\/roster\.json: @descix\/frqtl-web@0\.7\.0-p3 normalizeRoster refuses it: .*group/);
+  assert.equal(refused.code, 1); assert.match(refused.err, new RegExp(`roster file .*scenes/roster\\.json: @descix/frqtl-web@${reEsc(v07)} normalizeRoster refuses it: .*group`));
 
   const k = JSON.parse(JSON_TEXT); delete k.showcase;
   const none = world07({ specs: { a: withRoster('https://a.example') }, files: { 'scenes/roster.json': JSON.stringify(k) } }).build('a');
@@ -95,5 +101,5 @@ test('roster file vs registry: a 0.7 registry without the spec\'s roster refuses
   const no = world07({ specs: { a: spec('https://a.example', [{ use: 'proof' }]) } }).build('a');
   assert.equal(no.code, 1); assert.match(no.err, /ships no rows \(normalizeRoster\); declare the app's roster file in the spec: "roster"/);
   const both = world({ files: { 'scenes/roster.json': JSON_TEXT }, specs: { a: withRoster('https://a.example') } }).build('a');
-  assert.equal(both.code, 1); assert.match(both.err, /scenes\/roster\.json: @descix\/frqtl-web\/registry \(@descix\/frqtl-web@0\.6\.1-p3\.1\) ships its own rows \(EXHIBITS\)/);
+  assert.equal(both.code, 1); assert.match(both.err, new RegExp(`scenes/roster\\.json: @descix/frqtl-web/registry \\(@descix/frqtl-web@${reEsc(v06)}\\) ships its own rows \\(EXHIBITS\\)`));
 });

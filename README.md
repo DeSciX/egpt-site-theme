@@ -7,16 +7,18 @@ owns its spec, its chrome data (brand, links, legal line), its fragments and its
 with the CLI; an app that writes its own page takes the same chrome from `./chrome` `renderChrome`.
 
 ```
-npm i -D --save-exact @descix/egpt-site-theme@0.2.0-p2 @descix/frqtl-web@0.6.1-p3.1 @descix/app-sdk@0.10.1
-# or @descix/frqtl-web@0.7.0-p3, with the app's roster file named in the spec ("roster")
+npm i -D --save-exact @descix/egpt-site-theme@0.2.0-p3 @descix/frqtl-web@0.6.1-p3.1 @descix/app-sdk@0.10.1
+# or @descix/frqtl-web@0.7.0-p4, with the app's roster file named in the spec ("roster")
 npx egpt-site-theme build frontpage/<app>.json --out site
 ```
 
 `@descix/frqtl-web` (the showcase roster: `./registry`) and `@descix/app-sdk` (the bridge file: `./scaffold`; the
 share.json contract: `./share`) are peer dependencies, pinned exactly by the app; the build resolves both from the app's
 directory, so the tiles are the roster release the app pins. The `@descix/frqtl-web` peer accepts `0.6.1-p3.1` (its
-registry ships the showcase rows, `EXHIBITS`) or `0.7.0-p3` (its registry ships none: the rows are the app's own roster
-file, normalized by the registry's `normalizeRoster`; the spec names it, `roster`).
+registry ships the showcase rows, `EXHIBITS`, and the tile link writer) or `0.7.0-p4` or `0.7.0-p3` (its registry ships
+none: the rows are the app's own roster file, normalized by the registry's `normalizeRoster`; the spec names it,
+`roster`). `0.6.1`'s registry ships no tile link writer (`showcaseHref`, `showcaseUrl`, `SHOWCASE_SITE`), so a build
+with it refuses, and the peer does not name it.
 
 ## Exports
 
@@ -47,7 +49,9 @@ The app id is the spec's file name. Every input is read from the app's git repos
 uncommitted input refuses, naming it. The output is `pageOutputs(fromDir)`: `index.html`, `images/` (theme images, tile stills,
 declared images, `images/share/`), `fonts/` (the self-hosted fonts and their licences, see "Chrome"), `DeSciXAppSDK.js`
 (when `scripts.sdk`), `share.json` (when the spec has a share block). An app's upload manifest carries all of them:
-a manifest that omits `fonts/**` serves the page without its fonts. `<body>` carries the provenance stamp `data-frontpage-app`, `data-frontpage-theme` (this package's version),
+a manifest that omits `fonts/**` serves the page without its fonts. The theme owns `fonts/`: a build removes any file
+there that is not one of `FONT_FILES` (a font an earlier theme version shipped) and says so; nothing else in the output
+directory is removed, and a directory inside `fonts/` refuses. `<body>` carries the provenance stamp `data-frontpage-app`, `data-frontpage-theme` (this package's version),
 `data-frontpage-roster` (the `@descix/frqtl-web` version, when the page has tiles) and `data-frontpage-build` (the app
 repository's HEAD, the full sha).
 
@@ -282,9 +286,11 @@ the generator's Google Fonts link against the built `<style>`'s fonts and tokens
 whose vendored spec said `"template"` (the test plants the Courant chrome data, `test/fixtures/courant-chrome.json`),
 the one nav link the generator wrote class-first.
 
-`test/roster-file.test.mjs` builds with the real 0.7 registry (the devDependency alias `frqtl-web-0.7`) and the
-showcase app's own roster (`test/fixtures/roster-0.7`, vendored by sha256): the tiles, links, stills and through-line,
-the page gate on a planted href, and each roster-file refusal.
+`test/roster-file.test.mjs` builds with the real 0.7 registry (the devDependency alias `frqtl-web-0.7`, `0.7.0-p4`) and
+the showcase app's own roster (`test/fixtures/roster-0.7`, vendored by sha256): the tiles, links, stills and
+through-line, the page gate on a planted href, and each roster-file refusal; the showcase page is built once per 0.7
+alternative of the peer range (each a devDependency alias). `test/conformance.test.mjs` holds every peer alternative to
+an install at exactly that version.
 
 ## Releases
 
@@ -299,7 +305,8 @@ version (`0.2.0`) publishes to `latest`, and `next` is moved to it too.
 What is published is gated as published, by `scripts/publish-gate.sh`: `npm test`; one `npm pack`; the tarball holds
 exactly `package.json` and the tracked files under `files` (`bin/`, `src/`, `LICENSE.md`, `README.md`), each equal to the
 tagged commit; an install of the tarball with its exact peers into an empty project, whose `egpt-site-theme build` must
-reproduce the `egpt` fixture page (`test/fixtures/egpt/expected/egpt/`); and the tarball's sha256, re-checked before
+reproduce the `egpt` fixture page (`test/fixtures/egpt/expected/egpt/`); an `npm install --dry-run` of the tarball beside
+every alternative of every peer range, which must resolve (no ERESOLVE); and the tarball's sha256, re-checked before
 `npm publish` takes that file. `bash scripts/publish-gate.sh` runs the same gate locally and prints the sha256 and the
 dist-tag.
 

@@ -20,6 +20,7 @@ import { WRITER_SLOTS } from '../src/gates.mjs';
 const PKG = JSON.parse(fs.readFileSync(path.join(THEME, 'package.json'), 'utf8'));
 const README = fs.readFileSync(path.join(THEME, 'README.md'), 'utf8');
 const self = createRequire(path.join(THEME, 'test', '_.js'));
+const installed = n => JSON.parse(fs.readFileSync(path.join(THEME, 'node_modules', n, 'package.json'), 'utf8')).version;
 
 test('exports map: every door resolves by package name and a module door publishes names', async () => {
   for (const [door, target] of Object.entries(PKG.exports)) {
@@ -38,12 +39,23 @@ test('exports map: README "Exports" table names exactly the doors, in order', ()
   assert.deepEqual(rows, Object.keys(PKG.exports).filter(d => d !== './package.json'));
 });
 
-test('exports map: a peer is one exact version or exact alternatives (a || b); the tests install every alternative', () => {
+test('exports map: a peer is one exact version or exact alternatives (a || b); the tests install every alternative, at that version', () => {
   for (const [n, v] of Object.entries(PKG.peerDependencies)) {
     const alts = v.split(' || ');
+    assert.equal(new Set(alts).size, alts.length, `${n}: no alternative is listed twice`);
     for (const a of alts) assert.match(a, /^\d+\.\d+\.\d+(-[\w.]+)?$/, `${n}: ${a} is an exact version`);
     assert.equal(PKG.devDependencies[n], alts[0], `${n}: the dev pin is the peer's first alternative`);
-    for (const a of alts.slice(1)) assert.ok(Object.values(PKG.devDependencies).includes(`npm:${n}@${a}`), `${n}@${a}: installed for the tests as a devDependency alias npm:${n}@${a}`);
+    assert.equal(installed(n), alts[0], `${n}: installed at the dev pin`);
+    for (const a of alts.slice(1)) {
+      const alias = Object.keys(PKG.devDependencies).find(k => PKG.devDependencies[k] === `npm:${n}@${a}`);
+      assert.ok(alias, `${n}@${a}: installed for the tests as a devDependency alias npm:${n}@${a}`);
+      assert.equal(installed(alias), a, `${alias}: installed at ${a}`);
+    }
+  }
+  // the other direction: every alias of a peer the tests install is one of its alternatives (no stray, untested-for pin)
+  for (const [k, d] of Object.entries(PKG.devDependencies)) {
+    const m = /^npm:(@[^@/]+\/[^@]+)@(.+)$/.exec(d);
+    if (m && PKG.peerDependencies[m[1]]) assert.ok(PKG.peerDependencies[m[1]].split(' || ').includes(m[2]), `${k}: ${m[2]} is an alternative of the ${m[1]} peer`);
   }
 });
 

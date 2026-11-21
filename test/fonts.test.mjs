@@ -13,6 +13,9 @@ import { fontsCss, FONT_FILES, FONTS_DIR } from '../src/chrome.mjs';
 import { tokensCss } from '../src/tokens.mjs';
 import { loadPartials } from '../src/partials.mjs';
 import { GOOGLE_FONTS_HEAD } from './lib/expected.mjs';
+import { spawnSync } from 'node:child_process';
+import { world, BIN } from './lib/world.mjs';
+import { FONTS_OUT } from '../src/chrome.mjs';
 
 /** p8's faces, read off its Google Fonts request: family → [{style, lo, hi}] (a requested weight is a one-weight face). */
 export function requestFaces(head) {
@@ -148,4 +151,45 @@ test('fonts: the files are the ones measured equal to p8 (a new file is a new me
     const sha = crypto.createHash('sha256').update(fs.readFileSync(path.join(FONTS_DIR, f))).digest('hex').slice(0, 16);
     assert.equal(sha, MEASURED[f], f);
   }
+});
+
+// The theme owns the output's fonts/ (FONTS_OUT): a rebuild after a font change leaves no font the theme no longer ships
+// (the site manifest's fonts/** would upload it); every other file in the output directory is the app's and stays.
+test('writePage: a stale file under fonts/ is removed on rebuild; a non-font file in the same output dir is untouched', () => {
+  const w = world();
+  const out = path.join(w.T, 'out', 'other');
+  const plant = (rel, text) => { fs.mkdirSync(path.dirname(path.join(out, rel)), { recursive: true }); fs.writeFileSync(path.join(out, rel), text); };
+  const STALE = `${FONTS_OUT}/OldFace-Regular-Latin1.woff2`;
+  assert.ok(!FONT_FILES.includes(path.basename(STALE)), 'the planted font is not one the theme ships');
+  plant(STALE, 'a font an earlier theme shipped');
+  plant(`${FONTS_OUT}/${FONT_FILES[0]}`, 'stale bytes of a font the theme still ships');
+  plant('notes.txt', 'the app\'s own file');
+  plant('images/app-own.png', 'the app\'s own image');
+  const r = spawnSync(process.execPath, [BIN, 'build', path.join(w.app, 'other.json'), '--out', out], { encoding: 'utf8' });
+  assert.equal(r.status, 0, r.stderr);
+  assert.ok(!fs.existsSync(path.join(out, STALE)), `${STALE} was removed`);
+  assert.match(r.stdout, new RegExp(`removed 1 stale font file\\(s\\): ${STALE.replace(/[.]/g, '\\.')}`));
+  assert.deepEqual(fs.readdirSync(path.join(out, FONTS_OUT)).sort(), [...FONT_FILES], 'fonts/ holds exactly FONT_FILES');
+  assert.ok(fs.readFileSync(path.join(out, FONTS_OUT, FONT_FILES[0])).equals(fs.readFileSync(path.join(FONTS_DIR, FONT_FILES[0]))), 'a shipped font is rewritten');
+  // the control: the same output dir's non-font files are untouched
+  assert.equal(fs.readFileSync(path.join(out, 'notes.txt'), 'utf8'), 'the app\'s own file');
+  assert.equal(fs.readFileSync(path.join(out, 'images', 'app-own.png'), 'utf8'), 'the app\'s own image');
+  // a clean rebuild removes nothing and says nothing about it
+  const again = spawnSync(process.execPath, [BIN, 'build', path.join(w.app, 'other.json'), '--out', out], { encoding: 'utf8' });
+  assert.equal(again.status, 0, again.stderr);
+  assert.doesNotMatch(again.stdout, /stale font/);
+  assert.equal(fs.readFileSync(path.join(out, 'notes.txt'), 'utf8'), 'the app\'s own file');
+});
+
+test('writePage: a directory inside fonts/ refuses, naming it, and nothing is removed or written', () => {
+  const w = world();
+  const out = path.join(w.T, 'out', 'other');
+  fs.mkdirSync(path.join(out, FONTS_OUT, 'mine'), { recursive: true });
+  fs.writeFileSync(path.join(out, FONTS_OUT, 'mine', 'keep.txt'), 'k');
+  fs.writeFileSync(path.join(out, FONTS_OUT, 'Old.woff2'), 'o');
+  const r = spawnSync(process.execPath, [BIN, 'build', path.join(w.app, 'other.json'), '--out', out], { encoding: 'utf8' });
+  assert.equal(r.status, 1);
+  assert.match(r.stderr, /fonts\/mine is a directory inside the theme's fonts\/ output/);
+  assert.ok(fs.existsSync(path.join(out, FONTS_OUT, 'mine', 'keep.txt')) && fs.existsSync(path.join(out, FONTS_OUT, 'Old.woff2')), 'nothing removed');
+  assert.ok(!fs.existsSync(path.join(out, 'index.html')), 'nothing written');
 });

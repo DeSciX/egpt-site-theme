@@ -25,7 +25,11 @@ overrides, and runs `egpt-site-theme build`. README.md owns the exports, the CLI
   says why; a change inside a region is held by its own test (`test/request.test.mjs`, `test/login.test.mjs`).
 - Vendored inputs carry no private repository name, local path or decider's words: vendor-fixtures drops the specs'
   `_…` comment keys, and the quotation ground is never vendored (the test reads it at its commit).
-- Pins are exact (`peerDependencies` = `devDependencies`); `package-lock.json` is committed.
+- Pins are exact: a peer is one exact version or exact alternatives (`a || b`); the dev pin is its first alternative and
+  every other alternative is a devDependency alias (`npm:<peer>@<version>`), so the tests and the publish gate run every
+  version a peer names (`test/conformance.test.mjs`, `scripts/publish-gate.sh`); `package-lock.json` is committed.
+- The theme owns its output's `fonts/`: `writePage` removes a file there that is not one of `FONT_FILES`, and nothing
+  outside it.
 - Every repo file is under the DCMA: `LICENSE.md` is its render, never hand-edited; manifests say
   `"license": "SEE LICENSE IN LICENSE.md"`.
 
