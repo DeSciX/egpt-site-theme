@@ -12,6 +12,8 @@
 #         3. install smoke: in a fresh temp project, `npm install` the tarball and each peer at its dev pin from the registry,
 #            commit the vendored inputs of one fixture page (test/fixtures/egpt), run the INSTALLED `egpt-site-theme
 #            build`, and hold the page to that fixture's expected output, stamp line normalised and itself checked;
+#            then, for EVERY exact alternative of every peer range (the other peers at their dev pins), `npm install
+#            --dry-run` the tarball with it in a fresh project: an alternative npm cannot resolve (ERESOLVE) is red;
 #         4. the tarball's sha256 is unchanged after the smoke test.
 #       Step 0 also holds `npm --version` to the npm floor (below). Only then writes <dir>/GATED.sha256 and prints the
 #       tarball, its sha256 and the dist-tag the version derives. --print-publish-command also prints the exact local
@@ -275,6 +277,19 @@ SMOKE_HEAD="$(git -C "$SMOKE" rev-parse HEAD)"
   || { cat "$WORK/build.log" >&2; red "3. the installed egpt-site-theme build refused fixture '$SMOKE_APP'"; }
 node "$ROOT/test/tools/check-built-page.mjs" "$SMOKE_APP" "$SMOKE/.out/$SMOKE_APP" --theme "$VERSION" --roster "$ROSTER" --build "$SMOKE_HEAD" \
   || red "3. the installed build of '$SMOKE_APP' is not the fixture's expected output"
+
+# 3b. Every alternative a peer range names resolves beside the tarball: what an app pinning that alternative runs.
+say "── 3b. npm resolves the tarball beside every alternative of every peer range"
+SETS="$(node -e "const p=require(process.argv[1]),P=p.peerDependencies||{},D=p.devDependencies||{};const S=new Set();for(const [n,v] of Object.entries(P))for(const a of v.split(' || '))S.add(Object.keys(P).map(m=>m===n?m+'@'+a:m+'@'+D[m]).join(' '));console.log([...S].join('\\n'))" "$PKGDIR/package.json")" || red "3b. the peer alternatives"
+[ -n "$SETS" ] || red "3b. no peer alternatives read from the tarball's package.json"
+i=0
+while IFS= read -r set; do
+  i=$((i + 1)); R="$WORK/resolve-$i"; mkdir -p "$R"
+  node -e "require('fs').writeFileSync(process.argv[1], JSON.stringify({ name: 'egpt-site-theme-resolve', private: true }, null, 2) + '\n')" "$R/package.json"
+  # shellcheck disable=SC2086
+  ( cd "$R" && npm install --dry-run --save-exact --no-audit --no-fund --ignore-scripts "$TGZ" $set >"$WORK/resolve-$i.log" 2>&1 ) || { cat "$WORK/resolve-$i.log" >&2; red "3b. npm cannot install the tarball beside $set"; }
+  say "resolves: $(basename "$TGZ") + $set"
+done <<< "$SETS"
 
 # 4. The gated bytes are still the packed bytes; only now is the record written that check-sha reads.
 say "── 4. tarball sha unchanged after the smoke test"

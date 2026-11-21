@@ -21,7 +21,7 @@ import { normalizeSpec } from './spec.mjs';
 import { normalizeCopy, overriddenOf, fillCopy, slotKind, COPY_SCHEMA } from './copy.mjs';
 import { loadPartials, sectionOf, themeImage, TOKENS_INCLUDE } from './partials.mjs';
 import { tokensCss, gridColumns } from './tokens.mjs';
-import { renderChrome, linkHtml as link, FONTS_OUT } from './chrome.mjs';
+import { renderChrome, linkHtml as link, FONTS_OUT, FONT_FILES } from './chrome.mjs';
 import { loadRoster, stillName, tileOf, tileHtml } from './tiles.mjs';
 import { CODESITE_SCRIPT, loadBridgeFile } from './bridge.mjs';
 import { loadShareContract, shareFiles, validatePages, SHARE_DIR } from './share.mjs';
@@ -312,11 +312,28 @@ ${sdk ? `<script src="${sdk.name}"></script>\n` : ''}${scripts.map(s => `<script
   return { app, html, files, ground, inputs: [...repo.inputs].sort(), log };
 }
 
+/**
+ * Writes a build's files under `out`. The theme owns `out/fonts/` (FONTS_OUT): a file there that is not one of FONT_FILES
+ * (a font an earlier theme shipped) is removed, so a site's `fonts/**` upload carries only the fonts this page names.
+ * Nothing outside `fonts/` is removed; a directory inside it refuses (the theme writes none). Returns the removed paths.
+ */
 export function writePage(result, out) {
+  const fontsDir = path.join(out, FONTS_OUT);
+  const stale = [];
+  if (fs.existsSync(fontsDir)) {
+    if (!fs.lstatSync(fontsDir).isDirectory()) refuse(`${fontsDir} is not a directory: the theme writes its font files there`);
+    for (const e of fs.readdirSync(fontsDir, { withFileTypes: true })) {
+      if (FONT_FILES.includes(e.name)) continue;
+      if (e.isDirectory()) refuse(`${path.join(fontsDir, e.name)} is a directory inside the theme's ${FONTS_OUT}/ output; the theme writes no directory there, so it will not remove it: move it out of ${FONTS_OUT}/`);
+      stale.push(`${FONTS_OUT}/${e.name}`);
+    }
+  }
+  for (const rel of stale) fs.rmSync(path.join(out, rel));
   for (const [rel, data] of result.files) {
     fs.mkdirSync(path.dirname(path.join(out, rel)), { recursive: true });
     fs.writeFileSync(path.join(out, rel), data);
   }
+  return { pruned: stale };
 }
 
 const USAGE = 'usage: egpt-site-theme build <dir>/<app>.json --out <dir> [--dry-run] [--ground <git checkout>@<commit> | --ground-github <owner/name>@<sha>]';
@@ -343,8 +360,8 @@ export async function main(argv) {
       ground = githubGround(m[1], m[2]);
     }
     const r = await buildPage(specFile, { ground });
-    if (!dry) writePage(r, path.resolve(out));
-    console.log(`${dry ? '[dry-run] ' : ''}${r.log}`);
+    const { pruned } = dry ? { pruned: [] } : writePage(r, path.resolve(out));
+    console.log(`${dry ? '[dry-run] ' : ''}${r.log}${pruned.length ? `; removed ${pruned.length} stale font file(s): ${pruned.join(', ')}` : ''}`);
     return 0;
   } catch (e) {
     console.error(`ERROR: ${e instanceof ThemeError ? e.message : (e && e.stack) || e}`);
